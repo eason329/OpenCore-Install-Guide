@@ -1,34 +1,35 @@
-# Creating the USB
+# 製作引導隨身碟
 
-Requirements:
+你需要：
 
-* [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases), highly recommend running the debug version to show more info
-* [ProperTree](https://github.com/corpnewt/ProperTree) to edit .plist files (OpenCore Configurator is another tool but is heavily outdated and the Mackie version is known for corruption. **Please avoid these kinds of tools at all costs!**).
-* You must remove Clover from your system entirely if you wish to use OpenCore as your main boot-loader. Keep a backup of your Clover based EFI. See here on what needs to be cleaned: [Clover Conversion](https://github.com/dortania/OpenCore-Install-Guide/tree/master/clover-conversion)
+* [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases)，強烈建議先行使用除錯版本以顯示更多訊息
+* [ProperTree](https://github.com/corpnewt/ProperTree)，編輯 .plist 檔案（另有一些工具如 OpenCore Configurator 或 OpenCore Auxiliary Tools，但可能已嚴重過時，Mackie 版本的 OCC 更是以損毀檔案而聞名。**請盡量避免使用這些工具！**）
+* 如果你希望使用 OpenCore 作為主要引導程式，則必須從系統中完全移除 Clover。並保留一個基於 Clover 的 EFI 備份。請參閱[從 Clover 轉換](https://github.com/sumingyd/OpenCore-Install-Guide/tree/master/clover-conversion)了解需要清理的地方。
 
-### Online vs Offline Installer
+### 線上 vs 離線安裝程式
 
-Offline installers have a complete copy of macOS, while online installers are only a recovery image (~500MB) which then download macOS from Apple servers once booted.
+離線安裝程式有一個完整的 macOS 副本，而線上安裝程式只有一個恢復映像（~500MB），啟動後就可以從蘋果伺服器下載 macOS。
 
-* Offline
-  * Can only be made in macOS
-  * Windows/Linux do not have the APFS/HFS drivers needed to assemble a full installer
-* Online
-  * Can be made in macOS/Linux/Windows
-  * Requires a working internet connection via a macOS supported network adapter on the target machine
+* 離線
+  * 只能在 macOS 下製作
+  * Windows/Linux 沒有整合完整安装程式所需的 APFS／HFS 驅動程式
+* 線上
+  * 可在 macOS/Linux/Windows 下製作
+  * 需要在欲安裝電腦上使用 macOS 支援的網路適配器進行網際網路連接
 
-### Making the Installer
+### 製作安裝程式
 
-Depending on which OS you're on, see your specific section on making the USB:
+根據你使用的操作系統，請參閱有關製作引導隨身碟的具體部分：
 
-* [macOS users](../installer-guide/mac-install.md)
-  * Supports OS X 10.4 to current
-  * Supports both legacy and UEFI installs
-* [Windows users](../installer-guide/windows-install.md)
-  * Supports OS X 10.7 to current
-  * Online installer only
-  * Supports both legacy and UEFI installs
-* [Linux users(UEFI)](../installer-guide/linux-install.md)
-  * Supports OS X 10.7 to current
-  * Online installer only
-  * Meant for machines supporting UEFI Boot
+* [macOS 用戶](../installer-guide/mac-install.md)
+  * 支援 OS X 10.4 至目前版本
+  * 提供線上及離線安裝程式
+  * 支援傳統 BIOS 和 UEFI 安裝
+* [Windows 用戶](../installer-guide/windows-install.md)
+  * 支援 OS X 10.7 至目前版本
+  * 只提供線上安裝程式
+  * 支援傳統 BIOS 和 UEFI 安裝
+* [Linux 用戶（UEFI）](../installer-guide/linux-install.md)
+  * 支援 OS X 10.7 至目前版本
+  * 只提供線上安裝程式
+  * 適用於支援 UEFI 引導的電腦

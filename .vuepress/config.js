@@ -3,7 +3,6 @@ const {
 } = require('../package')
 
 module.exports = {
-    title: 'OpenCore Install Guide',
     head: [
         ['meta', {
             name: 'theme-color',
@@ -22,6 +21,14 @@ module.exports = {
             href: "/styles/website.css"
         },]
     ],
+    locales: {
+        '/': {
+            lang: 'zh-TW',
+            title: 'OpenCore 安裝指南',
+            description: '正體中文版 - 目前支援版本 0.8.8'
+        },
+    },
+
     base: '/OpenCore-Install-Guide/',
 
     watch: {
@@ -54,256 +61,274 @@ module.exports = {
     ],
 
     themeConfig: {
-        lastUpdated: true,
-        repo: 'https://github.com/dortania/OpenCore-Install-Guide',
+        lastUpdated: true,//上次更新
+        smoothScroll: true,//页面滚动
+        repo: 'https://github.com/eason329/OpenCore-Install-Guide',
         editLinks: true,
-        editLinkText: 'Help us improve this page!',
+        editLinkText: '在 GitHub 上編輯此頁',
         logo: '/homepage.png',
-        nav: [{
-            text: 'Dortania Guides',
-            items: [{
-                text: 'Home Site',
-                link: 'https://dortania.github.io/'
-            },
-            {
-                text: 'Getting Started With ACPI',
-                link: 'https://dortania.github.io/Getting-Started-With-ACPI/'
-            },
-            {
-                text: 'OpenCore Post-Install',
-                link: 'https://dortania.github.io/OpenCore-Post-Install/'
-            },
-            {
-                text: 'OpenCore Multiboot',
-                link: 'https://dortania.github.io/OpenCore-Multiboot/'
-            },
-            {
-                text: 'GPU Buyers Guide',
-                link: 'https://dortania.github.io/GPU-Buyers-Guide/'
-            },
-            {
-                text: 'Wireless Buyers Guide',
-                link: 'https://dortania.github.io/Wireless-Buyers-Guide/'
-            },
-            {
-                text: 'Anti Buyers Guide',
-                link: 'https://dortania.github.io/Anti-Hackintosh-Buyers-Guide/'
-            },
-            ]
-        },
-        ],
-        sidebar: [{
-            title: 'Introduction',
-            collapsable: false,
-            sidebarDepth: 1,
-            children: [
-                'prerequisites',
-                'macos-limits',
-                'find-hardware',
-                'terminology',
-                'why-oc',
-            ]
-        },
-        {
-            title: 'USB Creation',
-            collapsable: false,
-            sidebarDepth: 2,
-            children: [{
-                title: 'Creating the USB',
-                collapsable: true,
-                path: '/installer-guide/',
-                sidebarDepth: 1,
-                children: [
-                    '/installer-guide/mac-install',
-                    '/installer-guide/windows-install',
-                    '/installer-guide/linux-install',
+        locales: {
+            '/': {
+                label: '正體中文',
+                lastUpdated: '上次更新',
+                nav: [
+                    {
+                        text: '指南選單',
+                        items: [
+                            {
+                                text: 'OpenCore 安裝指南',
+                                link: 'https://eason329.github.io/OpenCore-Install-Guide/'
+                            },
+                            {
+                                text: 'OpenCore 安裝後完善指南',
+                                link: 'https://eason329.github.io/OpenCore-Post-Install/'
+                            },
+                            {
+                                text: 'OpenCore 多系統開機',
+                                link: 'https://eason329.github.io/OpenCore-Multiboot/'
+                            },
+                            {
+                                text: 'ACPI 入門教學',
+                                link: 'https://eason329.github.io/Getting-Started-With-ACPI/'
+                            },
+                            {
+                                text: '無線網卡購買指南',
+                                link: 'https://eason329.github.io/Wireless-Buyers-Guide/'
+                            },
+                            {
+                                text: '顯示卡購買指南',
+                                link: 'https://eason329.github.io/GPU-Buyers-Guide/'
+                            },
+                            {
+                                text: '避免購買指南',
+                                link: 'https://eason329.github.io/Anti-Hackintosh-Buyers-Guide/'
+                            },
+                        ]
+                    },
+                    { text: 'English', link: 'https://dortania.github.io/OpenCore-Install-Guide/' },
+                ],
+                sidebar: [
+                    {
+                        title: '簡介',
+                        collapsable: false,
+                        sidebarDepth: 1,
+                        children: [
+                            'prerequisites',
+                            'macos-limits',
+                            'find-hardware',
+                            'terminology',
+                            'why-oc',
+                        ]
+                    },
+                    {
+                        title: '製作開機隨身碟',
+                        collapsable: false,
+                        sidebarDepth: 2,
+                        children: [{
+                            title: '製作開機隨身碟',
+                            collapsable: true,
+                            path: '/installer-guide/',
+                            sidebarDepth: 1,
+                            children: [
+                                '/installer-guide/mac-install',
+                                '/installer-guide/windows-install',
+                                '/installer-guide/linux-install',
+                            ],
+                        },
+                            '/installer-guide/opencore-efi',
+                            'ktext',
+                        ['https://sumingyd.github.io/Getting-Started-With-ACPI/', 'ACPI 入門教學'],
+                            '/config.plist/',
+                        ]
+                    },
+                    {
+                        title: '配置',
+                        collapsable: false,
+                        children: [{
+                            title: 'Intel 桌面電腦配置檔案',
+                            collapsable: true,
+                            sidebarDepth: 1,
+                            children: [
+                                ['/config.plist/penryn', 'Penryn'],
+                                ['/config.plist/clarkdale', 'Clarkdale'],
+                                ['/config.plist/sandy-bridge', 'Sandy Bridge'],
+                                ['/config.plist/ivy-bridge', 'Ivy Bridge'],
+                                ['/config.plist/haswell', 'Haswell'],
+                                ['/config.plist/skylake', 'Skylake'],
+                                ['/config.plist/kaby-lake', 'Kaby Lake'],
+                                ['/config.plist/coffee-lake', 'Coffee Lake'],
+                                ['/config.plist/comet-lake', 'Comet Lake'],
+                            ]
+                        },
+                        {
+                            title: 'Intel 筆記型電腦配置檔案',
+                            collapsable: true,
+                            sidebarDepth: 1,
+                            children: [
+                                ['/config-laptop.plist/arrandale', 'Arrandale'],
+                                ['/config-laptop.plist/sandy-bridge', 'Sandy Bridge'],
+                                ['/config-laptop.plist/ivy-bridge', 'Ivy Bridge'],
+                                ['/config-laptop.plist/haswell', 'Haswell'],
+                                ['/config-laptop.plist/broadwell', 'Broadwell'],
+                                ['/config-laptop.plist/skylake', 'Skylake'],
+                                ['/config-laptop.plist/kaby-lake', 'Kaby Lake'],
+                                ['/config-laptop.plist/coffee-lake', 'Coffee Lake and Whiskey Lake'],
+                                ['/config-laptop.plist/coffee-lake-plus', 'Coffee Lake Plus and Comet Lake'],
+                                ['/config-laptop.plist/icelake', 'Ice Lake'],
+                            ]
+                        },
+                        {
+                            title: 'Intel HEDT 配置檔案',
+                            collapsable: true,
+                            sidebarDepth: 1,
+                            children: [
+                                '/config-HEDT/nehalem',
+                                '/config-HEDT/ivy-bridge-e',
+                                '/config-HEDT/haswell-e',
+                                '/config-HEDT/broadwell-e',
+                                '/config-HEDT/skylake-x',
+                            ]
+                        },
+                        {
+                            title: 'AMD 桌面電腦配置檔案',
+                            collapsable: true,
+                            sidebarDepth: 1,
+                            children: [
+                                '/AMD/fx',
+                                '/AMD/zen',
+                            ]
+                        },
+                        ['/config.plist/security', '蘋果安全啟動']
+                        ]
+                    },
+                    {
+                        title: '安裝',
+                        collapsable: false,
+                        children: [
+                            '/installation/installation-process',
+
+                        ]
+                    },
+                    {
+                        title: '故障診斷',
+                        collapsable: false,
+                        children: [
+                            '/troubleshooting/troubleshooting',
+                            {
+                                title: '',
+                                collapsable: false,
+                                children: [
+                                    '/troubleshooting/extended/opencore-issues',
+                                    '/troubleshooting/extended/kernel-issues',
+                                    '/troubleshooting/extended/userspace-issues',
+                                    '/troubleshooting/extended/post-issues',
+                                    '/troubleshooting/extended/misc-issues',
+
+                                ]
+                            },
+                            '/troubleshooting/debug',
+                            '/troubleshooting/boot',
+                            '/troubleshooting/kernel-debugging',
+                        ]
+                    },
+                    {
+                        title: '安裝 OpenCore 以後',
+                        collapsable: false,
+                        children: [
+                            ['https://sumingyd.github.io/OpenCore-Post-Install/', '安裝後完善指南'],
+                            {
+                                title: '通用',
+                                collapsable: true,
+                                sidebarDepth: 1,
+                                children: [
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/security', '安全與 FileVault'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/audio', '修復音訊'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/oc2hdd', '無 USB 開機'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/update', '更新 OpenCore、kext 和 macOS'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/drm', '修復 DRM'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/iservices', '修復 iServices'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/pm', '修復電源管理'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/sleep', '修復睡眠'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/usb/', '修復 USB'],
+                                ]
+                            },
+                            {
+                                title: '筆記型電腦',
+                                collapsable: true,
+                                children: [
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/laptop-specific/battery', '修復電池讀數'],
+
+                                ]
+                            },
+                            {
+                                title: '美化',
+                                collapsable: true,
+                                children: [
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/cosmetic/verbose', '修復分辨率和囉嗦模式'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/cosmetic/gui', '增加 GUI 和開機鈴聲'],
+                                ]
+                            },
+                            {
+                                title: '多系統開機',
+                                collapsable: true,
+                                children: [
+                                    ['https://sumingyd.github.io/OpenCore-Multiboot/', 'OpenCore 多系統開機'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootstrap', '設定啟動選項'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootcamp', '安裝 Boot Camp'],
+                                ]
+                            },
+                            {
+                                title: '其他',
+                                collapsable: true,
+                                children: [
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/misc/rtc', '修復 RTC'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/misc/msr-lock', '修復 CFG Lock'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/misc/nvram', '模擬 NVRAM'],
+                                ]
+                            },
+                        ]
+                    },
+                    {
+                        title: '額外資訊',
+                        collapsable: false,
+                        sidebarDepth: 2,
+                        children: [
+                            '/extras/kaslr-fix',
+                            '/extras/spoof',
+                            '/extras/ventura',
+                            ['https://github.com/sumingyd/OpenCore-Install-Guide/tree/master/clover-conversion', '從 Clover 轉換（建設中）'],
+                            '/extras/smbios-support.md',
+                        ]
+                    },
+                    {
+                        title: '其他',
+                        collapsable: false,
+                        children: [
+                            'CONTRIBUTING',
+                            '/misc/credit',
+                        ]
+                    },
                 ],
             },
-                '/installer-guide/opencore-efi',
-                'ktext',
-            ['https://dortania.github.io/Getting-Started-With-ACPI/', 'Getting started with ACPI'],
-                '/config.plist/',
-            ]
-        },
-        {
-            title: 'Configs',
-            collapsable: false,
-            children: [{
-                title: 'Intel Desktop config.plist',
-                collapsable: true,
-                sidebarDepth: 1,
-                children: [
-                    ['/config.plist/penryn', 'Penryn'],
-                    ['/config.plist/clarkdale', 'Clarkdale'],
-                    ['/config.plist/sandy-bridge', 'Sandy Bridge'],
-                    ['/config.plist/ivy-bridge', 'Ivy Bridge'],
-                    ['/config.plist/haswell', 'Haswell'],
-                    ['/config.plist/skylake', 'Skylake'],
-                    ['/config.plist/kaby-lake', 'Kaby Lake'],
-                    ['/config.plist/coffee-lake', 'Coffee Lake'],
-                    ['/config.plist/comet-lake', 'Comet Lake'],
-                ]
-            },
-            {
-                title: 'Intel Laptop config.plist',
-                collapsable: true,
-                sidebarDepth: 1,
-                children: [
-                    ['/config-laptop.plist/arrandale', 'Arrandale'],
-                    ['/config-laptop.plist/sandy-bridge', 'Sandy Bridge'],
-                    ['/config-laptop.plist/ivy-bridge', 'Ivy Bridge'],
-                    ['/config-laptop.plist/haswell', 'Haswell'],
-                    ['/config-laptop.plist/broadwell', 'Broadwell'],
-                    ['/config-laptop.plist/skylake', 'Skylake'],
-                    ['/config-laptop.plist/kaby-lake', 'Kaby Lake'],
-                    ['/config-laptop.plist/coffee-lake', 'Coffee Lake and Whiskey Lake'],
-                    ['/config-laptop.plist/coffee-lake-plus', 'Coffee Lake Plus and Comet Lake'],
-                    ['/config-laptop.plist/icelake', 'Ice Lake'],
-                ]
-            },
-            {
-                title: 'Intel HEDT config.plist',
-                collapsable: true,
-                sidebarDepth: 1,
-                children: [
-                    '/config-HEDT/nehalem',
-                    '/config-HEDT/ivy-bridge-e',
-                    '/config-HEDT/haswell-e',
-                    '/config-HEDT/broadwell-e',
-                    '/config-HEDT/skylake-x',
-                ]
-            },
-            {
-                title: 'AMD Desktop config.plist',
-                collapsable: true,
-                sidebarDepth: 1,
-                children: [
-                    '/AMD/fx',
-                    '/AMD/zen',
-                ]
-            },
-            ['/config.plist/security', 'Apple Secure Boot']
-            ]
-        },
-        {
-            title: 'Installation',
-            collapsable: false,
-            children: [
-                '/installation/installation-process',
+        }
 
-            ]
-        },
-        {
-            title: 'Troubleshooting',
-            collapsable: false,
-            children: [
-                '/troubleshooting/troubleshooting',
-                {
-                    title: '',
-                    collapsable: false,
-                    children: [
-                        '/troubleshooting/extended/opencore-issues',
-                        '/troubleshooting/extended/kernel-issues',
-                        '/troubleshooting/extended/userspace-issues',
-                        '/troubleshooting/extended/post-issues',
-                        '/troubleshooting/extended/misc-issues',
-
-                    ]
-                },
-                '/troubleshooting/debug',
-                '/troubleshooting/boot',
-                '/troubleshooting/kernel-debugging',
-            ]
-        },
-        {
-            title: 'Post Install',
-            collapsable: false,
-            children: [
-                ['https://dortania.github.io/OpenCore-Post-Install/', 'Post-Install'],
-                {
-                    title: 'Universal',
-                    collapsable: true,
-                    sidebarDepth: 1,
-                    children: [
-                        ['https://dortania.github.io/OpenCore-Post-Install/universal/security', 'Security and FileVault'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/universal/audio', 'Fixing Audio'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/universal/oc2hdd', 'Booting without USB'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/universal/update', 'Updating OpenCore, kexts and macOS'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/universal/drm', 'Fixing DRM'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/universal/iservices', 'Fixing iServices'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/universal/pm', 'Fixing Power Management'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/universal/sleep', 'Fixing Sleep'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/usb/', 'Fixing USB'],
-                    ]
-                },
-                {
-                    title: 'Laptop Specifics',
-                    collapsable: true,
-                    children: [
-                        ['https://dortania.github.io/OpenCore-Post-Install/laptop-specific/battery', 'Fixing Battery Read-outs'],
-
-                    ]
-                },
-                {
-                    title: 'Cosmetics',
-                    collapsable: true,
-                    children: [
-                        ['https://dortania.github.io/OpenCore-Post-Install/cosmetic/verbose', 'Fixing Resolution and Verbose'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/cosmetic/gui', 'Add GUI and Boot-chime'],
-                    ]
-                },
-                {
-                    title: 'Multiboot',
-                    collapsable: true,
-                    children: [
-                        ['https://dortania.github.io/OpenCore-Multiboot/', 'OpenCore Multiboot'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/multiboot/bootstrap', 'Setting up LauncherOption'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/multiboot/bootcamp', 'Installing BootCamp'],
-                    ]
-                },
-                {
-                    title: 'Miscellaneous',
-                    collapsable: true,
-                    children: [
-                        ['https://dortania.github.io/OpenCore-Post-Install/misc/rtc', 'Fixing RTC'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/misc/msr-lock', 'Fixing CFG Lock'],
-                        ['https://dortania.github.io/OpenCore-Post-Install/misc/nvram', 'Emulated NVRAM'],
-                    ]
-                },
-            ]
-        },
-        {
-            title: 'Extras',
-            collapsable: false,
-            sidebarDepth: 2,
-            children: [
-                '/extras/kaslr-fix',
-                '/extras/spoof',
-                '/extras/ventura',
-                ['https://github.com/dortania/OpenCore-Install-Guide/tree/master/clover-conversion', 'Clover Conversion'],
-                '/extras/smbios-support.md',
-            ]
-        },
-        {
-            title: 'Misc',
-            collapsable: false,
-            children: [
-                'CONTRIBUTING',
-                '/misc/credit',
-            ]
-        },
-        ],
     },
     plugins: [
-        '@vuepress/back-to-top',
-        'vuepress-plugin-smooth-scroll',
-        'vuepress-plugin-fulltext-search',
-        ['@vuepress/medium-zoom',
-            {
-                selector: ".theme-succinct-content :not(a) > img",
-                options: {
-                    background: 'var(--bodyBgColor)'
-                }
-            }],
+        ['@vuepress/back-to-top', true],//开启右下角返回顶层图标
+        ['@vuepress/nprogress', true],//这个插件将会在你切换页面的时候，在顶部显示进度条。
+        ['vuepress-plugin-smooth-scroll', true],//在你的 VuePress 站点中使用平滑滚动。
+        ['vuepress-plugin-fulltext-search', true],//基于 Headers 的搜索插件
+        ['@vuepress/medium-zoom', {
+            selector: ".theme-succinct-content :not(a) > img",
+            options: {
+                background: 'var(--bodyBgColor)'
+            }
+        }
+        ],//这个插件将会使你的图片支持点击缩放。
+        ['@vuepress/active-header-links', {
+            sidebarLinkSelector: '.sidebar-link',
+            headerAnchorSelector: '.header-anchor'
+        }
+        ],//页面滚动时自动激活侧边栏链接的插件
     ]
 }

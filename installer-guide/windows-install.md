@@ -1,23 +1,23 @@
-# Making the installer in Windows
+# 在 Windows 中製作安裝程式
 
-While you don't need a fresh install of macOS to use OpenCore, some users prefer having a fresh slate with their boot manager upgrades.
+雖然你不需要重新安裝 macOS 來使用 OpenCore，但一些用戶更喜歡升級開機管理器後帶來的全新體驗。
 
-To start you'll need the following:
+在開始之前，你需要準備以下東西：
 
-* 4GB USB Stick
+* 4GB 的 USB 隨身碟
 
-* For USB larger than 16 GB to format in FAT32 use [Rufus method](#rufus-method)
+* 對於大於 16GB 的隨身碟，使用 [Rufus method](#rufus-method) 格式化成 FAT32。
 
 * [macrecovery.py](https://github.com/acidanthera/OpenCorePkg/releases)
-  * This will require [Python 3 installed](https://www.python.org/downloads/)
+  * 這需要[安裝 Python 3](https://www.python.org/downloads/)
 
-## Downloading macOS
+## 下載 macOS
 
-To grab legacy installers is super easy, first grab a copy of [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases) and head to `/Utilities/macrecovery/`. Next, click next to the current folder path and type `cmd` to open a Command Prompt in the current directory:
+要取得傳統的安裝程式非常容易，首先下載 [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases) 然後轉到 `/Utilities/macrecovery/`. 接下來，點擊目前資料夾路徑旁邊後輸入 `cmd`，就能在目前目錄中打開命令提示字符：
 
 ![](../images/installer-guide/windows-install-md/open-cmd-current-folder.gif)
 
-Now run one of the following depending on what version of macOS you want(Note these scripts rely on [Python 3](https://www.python.org/downloads/) support, please install if you haven't already):
+現在根據你想要的 macOS 版本執行以下其中一個命令（注意：這些腳本依賴於 [Python 3](https://www.python.org/downloads/) 的支援，如果你還沒有的話請先安裝）：
 
 ```sh
 # Lion (10.7):
@@ -55,16 +55,16 @@ python3 macrecovery.py -b Mac-42FD25EABCABB274 -m 00000000000000000 download
 # Monterey (12)
 python3 macrecovery.py -b Mac-FFE5EF870D7BA81A -m 00000000000000000 download
 
-# Latest version
+# 最新版本
 # ie. Ventura (13)
 python3 macrecovery.py -b Mac-4B682C642B45593E -m 00000000000000000 download
 ```
 
-* **macOS 12 and above note**: As recent macOS versions introduce changes to the USB stack, it is highly advisable that you map your USB ports (with USBToolBox) before installing macOS.
-  * <span style="color:red"> CAUTION: </span> With macOS 11.3 and newer, [XhciPortLimit is broken resulting in boot loops](https://github.com/dortania/bugtracker/issues/162).
-    * If you've already [mapped your USB ports](https://dortania.github.io/OpenCore-Post-Install/usb/) and disabled `XhciPortLimit`, you can boot macOS 11.3+ without issues.
+* **macOS 12 及以上版本注意**: 由於最新版本的 macOS 對 USB 堆棧進行了更改，因此在安裝 macOS 之前，強烈建議你使用 USBToolBox 來映射 USB 連接埠。
+  * <span style="color:red"> 注意: </span> 在 macOS 11.3 及更新版本中，[XhciPortLimit 己經失效，導致開機循環](https://github.com/dortania/bugtracker/issues/162).
+    * 如果你已[映射 USB 連接埠](https://sumingyd.github.io/OpenCore-Post-Install/usb/)且停用了 `XhciPortLimit`，你可以正常啟動 macOS 11.3+。
 
-This will take some time, however once you're finished you should get either BaseSystem or RecoveryImage files:
+這需要一些時間，命令執行完畢後，你應該會找到 BaseSystem 或 RecoveryImage 檔案：
 
 ![](../images/installer-guide/windows-install-md/macrecovery-done.png)
 
@@ -72,77 +72,77 @@ This will take some time, however once you're finished you should get either Bas
 | :--- | :--- |
 |![](../images/installer-guide/windows-install-md/basesystem-example.png) | ![](../images/installer-guide/windows-install-md/macrecovery-after.jpg) |
 
-Now with our installer downloaded, we'll next want to format our USB.
+現在安裝程式已經下載完畢，接下來我們要把隨身碟格式化。
 
-## Making the installer
+## 製作安裝程式
 
-Here we'll be formatting our USB and adding macOS onto it, we have 2 options:
+在這裡，我們將格式化我們的 USB 隨身碟並將 macOS 檔案放進隨身碟裡，我們有三個選擇（實際上其中兩個使用了同一工具）：
 
-* [Disk Management method](#disk-management-method)
-  * GUI Based, simplest way
-  * Only UEFI systems are supported(ex. 2012+)
-* [Rufus method](#rufus-method)
-  * GUI Based, simplest way
-  * For larger USB drives(16GB+)
-* [diskpart method](#diskpart-method)
-  * Command line based, little more work
-  * Required for legacy systems(ie. non-UEFI, pre-2012)
+* [磁碟管理方法](#磁碟管理方法)
+  * 基於 GUI，最簡單的方式
+  * 只支援 UEFI 系统（例如：2012+）
+* [Rufus 方法](#Rufus-方法)
+  * 基於 GUI，最簡單的方式
+  * 適用於大容量的 USB 隨身碟（16GB 以上）
+* [diskpart 方法](#diskpart-方法)
+  * 基於命令列，更多的工作
+  * 對舊版系統是必需的（如：非 UEFI、2012 年之前）
 
-### Disk Management method
+### 磁碟管理方法
 
-Simply open up Disk Management, and format your USB as FAT32:
+只需打開磁碟管理，並將隨身碟格式化為 FAT32：
 
-1. Right click the Start Button on your task bar and select Disk Management.
-2. You should see all of your partitions and disks. On the bottom half, you'll see your devices. Find your USB.
-3. You'll want to format the USB to have a FAT32 partition.
+1. 右鍵點擊工作列上的「開始」按鈕並選擇“磁碟管理”。
+2. 您應該會看到所有磁碟和磁碟區。在下半部分，你會看到你的裝置。找出你的隨身碟。
+3. 你需要將隨身碟格式化為 FAT32 磁碟區。
 
-* If you have multiple partitions on the USB, right click each partition and click Delete Volume for your USB (This will remove data, make sure you have backups and only remove partitions from your USB)
-  * Right click the unallocated space and create a new simple volume. Make sure it is FAT32 and at least a gigabyte or two big. Name it "EFI".
-* Otherwise, right click the partition on the USB and click Format and set it to FAT32.
+* 如果你的隨身碟上有多個分區，右鍵點擊每個隨身碟的磁碟區並按移除磁碟區（這將刪除所有資料，請確保你已備份，只刪除 USB 的分區）
+  * 之後，右鍵點擊未分配的空間,建立一個新的簡單磁碟區。請確保它是 FAT32，並且至少有 1GB 或 2GB 大。命名為「EFI」。
+* 否則，鍵點擊隨身碟的磁碟區，按「格式化」，並設定為 FAT32。
 
 ![](../images/installer-guide/windows-install-md/DiskManagement.jpg)
 
-Next, go to the root of this USB drive and create a folder called `com.apple.recovery.boot`. Then move the downloaded BaseSystem or RecoveryImage files. Please ensure you copy over both the .dmg and .chunklist files to this folder:
+接下來，在這個隨身碟的根目錄下建立一個名為 `com.apple.recovery.boot` 的資料夾。然後將下載的 baseSystem 或 RecoveryImage 檔案移動到這裡。請確保將 .dmg 和 .chunklist 檔案都複製到這個資料夾：
 
 ![](../images/installer-guide/windows-install-md/com-recovery.png)
 
-Now grab OpenCorePkg you downloaded earlier and open it:
+現在取得之前下載的 OpenCorePkg 並打開它：
 
 ![](../images/installer-guide/windows-install-md/base-oc-folder.png)
 
-Here we see both IA32(32 Bit CPUs) and X64(64 Bit CPUs) folders, choose the one that's most appropriate to your hardware and open it. Next grab the EFI folder inside and place this on the root of the USB drive along side com.apple.recovery.boot. Once done it should look like this:
+這裡我們看到 IA32（32 位元 CPU）和 X64（64 位元 CPU）資料夾，根據你的硬體選擇一個最適合的，並打開它。接下来，取得裡面的 EFI 資料夾，並將其與 com.apple.recovery.boot 一起放在隨身碟的根目錄上。完成後，它看起來應該像這樣：
 
 ![](../images/installer-guide/windows-install-md/com-efi-done.png)
 
-### Rufus method
+### Rufus 方法
 
-1. Download [Rufus](https://rufus.ie/)
-2. Set the BOOT selection as not bootable
-3. Set File System as Large FAT32
-4. Click Start
-5. Delete all file autorun in USB Drive partition
+1. 下載 [Rufus](https://rufus.ie/)
+2. 將 BOOT 選項設置為「無引導」
+3. 設定檔案系統為 Large FAT32
+4. 按「開始」
+5. 刪除隨身碟中所有「autorun」檔案
 
 ![](../images/installer-guide/windows-install-md/format-usb-rufus.png)
 
-Next, go to the root of this USB drive and create a folder called `com.apple.recovery.boot`. Then move the downloaded BaseSystem or RecoveryImage files. Please ensure you copy over both the .dmg and .chunklist files to this folder:
+接下來，在這個隨身碟的根目錄下建立一個名為 `com.apple.recovery.boot` 的資料夾。然後將下載的 baseSystem 或 RecoveryImage 檔案移動到這裡。請確保將 .dmg 和 .chunklist 檔案都複製到這個資料夾：
 
 ![](../images/installer-guide/windows-install-md/com-recovery.png)
 
-Now grab OpenCorePkg you downloaded earlier and open it:
+現在取得之前下載的 OpenCorePkg 並打開它：
 
 ![](../images/installer-guide/windows-install-md/base-oc-folder.png)
 
-Here we see both IA32(32 Bit CPUs) and X64(64 Bit CPUs) folders, choose the one that's most appropriate to your hardware and open it. Next grab the EFI folder inside and place this on the root of the USB drive along side com.apple.recovery.boot. Once done it should look like this:
+這裡我們看到 IA32（32 位元 CPU）和 X64（64 位元 CPU）資料夾，根據你的硬體選擇一個最適合的，並打開它。接下来，取得裡面的 EFI 資料夾，並將其與 com.apple.recovery.boot 一起放在隨身碟的根目錄上。完成後，它看起來應該像這樣：
 
 ![](../images/installer-guide/windows-install-md/com-efi-done.png)
 
-### diskpart method
+### diskpart 方法
 
-::: details diskpart method
+::: details diskpart 方法
 
-Press Windows + R and enter `diskpart`.
+按 Windows+R 並输入 `diskpart` 。
 
-Now run the following:
+執行以下命令：
 
 ```sh
 # List available disks
@@ -165,48 +165,48 @@ format fs=fat32 quick
 ASSIGN LETTER=E
 ```
 
-Next, go to the root of this USB drive and create a folder called `com.apple.recovery.boot`. Then move the downloaded BaseSystem or RecoveryImage files. Please ensure you copy over both the .dmg and .chunklist files to this folder:
+接下來，在這個隨身碟的根目錄下建立一個名為 `com.apple.recovery.boot` 的資料夾。然後將下載的 baseSystem 或 RecoveryImage 檔案移動到這裡。請確保將 .dmg 和 .chunklist 檔案都複製到這個資料夾：
 
 ![](../images/installer-guide/windows-install-md/com-recovery.png)
 
-Now grab OpenCorePkg you downloaded earlier and open it:
+現在取得之前下載的 OpenCorePkg 並打開它：
 
 ![](../images/installer-guide/windows-install-md/base-oc-folder.png)
 
-Here we see both IA32(32 Bit CPUs) and X64(64 Bit CPUs) folders, choose the one that's most appropriate to your hardware and open it. Next grab the EFI folder inside and place this on the root of the USB drive along side com.apple.recovery.boot. Once done it should look like this:
+這裡我們看到 IA32（32 位元 CPU）和 X64（64 位元 CPU）資料夾，根據你的硬體選擇一個最適合的，並打開它。接下来，取得裡面的 EFI 資料夾，並將其與 com.apple.recovery.boot 一起放在隨身碟的根目錄上。完成後，它看起來應該像這樣：
 
 ![](../images/installer-guide/windows-install-md/com-efi-done.png)
 
-::: details Legacy Install Setup
+::: details 傳統 BIOS 安裝設定
 
-If your firmware does not support UEFI, see below instructions:
+如果您的韌體不支援 UEFI，請參閱以下說明:
 
-To start, you'll need the following:
+首先，你需要以下東西：
 
 * [7-Zip](https://www.7-zip.org)
 * [BOOTICE](https://www.majorgeeks.com/files/details/bootice_64_bit.html)
 * [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases)
 
-Next, open up BOOTICE and ensure you've selected the right drive.
+接下來，打開 BOOTICE 並確保選擇了正確的磁碟。
 
 ![](../images/installer-guide/windows-install-md/bootice.png)
 
-Next, enter "Process MBR" then select "Restore MBR" and select the **boot0** file from `Utilities/LegacyBoot/` in OpenCorePkg:
+接下來，按「Process MBR」，然後按「Restore MBR」，並在 OpenCorePkg 中從 `Utilities/LegacyBoot/` 中選擇 **boot0** 檔案：
 
 | Restore MBR | Restore boot0 file |
 | :--- | :--- |
 | ![](../images/installer-guide/windows-install-md/restore-mbr.png) | ![](../images/installer-guide/windows-install-md/restore-mbr-file.png) |
 
-Then head back to the main screen and select "Process PBR" then "Restore PBR". From here, choose the **boot1f32** file from `Utilities/LegacyBoot/` in OpenCorePkg:
+返回主界面，按「Process MBR」，然後按「Restore MBR」，從 OpenCorePkg 的 `Utilities/LegacyBoot/` 中選擇 **boot1f32** 檔案：
 
 | Restore PBR | Restore boot1f32 file |
 | :--- | :--- |
 | ![](../images/installer-guide/windows-install-md/restore-pbr.png) | ![](../images/installer-guide/windows-install-md/restore-pbr-file.png) |
 
-Once this is done, head back to your USB and do 1 final thing. Grab either the **bootx64**(64 Bit CPUs) or **bootia32**(32 Bit CPUs) file from `Utilities/LegacyBoot/` and place it on the root of your drive. **Rename this file to boot** to ensure DuetPkg can properly:
+完成後，回到你的隨身碟，做最後一件事。從 `Utilities/LegacyBoot/` 中取得 **bootx64**（64 位元 CPU）或 **bootia32**（32位元 CPU）檔案，並將其放在隨身碟的根目錄下。 **將這個檔案重新命名為 boot** 以確保 DuetPkg 可以正常執行:
 
 ![](../images/installer-guide/windows-install-md/final-boot-file.png)
 
 :::
 
-## Now with all this done, head to [Setting up the EFI](./opencore-efi.md) to finish up your work
+## 現在，所有步驟都完成了，前往[設定 EFI](./opencore-efi.md) 來完成你的工作
