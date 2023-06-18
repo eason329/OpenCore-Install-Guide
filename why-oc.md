@@ -1,108 +1,108 @@
-# 為什麼 OpenCore 超越 Clover 和其他程序
+# 为什么OpenCore超过Clover和其他公司
 
-本節簡單介紹了為什麼社群已經過渡到 OpenCore，並旨在消除社群中常見的一些誤解。那些只是想要一台 macOS 電腦的人可以跳過這一頁。
+本节简要介绍了为什么社区已经过渡到OpenCore，并旨在消除社区中常见的一些误解。那些只是想要一台macOS机器的人可以跳过这一页。
 
 [[toc]]
 
-## OpenCore 特性
+## OpenCore特性
 
-* 更多的操作系統支援！
-  * OpenCore 現在支持更多版本的 OS X 和 macOS，而無需像 Clover 和 Chameleon 那樣必須進行痛苦的破解過程
-  * 這包括早在 10.4、Tiger 的操作系統，甚至是最新版本的 macOS 13 Ventura！
-* 平均而言，OpenCore 系統的啟動速度比使用 Clover 的系統要快，因為減少了不必要的補丁
-* 更好的整體穩定性，補丁可以更精確：
+* 更多的操作系统支持!
+  * OpenCore现在支持更多版本的OS X和macOS，而无需Clover和Chameleon必须实现的痛苦hack
+  * 这包括早在10.4、Tiger的操作系统，甚至是13的最新版本Ventura!
+* 平均而言，OpenCore系统的启动速度比使用Clover的系统要快，因为不必要的补丁要少
+* 更好的整体稳定性，补丁可以更精确:
   * [macOS 10.15.4 更新](https://www.reddit.com/r/hackintosh/comments/fo9bfv/macos_10154_update/)
-  * AMD OSX 補丁不需要在每個小的安全更新中更新
-* 以多種形式提高整體安全性:
-  * 不需要停用系統完整性保護（SIP）
-  * 內置 FileVault 2 支援
-  * [Vaulting](https://sumingyd.github.io/OpenCore-Post-Install/universal/security.html#Vault) 允許創建 EFI 快照防止不必要的修改
-  * 真正的 Secure Boot 支持
-    * 包括 UEFI 和蘋果的變種
-* BootCamp 切換和啟動設備選擇通過讀取啟動盤設置的 NVRAM 變量來支援，就像真正的 Mac 一樣。
-* 通過 `boot.efi` 支援開機熱鍵 - 啟動時按 `Option` 或 `ESC` 來選擇啟動設備, `Cmd+R` 進入恢復模式或 `Cmd+Opt+P+R` 重設 NVRAM。
+  * AMD OSX补丁不需要在每个小的安全更新中更新
+* 以多种形式提高整体安全性:
+  * 不需要禁用系统完整性保护(SIP)
+  * 内置FileVault 2支持
+  * [Vaulting](https://sumingyd.github.io/OpenCore-Post-Install/universal/security.html#Vault) 允许创建EFI快照防止不必要的修改
+  * 真正的安全引导支持
+    * 包括UEFI和苹果的变种
+* BootCamp切换和启动设备选择通过读取启动盘设置的NVRAM变量来支持，就像真正的Mac一样。
+* 通过引导支持引导热键。efi - hold启动时选择启动设备的选项或ESC, Cmd+R进入恢复或Cmd+Opt+P+R复位NVRAM。
 
-### 軟體支援
+### 软件支持
 
-一些人想要從其他開機程式轉換的最大原因實際上是軟體支援：
+一些人想要从其他引导加载程序转换的最大原因实际上是软件支持:
 
-* Kexts 不再使用 Clover 測試:
-  * kext 出問題了？許多開發人員，包括 [Acidanthera](https://github.com/acidanthera) (您最喜歡的大多數 kext 的製造者) 不再提供除了 OpenCore 以外的支援
-* 許多韌體驅動程式被整合到 OpenCore：
-  * [APFS 支援](https://github.com/acidanthera/AppleSupportPkg)
-  * [FileVault 支援](https://github.com/acidanthera/AppleSupportPkg)
-  * [韌體補丁](https://github.com/acidanthera/AptioFixPkg)
+* Kexts不再测试Clover:
+  * kext出问题了? 许多开发人员，包括 [Acidanthera](https://github.com/acidanthera) (您最喜欢的大多数kext的制造商) 除非在OpenCore上，否则不会提供支持
+* 许多固件驱动程序被合并到OpenCore:
+  * [APFS 支持](https://github.com/acidanthera/AppleSupportPkg)
+  * [FileVault 支持](https://github.com/acidanthera/AppleSupportPkg)
+  * [Firmware 补丁](https://github.com/acidanthera/AptioFixPkg)
 
-## OpenCore 的缺點
+## OpenCore的缺点
 
-Clover 的大部分功能實際上在 OpenCore 中以一些奇怪的形式得到了支援，但是在過渡時，你應該密切關注 OpenCore 缺失的功能，因為這可能會影響到你自己:
+Clover的大部分功能实际上在OpenCore中以一些奇怪的形式得到了支持，但是在过渡时，你应该密切关注OpenCore缺失的功能，因为这可能会影响到你自己:
 
-* 不支援引導基於 MBR 的操作系統
-  * 解決方法是在 OpenCore 中鍊式加載 rEFInd 一次
-* 不支援基於 UEFI 的 VBIOS 補丁
-  * 但是在 macOS 中可以這樣做
-* 不支援傳統 GPU 的自動設備屬性注入
-  * 例如：InjectIntel、InjectNVIDIA、InjectAti
-  * 然而，你可以手動 [修補 GPU](https://sumingyd.github.io/OpenCore-Post-Install/gpu-patching/)
-* 不支援 IRQ 衝突補丁
+* 不支持引导基于mbr的操作系统
+  * 解决方法是在OpenCore中链式加载rEFInd一次
+* 不支持基于uefi的VBIOS补丁
+  * 但是在macOS中可以这样做
+* 不支持传统gpu的自动设备属性注入
+  * 例如:InjectIntel, InjectNVIDIA InjectAti
+  * 然而,可以手动: [GPU patching](https://sumingyd.github.io/OpenCore-Post-Install/gpu-patching/)
+* 不支持IRQ冲突补丁
   * 可以使用 [SSDTTime](https://github.com/corpnewt/SSDTTime)
-* 不支援舊的 CPU 生成 P 和 C 狀態
-* 不支援硬體 UUID 注入
-* 不支援 Clover 的許多 XCPM 補丁
-  * 例如：Ivy Bridge XCPM 補丁
-* 不支援隱藏特定的硬碟區
-* 不支援在 OpenCore 的選單內改變設置
-* 不修補 PCIRoot UID 值
-* 不支援 macOS 特有的 ACPI 補丁
+* 不支持旧的cpu生成P和C状态
+* 不支持硬件UUID注入
+* 不支持Clover的许多XCPM补丁
+  * 例如：Ivy Bridge XCPM补丁
+* 不支持隐藏特定的驱动器
+* 不支持在OpenCore的菜单内改变设置
+* 不修补PCIRoot UID值
+* 不支持macos特有的ACPI补丁
 
-## 常見的誤解
+## 常见的误区
 
-### OpenCore 還是測試版，所以不穩定嗎？
+### OpenCore还是测试版，所以不稳定吗?
 
-簡短的回答：不
+简短的回答:不
 
-長答案：不是
+长答案:不是
 
-OpenCore 的版本號並不代表項目的質量。相反，它更多的是一種看到項目的墊腳石的方式。 Acidanthera 仍然有很多他們想要做的項目，包括全面的改進和更多的功能支持。
+OpenCore的版本号并不代表项目的质量。相反，它更多的是一种看到项目的垫脚石的方式。Acidanthera仍然有很多他们想要做的项目，包括全面的改进和更多的功能支持。
 
-例如，OpenCore 通過適當的安全審計以確保符合 UEFI Secure Boot，並且是唯一經過這些嚴格審查並具有此類支援的 Hackintosh 開機程式。
+例如，OpenCore通过适当的安全审计以确保符合UEFI Secure Boot，并且是唯一经过这些严格审查并具有此类支持的Hackintosh引导加载程序。
 
-版本 0.6.1 最初被設計為 OpenCore 的官方發布版本，因為它將擁有適當的 UEFI/Apple Secure Boot，並將是 OpenCore 作為公共工具發布的一周年。然而，由於 macOS Big Sur 周圍的情況以及 OpenCore 的預連接器的重寫以支持它，它決定將 1.0.0 推遲一年。
+版本0.6.1最初被设计为OpenCore的官方发布版本，因为它将拥有适当的UEFI/Apple Secure Boot，并将是OpenCore作为公共工具发布的一周年。然而，由于macOS Big Sur周围的情况以及OpenCore的预链接器的重写以支持它，它决定将1.0.0推迟一年。
 
-目前的路線圖：
+目前的路线图：
 
-* 2019年：測試年
-* 2020年：安全啟動之年
-* 2021年：改進之年
+* 2019年:测试年
+* 2020年:安全启动之年
+* 2021年:改进之年
 
-所以請不要把版本號看作是一個障礙，而應該看作是值得期待的東西。
+所以请不要把版本号看作是一个障碍，而应该看作是值得期待的东西。
 
-### OpenCore 是否總是在其他操作系統中注入 SMBIOS 和 ACPI 數據?
+### OpenCore是否总是在其他操作系统中注入SMBIOS和ACPI数据?
 
-預設情況下，OpenCore 將假設所有操作系統都應該平等對待 ACPI 和 SMBIOS 訊息。這種想法的原因包括三個部分:
+默认情况下，OpenCore将假设所有操作系统都应该平等对待ACPI和SMBIOS信息。这种想法的原因包括三个部分:
 
-* 這允許正確的多系統開機支援，如 [BootCamp](https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootcamp.html)
-* 避免製作不良的 DSDT，並鼓勵適當的 ACPI 實踐
-* 避免訊息被多次注入的邊緣情況，通常在 Clover 中看到
-  * 例如：一旦啟動 boot.efi，你將如何處理 SMBIOS 和 ACPI 數據注入，但後來被趕出去嗎？因此試圖撤銷它們可能相當危險。這就是為什麼 Clover 的方法是不被允許的。
+* 这允许正确的多引导支持，如 [BootCamp](https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootcamp.html)
+* 避免制作不良的dsdt，并鼓励适当的ACPI实践
+* 避免信息被多次注入的边缘情况，通常在Clover中看到
+  * 例如：一旦启动boot.efi，你将如何处理SMBIOS和ACPI数据注入， 但后来被赶出去吗? 因此试图撤消它们可能相当危险。这就是为什么Clover的方法是不被允许的。
 
-然而，在 OpenCore 中有一些奇怪的地方允許 SMBIOS 注入受到 macOS 的限制，這是通過為 macOS 讀取 SMBIOS 信息的地方打補丁實現的。將 `CustomSMBIOSMode` 設置為 `Custom` 的 `CustomSMIOSGuid` 選項可能會在未來中斷，因此我們只建議在其他操作系統中某些軟件中斷的情況下使用此選項。為了最好的穩定性，請禁用這些選項。
+然而，在OpenCore中有一些奇怪的地方允许SMBIOS注入受到macOS的限制，这是通过为macOS读取SMBIOS信息的地方打补丁实现的。 将 `CustomSMBIOSMode`设置为`Custom`的`CustomSMIOSGuid`选项可能会在未来中断，因此我们只建议在其他操作系统中某些软件中断的情况下使用此选项。为了最好的稳定性，请禁用这些选项。
 
-### OpenCore 需要全新安裝嗎？
+### OpenCore需要全新安装吗?
 
-如果你有一個純淨的安裝，那就完全不需要了——這指的是操作系統是否以任何方式被篡改了，比如將第三方 kext 安裝到系統卷或其他蘋果不支持的修改。當你的系統被嚴重篡改，無論是你還是第三方工具，如 Hackintool，我們建議重新安裝，以避免任何潛在的問題。
+如果你有一个“Vanilla”安装，那就完全不需要了——这指的是操作系统是否以任何方式被篡改了，比如将第三方kext安装到系统卷或其他苹果不支持的修改。当你的系统被严重篡改，无论是你还是第三方工具，如Hackintool，我们建议重新安装，以避免任何潜在的问题。
 
-特別提醒 Clover 用戶：安裝 OpenCore 時，請重置 NVRAM。Clover 的許多變量可能與 OpenCore 和 macOS 衝突。
+特别提醒Clover用户:安装OpenCore时，请重置NVRAM。Clover的许多变量可能与OpenCore和macOS冲突。
 
-* 注：眾所周知，Thinkpad 筆記本電腦在 OpenCore 中 NVRAM 重置後是會變磚的，我們建議通過更新這些機器的 BIOS 來重置 NVRAM。
+* 注:众所周知，Thinkpad笔记本电脑在OpenCore中NVRAM重置后是半砖的，我们建议通过更新这些机器的BIOS来重置NVRAM。
 
-### OpenCore 只支援有限的 macOS 版本嗎？
+### OpenCore只支持macOS的有限版本吗?
 
-從 OpenCore 0.6.2 開始，你現在可以啟動每個 Intel 版本的 macOS，一直到 OS X 10.4！正確的支援取決於您的硬體，所以請自行驗證：[硬體限制](macos-limits.md)
+从OpenCore 0.6.2开始，你现在可以启动每个Intel版本的macOS，一直到OS X 10.4!正确的支持取决于您的硬件，所以请自行验证:[硬件限制](macos-limits.md)
 
-::: details macOS 安裝圖庫
+::: tip macOS安装库的详细信息
 
-Acidanthera 測試了很多版本的 OS X，而 dortania 也在他們的舊 HP DC 7900 (Core2 Quad Q8300) 上運行過很多版本的 OS X。以下是他們測試過的一小部分:
+Acidanthera测试了很多版本的OS X，我自己也在我的旧HP DC 7900 (Core2 Quad Q8300)上运行过很多版本的OS X。以下是我测试过的一小部分:
 
 ![](./images/installer-guide/legacy-mac-install-md/dumpster/10.4-Tiger.png)
 
@@ -128,32 +128,32 @@ Acidanthera 測試了很多版本的 OS X，而 dortania 也在他們的舊 HP D
 
 :::
 
-### OpenCore 支援舊的硬體嗎?
+### OpenCore支持旧的硬件吗?
 
-到目前為止，只要操作系統本身支持，大多數 Intel 硬體都是支援的！但是，請參閱[硬體限制頁面](macos-limits.md) 以了解 OS X/macOS 的哪些版本支援哪些硬體。
+到目前为止，只要操作系统本身支持，大多数英特尔硬件都是受支持的!但是，请参阅[硬件限制页面](macos-limits.md) 以了解OS X/macOS的哪些版本支持哪些硬件。
 
-目前，Intel 的 Yonah 和更新系列的 CPU 已經通過 OpenCore 進行了適當的測試。
+目前，英特尔的Yonah和新系列cpu已经通过OpenCore进行了适当的测试。
 
-### OpenCore 支持 Windows/Linux 開機嗎?
+### OpenCore支持Windows/Linux引导吗?
 
-OpenCore 將自動檢測 Windows 而無需任何額外配置。在 OpenCore 0.7.3 中，OpenLinuxBoot 作為 EFI 驅動程序添加到 OpenCore 中，它將自動檢測 Linux 分區。這需要 [ext4_x64.efi](https://github.com/acidanthera/OcBinaryData/blob/master/Drivers/ext4_x64.efi) 或 [btrfs_x64.efi](https://github.com/acidanthera/OcBinaryData/blob/master/Drivers/btrfs_x64.efi)，具體取決於在發行版中使用的格式。對於開機程式具有不規則路徑或名稱的任何操作系統，你可以簡單地將其新增到 BlessOverride 部分。
+OpenCore将自动检测Windows而无需任何额外配置。 在OpenCore 0.7.3中，OpenLinuxBoot作为EFI驱动程序添加到OpenCore中，它将自动检测Linux分区。这需要[ext4_x64.efi](https://github.com/acidanthera/OcBinaryData/blob/master/Drivers/ext4_x64.efi) 或 [btrfs_x64.efi](https://github.com/acidanthera/OcBinaryData/blob/master/Drivers/btrfs_x64.efi)具体取决于在发行版中使用的格式。对于引导加载程序具有不规则路径或名称的任何操作系统，您可以简单地将其添加到BlessOverride部分。
 
-### Hackintosh 的合法性
+### Hackintoshing的合法性
 
-Hackintosh 位於法律的灰色地帶，主要是因為雖然這並不違法，但我們實際上違反了蘋果的 EULA。這不是違法的原因：
+hackintoshing位于法律的灰色地带，主要是因为虽然这并不违法，但我们实际上违反了EULA。这不是违法的原因:
 
-* 我們從[蘋果的伺服器](https://github.com/acidanthera/OpenCorePkg/blob/0.6.9/Utilities/macrecovery/macrecovery.py#L125)直接下載 macOS
-* 我們是作為一個教學和個人使用的非營利組織來做這件事的
-  * 計劃將 Hackintosh 用於工作或想轉售它們的人應該參考 [Psystar 案例](https://en.wikipedia.org/wiki/Psystar_Corporation) 和他們的地區法律
+* 我们从[苹果的服务器](https://github.com/acidanthera/OpenCorePkg/blob/0.6.9/Utilities/macrecovery/macrecovery.py#L125)直接下载macOS
+* 我们是作为一个教学和个人使用的非营利组织来做这件事的
+  * 计划将Hackintosh用于工作或想转售它们的人应该参考 [Psystar 案例](https://en.wikipedia.org/wiki/Psystar_Corporation) 和他们的地区法律
 
-雖然 EULA 規定 macOS 只能安裝在真正的 mac 電腦或在真正的 mac 電腦上運行的虛擬機器上 ([第 2B-i 和 2B-iii 節](https://www.apple.com/legal/sla/docs/macOSBigSur.pdf))，但沒有強制執行的法律完全禁止這一點。然而，重新打包和修改 macOS 安裝程序的網站確實存在 [DMCA takedowns](https://en.wikipedia.org/wiki/Digital_Millennium_Copyright_Act) 等問題的潛在風險。
+虽然EULA规定macOS只能安装在真正的mac电脑或在真正的mac电脑上运行的虚拟机上 ([第2B-i和2B-iii节](https://www.apple.com/legal/sla/docs/macOSBigSur.pdf)),但没有强制执行的法律完全禁止这一点。 然而，重新打包和修改macOS安装程序的网站确实存在 [DMCA takedowns](https://en.wikipedia.org/wiki/Digital_Millennium_Copyright_Act) 等问题的潜在风险
 
-* **注意**：這不是法律建議，所以請自己進行適當的評估，如果你有任何疑問，請與你的律師討論。
+* **注意**: 这不是法律建议，所以请自己进行适当的评估，如果您有任何疑问，请与您的律师讨论。
 
-### macOS 支援 NVIDIA GPU 嗎?
+### macOS支持NVIDIA gpu吗?
 
-由於在 macOS 的新版本中圍繞 NVIDIA 支援的問題，許多用戶得出結論，macOS 從未支持 NVIDIA GPU。事實上，在直到 Monterey Beta 7 發布之前，蘋果都支持使用 NVIDIA GPU 的 mac 電腦（例如 2013 年使用 Kepler dGPU 的 MacBook Pro)。雖然有社區製作的補丁可以恢復支援，但它們需要停用 SIP（系統完整性保護），使 macOS 中的重要安全功能失效。
+由于在macOS的新版本中围绕NVIDIA支持的问题，许多用户得出结论，macOS从未支持NVIDIA gpu。直到Monterey Beta 7发布之前，苹果都支持使用NVIDIA gpu的mac电脑(例如2013年使用Kepler dGPU的MacBook Pro)。虽然有社区制作的补丁可以恢复支持，但它们需要禁用SIP(系统完整性保护)，从而禁用macOS中的重要安全功能。
 
-另一個問題與任何新的 NVIDIA GPU 有關，因為蘋果停止了與它們一起發貨的機器，因此它們從來沒有得到蘋果的官方操作系統支持。相反，用戶不得不依賴 NVIDIA 的第三方驅動。由於蘋果新推出的安全啟動的問題，他們不能再支援 Web Driver，因此 NVIDIA 不能在更新的平台上發布它們，限制它們在 mac OS 10.13, High Sierra。
+另一个问题与任何新的NVIDIA gpu有关，因为苹果停止了与它们一起发货的机器，因此它们从来没有得到苹果的官方操作系统支持。相反，用户不得不依赖NVIDIA的第三方驱动。由于苹果新推出的安全引导的问题，他们不能再支持网络驱动程序，因此NVIDIA不能在更新的平台上发布它们，限制它们在mac OS 10.13, High Sierra。
 
-有關操作系統支援的更多資訊，請參閱：[顯示卡購買指南](https://eason329.github.io/GPU-Buyers-Guide/)
+有关操作系统支持的更多信息，请参阅这里: [GPU买家指南](https://sumingyd.github.io/GPU-Buyers-Guide/)

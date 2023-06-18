@@ -1,10 +1,10 @@
-# 舊版 macOS：磁碟映像
+# Legacy macOS: Disk Images
 
-此方法依賴於來自蘋果或 Acidanthera 伺服的映像，並恢復到你的磁碟上。
+This method instead relies on hosted images either from Apple or Acidanthera, and restoring onto your drive.
 
-#### Acidanthera 的映像
+#### Acidanthera Images
 
-以下安裝程式是從正版 Mac 電腦的恢復磁碟提取，並刪除它們的 SMBIOS 鎖，OS X 本身的內容沒有以任何方式修改。
+The below installers were pulled from genuine Mac restore disks with their SMBIOS lock removed, contents of OS X itself have not been modified in any way.
 
 * [OS X 10.4.10(8R4088)](https://archive.org/details/10.4.10-8-r-4088-acdt)[MEGA Mirror](https://mega.nz/folder/D3ASzLzA#7sjYXE2X09f6aGjol_C7dg)
 
@@ -12,58 +12,58 @@
 
 * [OS X 10.6.7(10J4139)](https://archive.org/details/10.6.7-10j3250-disk-images)[MEGA Mirror](https://mega.nz/folder/z5YUhYTb#gA_IRY5KMuYpnNCg7kR3ug/file/ioQkTagI)
 
-#### 蘋果的映像
+#### Apple Images
 
-請注意，這些映像需要您擁有 Apple Developer 帳戶才能存取。
+Note that these images require you to have an Apple Developer account to access.
 
 * [OS X 10.5.0 Golden Master(9a581)](https://download.developer.apple.com/Mac_OS_X/mac_os_x_v10.5_leopard_9a581/leopard_9a581_userdvd.dmg)
 
 * [OS X 10.6.0 Golden Master(10a432)](https://download.developer.apple.com/Mac_OS_X/mac_os_x_version_10.6_snow_leopard_build_10a432/mac_os_x_v10.6_build_10a432_user_dvd.dmg)
 
-### 恢復你的磁碟
+### Restoring the drive
 
-有趣的來了，您首先要打開剛剛下載的 dmg 檔案並掛載它。然後開啟磁碟工具程式，並將您的磁碟格式化為使用 GUID 分區表的 macOS 擴充格式（HFS+）：
+Now comes the fun part, you'll first want to open the dmg you just downloaded and have it mounted. Now open Disk Utility and format your drive as macOS Extended(HFS+) with a GUID partition map:
 
-![格式化 USB](../images/installer-guide/mac-install-md/format-usb.png)
+![Formatting the USB](../images/installer-guide/mac-install-md/format-usb.png)
 
-接下來我們有兩個選擇：
+Next we have 2 options to follow:
 
-* [ASR 恢復](#asr)（Apple Software Restore）
-  * 基於命令列, SIP 啟用時仍可正常運作
-* [磁碟工具程式恢復](#磁碟工具程式)
-  * 在新版操作系統中可能需要停用 SIP
+* [ASR Restore](#asr)(Apple Software Restore)
+  * Terminal based, works with SIP enabled
+* [Disk Utility Restore](#disk-utility)
+  * May require SIP disabled in newer OSes
   
 #### ASR
 
-在這裡，你只需要打開終端並執行以下命令：
+Here you'll simply want to open terminal and run the following:
 
 ```sh
 sudo asr restore -source /Volumes/Mac\ OS\ X\ Install\ DVD  -target /Volumes/MyVolume -erase -noverify
 ```
 
-* **注意**：這可能與您的設定不一致，請相應更改：
-  * 將 `/Volumes/Mac\ OS\ X\ Install\ DVD` 更改為您掛載的磁碟映像的名稱
-  * 將 `/Volumes/MyVolume` 更改為您的（隨身碟）磁碟區的名稱
+* **Note**: This may not align with your setup, please change accordingly:
+  * Change `/Volumes/Mac\ OS\ X\ Install\ DVD` to what your mounted Disk Image is called
+  * Change `/Volumes/MyVolume` to what your USB is called
 
-### 你完成這些步驟後, 可前往[設定 OpenCore 的 EFI 環境](./mac-install.md#設定-opencore-的-efi-環境)
+### Once you're finished, you can head to [Setting up OpenCore's EFI environment](./mac-install.md#setting-up-opencore-s-efi-environment)
   
-#### 磁碟工具程式
+#### Disk Utility
 
-由於磁盤工具的一些令人討厭的問題，如果啟用 SIP，許多恢復可能會失敗。如果您遇到問題，我們建議您使用 [ASR 方法](#asr) 或停用 SIP。
+Due to some pesky issues with Disk Utility, many restores can fail if SIP is enabled. If you have issues we recommend either using the [ASR Method](#asr) or disable SIP.
 
-首先，打開「磁碟工具程式」，你應該會在側邊欄中看到你的 USB 隨身碟和磁碟映像。從這裡，選擇恢復
+To start, open Disk Utility and you should see both your USB drive and the Disk Image in the sidebar. From here, select restore
 
 ![](../images/installer-guide/legacy-mac-install-md/pre-restore.png)
 ![](../images/installer-guide/legacy-mac-install-md/restore.png)
 
-::: details 疑難排解
+::: details Troubleshooting
 
-如果在恢復過程中出現類似這樣的錯誤：
+If you get an error such as this one during restore:
 
 ![](../images/installer-guide/legacy-mac-install-md/sip-fail.png)
 
-這可能意味著需要停用 SIP，但我們建議改用 [ASR 方法](#asr)。
+This likely means SIP needs to be disabled, however we recommend using [ASR Method](#asr) instead.
 
 :::
 
-### 當你完成這些步驟後, 你可前往[設定 OpenCore 的 EFI 環境](./mac-install.md#設定-opencore-的-efi-環境)
+### Once you're finished, you can head to [Setting up OpenCore's EFI environment](./mac-install.md#setting-up-opencore-s-efi-environment)

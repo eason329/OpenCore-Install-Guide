@@ -1,12 +1,12 @@
-# 舊版 macOS：線上方法
+# Legacy macOS: Online Method
 
-此方法讓我們下載從 10.7 至目前最新的任意 macOS 版本，但它們只包含修復程式，因此需要網際網路連線才能安裝
+This method allows us to download legacy versions of macOS including 10.7 to current, however these are only recovery installers so require an internet connection inside the installer itself
 
-首先，你要改為使用 macrecovery.py。此工具已經包括在 OpenCorePkg　之中：
+To start, you'll want to use macrecovery.py instead. This tool is actually already bundled in OpenCorePkg:
 
 ![](../images/installer-guide/legacy-mac-install-md/macrecovery.png)
 
-工具的操作非常簡單，只要按你要下載的操作系統執行以下其中一個命令：
+Instructions for running are quite simple, choose from one of the below commands depending on which OS you want to download:
 
 ```sh
 # Lion (10.7):
@@ -44,25 +44,25 @@ python3 ./macrecovery.py -b Mac-42FD25EABCABB274 -m 00000000000000000 download
 # Monterey (12)
 python3 ./macrecovery.py -b Mac-FFE5EF870D7BA81A -m 00000000000000000 download
 
-# 最新版本
+# Latest version
 # ie. Ventura (13)
 python3 ./macrecovery.py -b Mac-4B682C642B45593E -m 00000000000000000 download
 ```
 
-* **macOS 12 及以上版本注意**: 由於最新版本的 macOS 對 USB 堆棧進行了更改，因此在安裝 macOS 之前，強烈建議你使用 USBToolBox 來映射 USB 連接埠。
-  * <span style="color:red"> 注意: </span> 在 macOS 11.3 及更新版本中，[XhciPortLimit 己經失效，導致開機循環](https://github.com/dortania/bugtracker/issues/162).
-    * 如果你已[映射 USB 連接埠](https://sumingyd.github.io/OpenCore-Post-Install/usb/)且停用了 `XhciPortLimit`，你可以正常啟動 macOS 11.3+。
+* **macOS 12 and above note**: As recent macOS versions introduce changes to the USB stack, it is highly advisable that you map your USB ports (with USBToolBox) before installing macOS.
+  * <span style="color:red"> CAUTION: </span> With macOS 11.3 and newer, [XhciPortLimit is broken resulting in boot loops](https://github.com/dortania/bugtracker/issues/162).
+    * If you've already [mapped your USB ports](https://sumingyd.github.io/OpenCore-Post-Install/usb/) and disabled `XhciPortLimit`, you can boot macOS 11.3+ without issues.
 
-現在，在終端機執行以上其中一個命令。完成後，你會取得類似下面圖片的輸出：
+From here, run one of those commands in terminal and once finished you'll get an output similar to this:
 
 ![](../images/installer-guide/legacy-mac-install-md/download-done.png)
 
-當完成後，將你的隨身碟以 GUID 磁碟分割方案格式化為 FAT32：
+Once this is done, format your USB as FAT32 with GUID Partition Scheme:
 
 ![](../images/installer-guide/legacy-mac-install-md/fat32-erase.png)
 
-最後，在這個隨身碟的根目錄下建立一個名為 `com.apple.recovery.boot` 的資料夾，並將剛下載好的 BaseSystem/RecoveryImage 檔案放到該資料夾裡：
+And finally, create folder on the root of this drive called `com.apple.recovery.boot` and place the newly downloaded BaseSystem/RecoveryImage files in:
 
 ![](../images/installer-guide/legacy-mac-install-md/dmg-chunklist.png)
 
-### 當你完成這些步驟後, 你可前往[設定 OpenCore 的 EFI 環境](./mac-install.md#設定-opencore-的-efi-環境)
+### Once you're finished, you can head to [Setting up OpenCore's EFI environment](./mac-install.md#setting-up-opencore-s-efi-environment)

@@ -23,9 +23,14 @@ module.exports = {
     ],
     locales: {
         '/': {
-            lang: 'zh-TW',
-            title: 'OpenCore 安裝指南',
-            description: '正體中文版 - 目前支援版本 0.8.8'
+            lang: 'zh-CN',
+            title: 'OpenCore安装指南',
+            description: '中文版OpenCore安装指南 - Ver.0.8.8'
+        },
+        '/zh/': {
+            lang: 'en-US',
+            title: 'OpenCore Install Guide',
+            description: 'OpenCore Install Guide'
         },
     },
 
@@ -63,53 +68,55 @@ module.exports = {
     themeConfig: {
         lastUpdated: true,//上次更新
         smoothScroll: true,//页面滚动
-        repo: 'https://github.com/eason329/OpenCore-Install-Guide',
+        repo: 'https://github.com/sumingyd/OpenCore-Install-Guide',
         editLinks: true,
-        editLinkText: '在 GitHub 上編輯此頁',
         logo: '/homepage.png',
         locales: {
             '/': {
-                label: '正體中文',
+                label: '简体中文',
+                selectText: '选择语言',
+                ariaLabel: '选择语言',
+                editLinkText: '在 GitHub 上编辑此页',
                 lastUpdated: '上次更新',
                 nav: [
                     {
-                        text: '指南選單',
+                        text: '指南菜单',
                         items: [
                             {
-                                text: 'OpenCore 安裝指南',
-                                link: 'https://eason329.github.io/OpenCore-Install-Guide/'
+                                text: 'OpenCore安装',
+                                link: 'https://sumingyd.github.io/OpenCore-Install-Guide/'
                             },
                             {
-                                text: 'OpenCore 安裝後完善指南',
-                                link: 'https://eason329.github.io/OpenCore-Post-Install/'
+                                text: 'OpenCore安装后',
+                                link: 'https://sumingyd.github.io/OpenCore-Post-Install/'
                             },
                             {
-                                text: 'OpenCore 多系統開機',
-                                link: 'https://eason329.github.io/OpenCore-Multiboot/'
+                                text: 'OpenCore多重引导',
+                                link: 'https://sumingyd.github.io/OpenCore-Multiboot/'
                             },
                             {
-                                text: 'ACPI 入門教學',
-                                link: 'https://eason329.github.io/Getting-Started-With-ACPI/'
+                                text: '开始使用ACPI',
+                                link: 'https://sumingyd.github.io/Getting-Started-With-ACPI/'
                             },
                             {
-                                text: '無線網卡購買指南',
-                                link: 'https://eason329.github.io/Wireless-Buyers-Guide/'
+                                text: '无线购买指南',
+                                link: 'https://sumingyd.github.io/Wireless-Buyers-Guide/'
                             },
                             {
-                                text: '顯示卡購買指南',
-                                link: 'https://eason329.github.io/GPU-Buyers-Guide/'
+                                text: '显卡购买指南',
+                                link: 'https://sumingyd.github.io/GPU-Buyers-Guide/'
                             },
                             {
-                                text: '避免購買指南',
-                                link: 'https://eason329.github.io/Anti-Hackintosh-Buyers-Guide/'
+                                text: '避免购买指南',
+                                link: 'https://sumingyd.github.io/Anti-Hackintosh-Buyers-Guide/'
                             },
                         ]
                     },
-                    { text: 'English', link: 'https://dortania.github.io/OpenCore-Install-Guide/' },
+                    { text: 'QQ群', link: 'https://jq.qq.com/?_wv=1027&k=liYHt5VH' },
                 ],
                 sidebar: [
                     {
-                        title: '簡介',
+                        title: '介绍',
                         collapsable: false,
                         sidebarDepth: 1,
                         children: [
@@ -121,11 +128,11 @@ module.exports = {
                         ]
                     },
                     {
-                        title: '製作開機隨身碟',
+                        title: '制作引导U盘',
                         collapsable: false,
                         sidebarDepth: 2,
                         children: [{
-                            title: '製作開機隨身碟',
+                            title: '制作引导U盘',
                             collapsable: true,
                             path: '/installer-guide/',
                             sidebarDepth: 1,
@@ -137,7 +144,7 @@ module.exports = {
                         },
                             '/installer-guide/opencore-efi',
                             'ktext',
-                        ['https://sumingyd.github.io/Getting-Started-With-ACPI/', 'ACPI 入門教學'],
+                        ['https://sumingyd.github.io/Getting-Started-With-ACPI/', 'ACPI入门'],
                             '/config.plist/',
                         ]
                     },
@@ -145,7 +152,7 @@ module.exports = {
                         title: '配置',
                         collapsable: false,
                         children: [{
-                            title: 'Intel 桌面電腦配置檔案',
+                            title: 'Intel 台式电脑配置文件',
                             collapsable: true,
                             sidebarDepth: 1,
                             children: [
@@ -161,7 +168,7 @@ module.exports = {
                             ]
                         },
                         {
-                            title: 'Intel 筆記型電腦配置檔案',
+                            title: 'Intel 笔记本电脑配置文件',
                             collapsable: true,
                             sidebarDepth: 1,
                             children: [
@@ -178,7 +185,7 @@ module.exports = {
                             ]
                         },
                         {
-                            title: 'Intel HEDT 配置檔案',
+                            title: 'Intel HEDT配置文件',
                             collapsable: true,
                             sidebarDepth: 1,
                             children: [
@@ -190,7 +197,7 @@ module.exports = {
                             ]
                         },
                         {
-                            title: 'AMD 桌面電腦配置檔案',
+                            title: 'AMD 台式电脑配置文件',
                             collapsable: true,
                             sidebarDepth: 1,
                             children: [
@@ -198,11 +205,11 @@ module.exports = {
                                 '/AMD/zen',
                             ]
                         },
-                        ['/config.plist/security', '蘋果安全啟動']
+                        ['/config.plist/security', '苹果安全启动']
                         ]
                     },
                     {
-                        title: '安裝',
+                        title: '安装',
                         collapsable: false,
                         children: [
                             '/installation/installation-process',
@@ -210,7 +217,7 @@ module.exports = {
                         ]
                     },
                     {
-                        title: '故障診斷',
+                        title: '故障诊断',
                         collapsable: false,
                         children: [
                             '/troubleshooting/troubleshooting',
@@ -232,31 +239,31 @@ module.exports = {
                         ]
                     },
                     {
-                        title: '安裝 OpenCore 以後',
+                        title: '安装后',
                         collapsable: false,
                         children: [
-                            ['https://sumingyd.github.io/OpenCore-Post-Install/', '安裝後完善指南'],
+                            ['https://sumingyd.github.io/OpenCore-Post-Install/', '安装后'],
                             {
                                 title: '通用',
                                 collapsable: true,
                                 sidebarDepth: 1,
                                 children: [
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/security', '安全與 FileVault'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/audio', '修復音訊'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/oc2hdd', '無 USB 開機'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/security', '安全与文件库'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/audio', '修复音频'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/oc2hdd', '无 USB 引导'],
                                     ['https://sumingyd.github.io/OpenCore-Post-Install/universal/update', '更新 OpenCore、kext 和 macOS'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/drm', '修復 DRM'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/iservices', '修復 iServices'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/pm', '修復電源管理'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/sleep', '修復睡眠'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/usb/', '修復 USB'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/drm', '修复 DRM'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/iservices', '修复 iServices'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/pm', '修复电源管理'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/universal/sleep', '修复睡眠'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/usb/', '修复 USB'],
                                 ]
                             },
                             {
-                                title: '筆記型電腦',
+                                title: '笔记本电脑',
                                 collapsable: true,
                                 children: [
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/laptop-specific/battery', '修復電池讀數'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/laptop-specific/battery', '修复电池读数'],
 
                                 ]
                             },
@@ -264,39 +271,39 @@ module.exports = {
                                 title: '美化',
                                 collapsable: true,
                                 children: [
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/cosmetic/verbose', '修復分辨率和囉嗦模式'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/cosmetic/gui', '增加 GUI 和開機鈴聲'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/cosmetic/verbose', '修复分辨率和啰嗦模式'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/cosmetic/gui', '添加GUI和开机铃声'],
                                 ]
                             },
                             {
-                                title: '多系統開機',
+                                title: '多引导',
                                 collapsable: true,
                                 children: [
-                                    ['https://sumingyd.github.io/OpenCore-Multiboot/', 'OpenCore 多系統開機'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootstrap', '設定啟動選項'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootcamp', '安裝 Boot Camp'],
+                                    ['https://sumingyd.github.io/OpenCore-Multiboot/', 'OpenCore多引导'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootstrap', '设置启动选项'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/multiboot/bootcamp', '安装Boot Camp'],
                                 ]
                             },
                             {
                                 title: '其他',
                                 collapsable: true,
                                 children: [
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/misc/rtc', '修復 RTC'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/misc/msr-lock', '修復 CFG Lock'],
-                                    ['https://sumingyd.github.io/OpenCore-Post-Install/misc/nvram', '模擬 NVRAM'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/misc/rtc', '修复 RTC'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/misc/msr-lock', '修复 CFG Lock'],
+                                    ['https://sumingyd.github.io/OpenCore-Post-Install/misc/nvram', '模拟NVRAM'],
                                 ]
                             },
                         ]
                     },
                     {
-                        title: '額外資訊',
+                        title: '额外',
                         collapsable: false,
                         sidebarDepth: 2,
                         children: [
                             '/extras/kaslr-fix',
                             '/extras/spoof',
                             '/extras/ventura',
-                            ['https://github.com/sumingyd/OpenCore-Install-Guide/tree/master/clover-conversion', '從 Clover 轉換（建設中）'],
+                            ['https://github.com/sumingyd/OpenCore-Install-Guide/tree/master/clover-conversion', 'Clover 的转换（建设中）'],
                             '/extras/smbios-support.md',
                         ]
                     },
@@ -309,6 +316,13 @@ module.exports = {
                         ]
                     },
                 ],
+            },
+            '/zh/': {
+                label: 'English',
+                selectText: 'Languages',
+                ariaLabel: 'Select language',
+                editLinkText: 'Edit this page on GitHub',
+                lastUpdated: 'Last Updated',
             },
         }
 

@@ -1,32 +1,33 @@
-# 在 macOS 中製作安裝程式
 
-雖然你不需要重新安裝 macOS 來使用 OpenCore，但一些用戶更喜歡升級開機管理器後帶來的全新體驗。
+# 在macOS中制作安装程序
 
-首先，我們要找一個 macOS 的副本。如果你只是製作一個可開機的 OpenCore 隨身碟，而不是安裝程式，你可以跳過這一步，直接格式化 USB。對於其他人來說，你可以從 App Store 下載 macOS，也可以使用 Munki 的腳本。
+虽然你不需要重新安装macOS来使用OpenCore，但一些用户更喜欢使用全新的引导管理器升级。
 
-## 下載 macOS：現代 OS
+首先，我们要找一个macOS的副本。如果你只是制作一个可引导的OpenCore U盘，而不是安装程序，你可以跳过这一步，直接格式化USB。对于其他人来说，你可以从App Store下载macOS，也可以使用Munki的脚本。
 
-此方法允許你下載 macOS 10.13 及更新版本，10.12 及更早版本請參見[下載 macOS：傳統 OS](#downloading-macos-legacy-os)。
+## 下载macOS:现代OS
 
-* **macOS 12 及以上版本備註**：由於最新版本的 macOS 對 USB 堆棧進行了更改，因此在安裝 macOS 之前，強烈建議你映射 USB 連接埠（使用 USBToolBox）。
-  * <span style="color:red"> 注意：</span> 在 macOS 11.3 及更新版本中，[XhciPortLimit 己經失效，導致開機循環](https://github.com/dortania/bugtracker/issues/162)。
-    * 如果你已[映射 USB 連接埠](https://sumingyd.github.io/OpenCore-Post-Install/usb/)且停用了 `XhciPortLimit`，你可以正常啟動 macOS 11.3+。
+此方法允许您下载macOS 10.13及更新版本，10.12及更早版本请参见 [下载 macOS: Legacy OS](#downloading-macos-legacy-os).
 
-在符合你想要安裝的 OS 版本要求的 macOS 電腦上，直接進入 App Store：
+* **macOS 12及以上版本注**:由于最新macOS版本对USB堆栈进行了更改，因此在安装macOS之前，强烈建议您映射USB端口(使用USBToolBox)。
+  * <span style="color:red"> 注意: </span> 在macOS 11.3及更新版本中，[XhciPortLimit被打破，导致引导循环](https://github.com/dortania/bugtracker/issues/162)。
+    * 如果你已经[映射了你的USB端口](https://sumingyd.github.io/OpenCore-Post-Install/usb/)并且禁用了`XhciPortLimit`，你可以正常启动macOS 11.3+。
+
+在符合你想要安装的OS版本要求的macOS机器上，直接进入App Store:
 
 * [使用 App Store](#using-app-store)
 
-對於需要特定操作系統版本或無法從 App Store 下載的電腦：
+对于需要特定操作系统版本或无法从App Store下载的机器:
 
 [[toc]]
 
 ## 使用 App Store
 
-在符合你想要安裝的操作系統版本要求的 macOS 電腦上，直接進入 App Store 下載所需的操作系統版本，然後繼續[**設定安裝程式**](#設定安裝程式)。
+在符合你想要安装的操作系统版本要求的macOS机器上，直接进入App Store下载所需的操作系统版本，然后继续 [**设置安装程序**](#setting-up-the-installer).
 
-## 命令列軟體更新工具程式
+## 命令行软件更新实用程序
 
-開啟一個終端窗口，然後複製並貼上下面的命令：
+开一个终端窗口，然后复制并粘贴下面的命令:
 
 ```sh
 softwareupdate --list-full-installers;echo;echo "Please enter version number you wish to download:";read;$(if [ -n "$REPLY" ]; then; echo "softwareupdate --fetch-full-installer --full-installer-version "$REPLY; fi);
@@ -34,23 +35,23 @@ softwareupdate --list-full-installers;echo;echo "Please enter version number you
 
 ![](../images/installer-guide/mac-install-md/commandlinesoftwareupdateutility.png)
 
-這將為你提供一個可供選擇的可用版本列表。
-下載後，它將儲存在你的應用程式資料夾。
-然後，你可以繼續[**設定安裝程式**](#設定安裝程式)。
+这将为您提供一个可供选择的可用版本列表。
+一旦下载，它将保存在您的应用程序文件夹。
+您可以继续[**设置安装程序**](#setting-up-the-installer).
 
-## Munki 的 InstallInstallMacOS 工具程式
+## Munki的InstallInstallMacOS实用程序
 
-::: details 執行 macOS Monterey 12.3 或以上版本的用戶請注意
+::: details 运行macOS Monterey 12.3或以上版本的用户请注意
 
-從 macOS Monterey 12.3 開始，蘋果移除了對 `python2.7` 的支援，如果沒有它，`installinstallmacos.py` 將出現以下錯誤：
+从macOS Monterey 12.3开始，苹果删除了对`python2.7`的支持， 因此如果没有它，`installinstallmacos.py`将出现以下错误:
 
 ```
 This tool requires the Python xattr module. Perhaps run 'pip install xattr' to install it.
 ```
 
-要解決這個問題，我們建議通過在終端中執行 `Xcode -select——install` 來安裝 `Xcode 命令列工具`，然後執行 `pip3 install xattr`
+为了解决这个问题，我们建议通过在终端中运行`Xcode -select——install`来安装`Xcode命令行工具`，然后运行`pip3 install xattr`
 
-之後你可以使用 `python3` 而不是 `python` 來執行下面相同的命令：
+之后你可以使用`python3`而不是`python`来运行下面相同的命令:
 
 ```sh
 mkdir -p ~/macOS-installer && cd ~/macOS-installer && curl https://raw.githubusercontent.com/munki/macadmin-scripts/main/installinstallmacos.py > installinstallmacos.py && sudo python3 installinstallmacos.py
@@ -58,7 +59,7 @@ mkdir -p ~/macOS-installer && cd ~/macOS-installer && curl https://raw.githubuse
   
 :::
 
-要執行它，只需要在終端窗口中複製並貼上下面的命令:
+为了运行它，只需要在终端窗口中复制并粘贴下面的命令:
 
 ```sh
 mkdir -p ~/macOS-installer && cd ~/macOS-installer && curl https://raw.githubusercontent.com/munki/macadmin-scripts/main/installinstallmacos.py > installinstallmacos.py && sudo python installinstallmacos.py
@@ -66,60 +67,60 @@ mkdir -p ~/macOS-installer && cd ~/macOS-installer && curl https://raw.githubuse
 
 ![](../images/installer-guide/mac-install-md/munki.png)
 
-如你所見，我們得到了一個很好的 macOS 安裝程式列表。如果你需要某個特定版本的 macOS，可以通過在它旁邊輸入數字來選擇它。在這個例子中，我們選擇 10：
+如你所见，我们得到了一个很好的macOS安装程序列表。如果你需要某个特定版本的macOS，可以通过在它旁边输入数字来选择它。在这个例子中，我们选择10:
 
 ![](../images/installer-guide/mac-install-md/munki-process.png)
 
-這將需要一段時間，因為我們正在下載一個 8GB 以上的 macOS 安裝程式，所以強烈建議你在等待的同時閱讀指南的其餘部分。
+这将需要一段时间，因为我们正在下载整个8GB以上的macOS安装程序，所以强烈建议您在等待的同时阅读指南的其余部分。
 
-完成後，你會發現在你的 `~/macOS-Installer/` 資料夾中有一個包含 macOS 安裝程式的 DMG 檔案，名為 `Install_macOS_11.1-20C69.Dmg`。掛載它後，你就會找到安裝程式。
+完成后，你会发现在你的`~/macOS-Installer/`文件夹中有一个包含macOS安装程序的DMG，名为`Install_macOS_11.1-20C69.Dmg`。挂载它，你就会找到安装程序。
 
-* 注意 1: 我們建議移動 安裝 macOS.app 到 `/Applications` 資料夾，因為我們將從那裡執行命令。
-* 注意 2: 在 Finder 中執行 Cmd+Shift+G 可以讓你輕鬆跳轉到 `~/macOS-installer`
+* 注意:我们建议移动安装 macOS.app 到 `/Applications` 文件夹，因为我们将从那里执行命令。
+* 注意 2:在Finder中运行Cmd+Shift+G可以让你轻松跳转到`~/macOS-installer`
 
 ![](../images/installer-guide/mac-install-md/munki-done.png)
 
 ![](../images/installer-guide/mac-install-md/munki-dmg.png)
 
-到了這裡，跳到[設定安裝程式](#設定安裝程式) 來完成你的工作。如果你想檢查下載的完整性，你可以查看[這個校驗儲存庫](https://github.com/notpeter/apple-installer-checksums)，不過請注意，這些校驗和是眾包的，可能不是檢查真實性的可靠方法。
+从这里，跳转到[设置安装程序](#setting-up-the-installer) 来完成你的工作。如果你想检查下载的完整性，你可以检查[这个校验存储库](https://github.com/notpeter/apple-installer-checksums), 不过请注意，这些校验和是众包的，可能不是检查真实性的可靠方法。
 
-## 下載 macOS：傳統 OS
+## 下载macOS:传统OS
 
-* 此方法允許你下載 OS X 的更老版本，目前支援所有 OS X 的 Intel 版本（10.4到目前版本）
+* 此方法允许您下载OS X的更老版本，目前支持所有OS X的英特尔版本(10.4到当前)
 
-  * [舊版 macOS：離線方法](./mac-install-pkg.md)
-    * 支援 10.7 - 10.12，不包括 10.9
-  * [舊版 macOS：線上方法](./mac-install-recovery.md)
-    * 支援 10.7 - 11
-  * [舊版 macOS：磁碟映像](./mac-install-dmg.md)
-    * 支援 10.4 - 10.6
+  * [传统macOS:离线方法](./mac-install-pkg.md)
+    * 10.7 - 10.12 支持，不包括 10.9
+  * [传统macOS:在线方法](./mac-install-recovery.md)
+    * 10.7 - 11 支持
+  * [传统macOS:磁盘映像](./mac-install-dmg.md)
+    * 10.4 - 10.6 支持
 
-## 設定安裝程式
+## 设置安装程序
 
-現在我們將格式化 USB 來為 macOS 安裝程式和 OpenCore 做準備。我們希望使用帶有 GUID 分區映射的 macOS Extended (HFS+)。這將建立兩個磁碟區：主分區 `MyVolume` 和第二個名為 `EFI` 的分區，它用作開機磁碟區，韌體將在其中檢查引導檔案。
+现在我们将格式化USB为macOS安装程序和OpenCore做准备。我们希望使用带有GUID分区映射的macOS Extended (HFS+)。这将创建两个分区:主分区`MyVolume`和第二个名为`EFI`的分区，它用作引导分区，固件将在其中检查引导文件。
 
-* 注意 1：通過格式化 USB 建立的 `EFI` 分區是隱藏的，除非你掛載它。稍後將在[設定 OpenCore 的 EFI 環境](#設定 OpenCore 的 EFI 環境)時掛載
-* 注意 2：預設情况下，磁碟工具程式只會顯示分區 - 按 Cmd/Win+2 顯示所有設備（或是你可以按顯示方式按鈕）
-* 注意 3：“傳統 macOS：線上方法”部分的用戶可以跳轉到[設定 OpenCore 的 EFI 環境](#設定 OpenCore 的 EFI 環境)
+* 注意1:通过格式化USB创建的`EFI`分区是隐藏的，直到你挂载它。稍后将在[设置OpenCore的EFI环境](#setting-up-opencores-efi-environment)时挂载
+* 注2:默认情况下，磁盘实用程序只显示分区-按Cmd/Win+2显示所有设备(或者你可以按查看按钮)
+* 注3:“Legacy macOS: 在线方法”部分的用户可以跳转到[设置OpenCore的EFI环境](#setting-up-opencores-efi-environment)
 
-![格式化 USB](../images/installer-guide/mac-install-md/format-usb.png)
+![格式化USB](../images/installer-guide/mac-install-md/format-usb.png)
 
-接下來執行[蘋果](https://support.apple.com/en-us/HT201372)提供的 `createinstallmedia` 命令。請注意，該命令是假設在為名稱為 `MyVolume` 的 USB 建立安裝程式：
+接下来运行[苹果](https://support.apple.com/en-us/HT201372)提供的`createinstallmedia`命令。请注意，该命令是为名称为`MyVolume`的USB创建的:
 
 ```sh
 sudo /Applications/Install\ macOS\ Big\ Sur.app/Contents/Resources/createinstallmedia --volume /Volumes/MyVolume
 ```
 
-::: details 在 Apple Silicon 上安裝比 macOS Big Sur 更舊版本的用戶請注意
+::: details Apple Silicon上安装macOS比Big Sur更早的用户请注意
 
-如果 `createinstallmedia` 以 `zsh:killed` 或 `killed:9` 提示失敗，那麼很可能是安裝程序的代碼簽名有問題。要解決這個問題，你可以執行以下命令：
+如果`createinstallmedia`以`zsh:killed`或`killed:9`失败，那么很可能是安装程序的代码签名有问题。要解决这个问题，您可以运行以下命令:
 
 ```sh
 cd /Applications/Install\ macOS\ Big\ Sur.app/Contents/Resources/
 codesign -s - -f --deep /Applications/Install\ macOS\ Big\ Sur.app
 ```
 
-你需要安裝 Xcode 命令列工具：
+你需要为Xcode安装命令行工具:
 
 ```sh
 xcode-select --install
@@ -127,13 +128,13 @@ xcode-select --install
 
 :::
 
-這需要一些時間，所以你可能想要喝杯咖啡或繼續閱讀本指南（公平地說，你真的不應該在沒有閱讀完整內容之前一步步遵循本指南）。
+这需要一些时间，所以你可能想要喝杯咖啡或继续阅读本指南(公平地说，你真的不应该在没有阅读完整内容之前一步一步地遵循本指南)。
 
-你也可以將 `createinstallmedia` 路徑替換為安裝程序所在的路徑（與磁碟名稱相同）。
+你也可以将`createinstallmedia`路径替换为安装程序所在的路径(与驱动器名称相同)。
 
-::: details 舊版本的 createinstallmedia 命令
+::: details 传统 createinstallmedia 命令
 
-來自蘋果官方網站：[為 macOS 製作可開機安裝磁碟](https://support.apple.com/zh-tw/HT201372)
+来自苹果自己的网站:[如何为macOS创建一个可引导安装程序](https://support.apple.com/en-us/HT201372)
 
 ```sh
 # Ventura
@@ -169,49 +170,49 @@ sudo /Applications/Install\ OS\ X\ Mavericks.app/Contents/Resources/createinstal
 
 :::
 
-## 傳統 BIOS 設定
+## 传统设置
 
-對於不支援 UEFI 開機的系統，請參見以下內容:
+对于不支持UEFI引导的系统，请参见以下内容:
 
-::: details 傳統 BIOS 開機
+::: details 设置传统引导
 
-首先，你需要以下檔案：
+首先，你需要以下文件:
 
 * BootInstall_IA32.tool 或 BootInstall_X64.tool
-  * 可以在 OpenCorePkg 的 `/utilities/LegacyBoot/` 目錄下找到
-* 安裝隨身碟（在前面建立的）
+  * 可以在OpenCorePkg的`/utilities/LegacyBoot/`目录下找到
+* 安装USB(上面创建的)
 
-在你的 OpenCore build 資料夾中，前往 `Utilities/LegacyBoot`。在這裡你會找到一個名為 `BootInstall_ARCH.tool` 的檔案。這樣做的目的是將 DuetPkg 安裝到所需的磁碟。
+在你的OpenCore build文件夹中，导航到`Utilities/LegacyBoot`。在这里你会找到一个名为`BootInstall_ARCH.tool`的文件。这样做的目的是将DuetPkg安装到所需的驱动器。
 
 ![BootInstall 位置](../images/extras/legacy-md/download.png)
 
-现在**使用 sudo**在終端中執行此工具(否則此工具可能會失敗)：
+现在**使用sudo**在终端中运行此工具(否则此工具可能会失败):
 
 ```sh
 # Replace X64 with IA32 if you have a 32-Bit CPU
 sudo ~/Downloads/OpenCore/Utilities/legacyBoot/BootInstall_X64.tool
 ```
 
-![磁碟選擇／寫入新 MBR](../images/extras/legacy-md/boot-disk.png)
+![磁盘选择/写入新MBR](../images/extras/legacy-md/boot-disk.png)
 
-這將給你一個可用磁碟的列表，選擇你的磁碟，並提示你寫入一個新的 MBR。選擇 yes `[y]`，你就完成了。
+这将给您一个可用磁盘的列表，选择您的磁盘，并提示您写入一个新的MBR。选择yes`[y]`，你就完成了。
 
-![安裝完畢](../images/extras/legacy-md/boot-done.png)
+![安装完毕](../images/extras/legacy-md/boot-done.png)
 
-![基礎 EFI](../images/extras/legacy-md/efi-base.png)
+![基础EFI](../images/extras/legacy-md/efi-base.png)
 
-這將為你提供一個包含 **bootia32** 或 **bootx64** 檔案的 EFI 分區
+这将为你提供一个包含**bootia32**或**bootx64**文件的EFI分区
 
 :::
 
-## 設定 OpenCore 的 EFI 環境
+## 设置OpenCore的EFI环境
 
-設定 OpenCore 的 EFI 環境很簡單 - 你需要做的就是掛載我們的 EFI 系統分區。當我們使用 GUID 格式化時是會自動生成該分區，但預設是卸載的，這就是我們的朋友 [MountEFI](https://github.com/corpnewt/MountEFI) 發揮作用的地方：
+设置OpenCore的EFI环境很简单-你需要做的就是挂载我们的EFI系统分区。当我们使用GUID格式化时，这是自动生成的，但默认情况下是卸载的， 这就是我们的朋友[挂载EFI](https://github.com/corpnewt/MountEFI) 发挥作用的地方:
 
-![掛載 EFI](../images/installer-guide/mac-install-md/mount-efi-usb.png)
+![挂载EFI](../images/installer-guide/mac-install-md/mount-efi-usb.png)
 
-你會注意到，打開 EFI 分區後，它是空的。這就是樂趣的開始。
+你会注意到，打开EFI分区后，它是空的。这就是乐趣的开始。
 
-![EFI 空分區](../images/installer-guide/mac-install-md/base-efi.png)
+![EEFI空分区](../images/installer-guide/mac-install-md/base-efi.png)
 
-## 現在，所有步驟都完成了，前往[設定 EFI](./opencore-efi.md) 來完成你的工作
+## 现在所有这些都完成了，前往[设置EFI](./opencore-efi.md) 来完成你的工作
