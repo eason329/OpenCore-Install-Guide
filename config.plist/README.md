@@ -68,7 +68,7 @@ config.plist **必須** 與 EFI 資料夾的內容相匹配. 如果您刪除了�
 
 | 代號名稱 | 系列 | 發行日期 |
 | :--- | :--- | :--- |
-| [Yonah, Conroe and Penryn](../config.plist/penryn.md) | E8XXX, Q9XXX, [etc 1](https://en.wikipedia.org/wiki/Yonah_(microprocessor)), [etc 2](https://en.wikipedia.org/wiki/Penryn_(microarchitecture)) | 2006-2009 年 |
+| [Yonah, Conroe and Penryn](../config.plist/penryn.md) | E8XXX, Q9XXX, [註 1](https://en.wikipedia.org/wiki/Yonah_(microprocessor)), [註 2](https://en.wikipedia.org/wiki/Penryn_(microarchitecture)) | 2006-2009 年 |
 | [Lynnfield and Clarkdale](../config.plist/clarkdale.md) | 5XX-8XX | 2010 年 |
 | [Sandy Bridge](../config.plist/sandy-bridge.md) | 2XXX | 2011 年 |
 | [Ivy Bridge](../config.plist/ivy-bridge.md) | 3XXX | 2012 年 |
@@ -99,7 +99,7 @@ config.plist **必須** 與 EFI 資料夾的內容相匹配. 如果您刪除了�
 
 | 代號名稱 | 系列 | 發行日期 |
 | :--- | :--- | :--- |
-| [Nehalem and Westmere](../config-HEDT/nehalem.md) | 9XX, X3XXX, X5XXX, [etc 1](https://en.wikipedia.org/wiki/Nehalem_(microarchitecture)), [2](https://en.wikipedia.org/wiki/Westmere_(microarchitecture)) | 2008-2010 年 |
+| [Nehalem and Westmere](../config-HEDT/nehalem.md) | 9XX, X3XXX, X5XXX, [註 1](https://en.wikipedia.org/wiki/Nehalem_(microarchitecture)), [註 2](https://en.wikipedia.org/wiki/Westmere_(microarchitecture)) | 2008-2010 年 |
 | [Sandy/Ivy Bridge-E](../config-HEDT/ivy-bridge-e.md) | 3XXX, 4XXX | 2011-2013 年 |
 | [Haswell-E](../config-HEDT/haswell-e.md) | 5XXX | 2014 年 |
 | [Broadwell-E](../config-HEDT/broadwell-e.md) | 6XXX | 2016 年 |

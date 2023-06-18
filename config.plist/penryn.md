@@ -1,32 +1,32 @@
-# Desktop Yonah, Conroe and Penryn
+# 桌面平台的 Yonah, Conroe and Penryn
 
-| Support | Version |
+| 支援 | 版本 |
 | :--- | :--- |
-| Initial macOS Support: Penryn | OS X 10.4.10, Tiger |
-| Last Supported OS: Penryn | macOS 10.13.6 High Sierra |
-| Note | iGPU support will not be covered in this guide, see here: [GMA Patching](https://dortania.github.io/OpenCore-Post-Install/gpu-patching/)|
-| Note 2 | SSE4 is required to boot macOS 10.12, Sierra and newer, so Conroe and older are unsupported |
+| 最初支援的 macOS 版本：Penryn | OS X 10.4.10, Tiger |
+| 最後支援的版本: Penryn | macOS 10.13.6 High Sierra |
+| 備註 | iGPU 支援不會在本指南中介紹，請參閱：[GMA 的修補](https://sumingyd.github.io/OpenCore-Post-Install/gpu-patching/)|
+| 備註 2 | 啟動 macOS 10.12 Sierra 及更新版本需要 SSE4，因此不支援 Conroe 及更老舊的硬體 |
 
-## Starting Point
+## 起點
 
-So making a config.plist may seem hard, it's not. It just takes some time but this guide will tell you how to configure everything, you won't be left in the cold. This also means if you have issues, review your config settings to make sure they're correct. Main things to note with OpenCore:
+製作一個 config.plist 看起來可能很難，其實不然，只是需要一些時間。本指南将告诉您如何配置所有内容，您不会被冷落。這也意味著如果你有問題，你需要檢查你的配置設定以確保它們是正確的。設定 OpenCore 時需要注意的主要事項：
 
-* **All properties must be defined**, there are no default OpenCore will fall back on so **do not delete sections unless told explicitly so**. If the guide doesn't mention the option, leave it at default.
-* **The Sample.plist cannot be used As-Is**, you must configure it to your system
-* **DO NOT USE CONFIGURATORS**, these rarely respect OpenCore's configuration and even some like Mackie's will add Clover properties and corrupt plists!
+* **所有屬性均必須定義**，OpenCore 不設任何預設的回退值，因此**除非明確地告訴你可以刪除，否則不要刪除任何章節**。如果指南沒有提到該選項，請將其保留為預設值。
+* **Sample.plist 不能按原樣使用**，你必須根據自己的系統進行配置
+* **不要使用配置器**, 這些配置器很少遵守 OpenCore 的配置設定，甚至一些像 Mackie 製作的配置器還會增加 Clover 屬性和破壞 plist！
 
-Now with all that, a quick reminder of the tools we need
+現在，我們來快速回顧一下我們需要的工具
 
 * [ProperTree](https://github.com/corpnewt/ProperTree)
-  * Universal plist editor
+  * 通用的 plist 編輯器
 * [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS)
-  * For generating our SMBIOS data
+  * 用於生成 SMBIOS 資料
 * [Sample/config.plist](https://github.com/acidanthera/OpenCorePkg/releases)
-  * See previous section on how to obtain: [config.plist Setup](../config.plist/README.md)
+  * 參閱上一章節了解如何取得：[config.plist 設定](../config.plist/README.md)
 
 ::: warning
 
-Read this guide more than once before setting up OpenCore and make sure you have it set up correctly. Do note that images will not always be the most up-to-date so please read the text below them, if nothing's mentioned then leave as default.
+在設定 OpenCore 之前，請多次閱讀本指南，並確保你已正確設定。請注意，圖片並不總是最新的，所以請閱讀圖片下面的文字，如果沒有提到，那麼請將其保持為預設值。
 
 :::
 
@@ -36,25 +36,25 @@ Read this guide more than once before setting up OpenCore and make sure you have
 
 ### Add
 
-::: tip Info
+::: tip 資訊
 
-This is where you'll add SSDTs for your system, these are very important to **booting macOS** and have many uses like [USB maps](https://dortania.github.io/OpenCore-Post-Install/usb/), [disabling unsupported GPUs](../extras/spoof.md) and such. And with our system, **it's even required to boot**. Guide on making them found here: [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/)
+這裡是你將為系統加入 SSDT 的地方，它們對**啟動 macOS** 非常重要，且有許多用途，如 [USB 映射](https://eason329.github.io/OpenCore-Post-Install/usb/), [停用不支援的 GPU](../extras/spoof.md) 等。在我們的系統中, **甚至需要這些才可以啟動**. 你可以在 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/)了解如何製作 SSDT
 
-For us we'll need a couple of SSDTs to bring back functionality that Clover provided:
+對於我們來說，我們需要一些 SSDT 來帶回 Clover 提供的功能：
 
-| Required SSDTs | Description |
+| 需要的 SSDT | 描述 |
 | :--- | :--- |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
+| **[SSDT-EC](https://eason329.github.io/Getting-Started-With-ACPI/)** | 修復嵌入式控制器，參見 [ACPI 入門教學](https://eason329.github.io/Getting-Started-With-ACPI/)瞭解更多詳細資訊。 |
 
-Note that you **should not** add your generated `DSDT.aml` here, it is already in your firmware. So if present, remove the entry for it in your `config.plist` and under EFI/OC/ACPI.
+請注意，你**不應該**在這裡加入您生成的 DSDT.aml，它已經在你的韌體中了。因此，如果存在的話，請刪除 config plist 和 EFI/OC/ACPI 下的相關條目。
 
-For those wanting a deeper dive into dumping your DSDT, how to make these SSDTs, and compiling them, please see the [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/) **page.** Compiled SSDTs have a **.aml** extension(Assembled) and will go into the `EFI/OC/ACPI` folder and **must** be specified in your config under `ACPI -> Add` as well.
+對於那些想要更深入地傾印你的 DSDT、如何製作這些 SSDT 及編譯它們的人，請參閱 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/) **页面**。編譯後的 SSDT 會有一個 **.aml** 副檔名（已編譯）並會放入 `EFI/OC/ACPI` 資料夾，且**必須**在你的配置檔案裡的 `ACPI -> Add` 下指定。
 
 :::
 
 ### Delete
 
-This blocks certain ACPI tables from loading, for us we can ignore this.
+這裡將阻止載入某些 ACPI 表，對於我們來說，我們可以略過它。
 
 ### Patch
 
