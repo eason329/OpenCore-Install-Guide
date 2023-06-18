@@ -1,44 +1,45 @@
-# config.plist Setup
+# config.plist 設定
 
-Now that we've got all our Kexts(.kext), SSDTs(.aml) and firmware drivers(.efi), your USB should start to look something like this:
+現在，我們收集了所有需要的 Kext (.kext)、SSDT (.aml) 和韌體驅動程式 (.efi)，你的 USB 隨身碟應該開始看起來像這樣：
 
-![Populated EFI folder](../images/installer-guide/opencore-efi-md/populated-efi.png)
+![已構置的 EFI 資料夾](../images/installer-guide/opencore-efi-md/populated-efi.png)
 
-* **Note**: Your USB **will look different**, everyone's system will have different requirements.
+* **注意**：你的隨身碟**看起來可能會與上圖有所不同**，不同的系統都會有不同的需求。
 
-## Creating your config.plist
+## 建立你的 config.plist
 
-First we'll want to grab the `Sample.plist` from the [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases), this will be located under the `Docs` folder:
+首先，我們要取得 `Sample.plist`，這個檔案在 [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases)的 `Docs` 資料夾之下：
 
 ![](../images/config/config-universal/sample-location.png)
 
-Next lets move it onto our USB's EFI partition(will be called BOOT on Windows) under `EFI/OC/`, and rename it to config.plist:
+接下來，我們將它移動到隨身碟的 EFI 磁碟區（在 Windows 上稱為 BOOT）under `EFI/OC/`, 並將其重新命名為 config.plist：
 
 ![](../images/config/config-universal/renamed.png)
 
-## Adding your SSDTs, Kexts and Firmware Drivers
+## 加入你需要的 SSDT、Kexts 和韌體驅動程式
 
-For the rest of this guide, you're gonna need some form of plist editing. And for our guide, we'll be using ProperTree and GenSMBIOS to help automate some of the tedious work:
+在本指南接下來的部分，你需要某種形式的 plist 編輯。在本指南中，我們將使用 ProperTree 和 GenSMBIOS 來幫助自動化一些乏味的工作：
 
 * [ProperTree](https://github.com/corpnewt/ProperTree)
-  * Universal plist editor
+  * 通用的 plist 編輯器
 * [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS)
-  * For generating our SMBIOS data
+  * 用於生成 SMBIOS 資料
 
-Next, let's open ProperTree and edit our config.plist:
+接下來，打開 ProperTree 並編輯我們的 config.plist：
 
 * `ProperTree.command`
-  * For macOS
-  * Pro tip: there's a `buildapp.command` utility in the `Scripts` folder that lets you turn ProperTree into a dedicated app in macOS
+  * 適用於 macOS
+  * 提示：在 Scripts 資料夾中有一個 buildapp.command 工具程式，可讓你在 macOS 中將 ProperTree 轉換為獨立的應用程式
 * `ProperTree.bat`
-  * For Windows
+  * 適用於 Windows
 
-Once ProperTree is running, open your config.plist by pressing **Cmd/Ctrl + O** and selecting the `config.plist` file on your USB.
+當 ProperTree 運行後, 通過按下 **Cmd/Ctrl + O** 開啟在隨身碟的的 config.plist。
 
-After the config is opened, press **Cmd/Ctrl + Shift + R** and point it at your EFI/OC folder to perform a "Clean Snapshot":
+在配置檔案打開後，按 **Cmd/Ctrl + Shift + R** 並將其指向你的 EFI/OC 資料夾來執行「清理快照」：
 
-* This will remove all the entries from the config.plist and then adds all your SSDTs, Kexts and Firmware drivers to the config
+* 這將從 config.plist 中刪除所有條目，然後將所有 SSDT、kext 和韌體驅動程式的條目新增至配置檔案中
 * **Cmd/Ctrl + R** is another option that will add all your files as well but will leave entries disabled if they were set like that before, useful for when you're troubleshooting but for us not needed right now
+* 另一個做法是 **Cmd/Ctrl + R**，它也會將你所有的檔案條目新增至配置檔案，但如果它們之前已被停用，則會維持原狀。這對你進行故障排除很有用，但對我們目前來說並不需要
 
 ![](../images/config/config-universal/before-snapshot.png)
 
