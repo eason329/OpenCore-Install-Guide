@@ -504,16 +504,16 @@ OpenCore 的 NVRAM GUID，主要針對 RTCMemoryFixup 用戶
 
 ::: tip 資訊
 
-For setting up the SMBIOS info, we'll use CorpNewt's [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) application.
+為了設定 SMBIOS 訊息，我們將使用 CorpNewt 的 [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) 應用程式。
 
-For this Penryn example, we'll chose the iMac10,1 SMBIOS - this is done intentionally for compatibility's sake. There are 4 main SMBIOS used for legacy hardware:
+在這個 Penryn 示例中，我們選擇 iMac10,1 SMBIOS —— 這樣做是為了相容性。這裡有 4 個主要用於傳統硬體的 SMBIOS：
 
-| SMBIOS | Hardware | OS Support |
+| SMBIOS | 硬體 | OS 支援 |
 | :--- | :--- | :--- |
-| iMac4,1 | Yonah SMBIOS(32-bit) | 10.4 to 10.6.8 |
-| iMac7,1 | Conroe SMBIOS(64-Bit, SSE3) | 10.4 to 10.11.6 |
-| iMac10,1 | Penryn SMBIOS(64-Bit, SSE4) | 10.6 to 10.13.6 |
-| MacPro6,1 | Mojave and newer SMBIOS | 10.9 to 12.6.4 |
+| iMac4,1 | Yonah SMBIOS(32-bit) | 10.4 至 10.6.8 |
+| iMac7,1 | Conroe SMBIOS(64-Bit, SSE3) | 10.4 至 10.11.6 |
+| iMac10,1 | Penryn SMBIOS(64-Bit, SSE4) | 10.6 至 10.13.6 |
+| MacPro6,1 | Mojave 和更新的 SMBIOS | 10.9 至 12.6.4 |
 
 * If you plan to later run macOS 10.14, Mojave or newer, MacPro6,1 will be the recommended SMBIOS. However please note you will need [telemetrap.kext](https://forums.macrumors.com/threads/mp3-1-others-sse-4-2-emulation-to-enable-amd-metal-driver.2206682/page-4?post=28447707#post-28447707) to resolve install issues
 
