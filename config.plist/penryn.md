@@ -125,11 +125,11 @@
 
 從映射中設定裝置屬性。
 
-By default, the Sample.plist has this section set for audio which we'll be setting up by setting the layout ID in the boot-args section, so removal of `PciRoot(0x0)/Pci(0x1b,0x0)` is also recommended from the `Add` section. On other platforms this section is also used for iGPU setup, on Penryn however it is covered in [another guide](https://dortania.github.io/OpenCore-Post-Install/gpu-patching/legacy-intel/).
+預設情況下，Sample.plist 已經加入了音訊部分的設定，我們將通過在 boot-args 部分設定 Layout ID 來設置音訊，因此建議從 `Add` 章節中刪除 `PciRoot(0x0)/Pci(0x1b,0x0)`。在其他平台上，本章節也用於設定 iGPU，但在 Penryn 上則由[另一個指南](https://eason329.github.io/OpenCore-Post-Install/gpu-patching/legacy-intel/)中提供教學。
 
 ### Delete
 
-Removes device properties from the map, for us we can ignore this
+這裡將移除某些裝置屬性，對於我們來說，我們可以略過它。
 
 ## Kernel
 
@@ -137,42 +137,42 @@ Removes device properties from the map, for us we can ignore this
 
 ### Add
 
-Here's where we specify which kexts to load, in what specific order to load, and what architectures each kext is meant for. By default we recommend leaving what ProperTree has done, however for 32-bit CPUs please see below:
+在這裡，我們將指定要載入哪些 kext，載入的次序，及 kext 適用的架構。預設情況下，我們建議保留 ProperTree 所做的操作，但對於 32 位元 CPU，請參見以下内容：
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
-The main thing you need to keep in mind is:
+你需要記住的主要事項:
 
-* Load order
-  * Remember that any plugins should load *after* its dependencies
-  * This means kexts like Lilu **must** come before VirtualSMC, AppleALC, WhateverGreen, etc
+* 載入次序
+  * 請記住，任何插件都應該在其依賴項**以後**才載入
+  * 這意味著像 Lilu 這樣的 kext 必須出現在 VirtualSMC、AppleALC、WhateverGreen 等插件之前
 
-A reminder that [ProperTree](https://github.com/corpnewt/ProperTree) users can run **Cmd/Ctrl + Shift + R** to add all their kexts in the correct order without manually typing each kext out.
+提醒：[ProperTree](https://github.com/corpnewt/ProperTree) 用戶可以執行 **Cmd/Ctrl + Shift + R** 以正確的次序加入所有 kext 而無需手動輸入。
 
 * **Arch**
-  * Architectures supported by this kext
-  * Currently supported values are `Any`, `i386` (32-bit), and `x86_64` (64-bit)
+  * Kext 支援的架構
+  * 目前支援的值包括 `Any`、`i386`（32 位元）及 `x86_64`（64位元）
 * **BundlePath**
-  * Name of the kext
-  * ex: `Lilu.kext`
+  * Kext 的名稱
+  * 例：`Lilu.kext`
 * **Enabled**
-  * Self-explanatory, either enables or disables the kext
+  * 不必多做解釋了，就是啟用或停用 kext
 * **ExecutablePath**
-  * Path to the actual executable is hidden within the kext, you can see what path your kext has by right-clicking and selecting `Show Package Contents`. Generally, they'll be `Contents/MacOS/Kext` but some have kexts hidden within under `Plugin` folder. Do note that plist only kexts do not need this filled in.
-  * ex: `Contents/MacOS/Lilu`
+  * 隱藏在 kext 中的實際可執行文件的路徑，您可以通過點擊右鍵並選擇`顯示套裝內容`來查看 kext 的路徑。它們一般都是 `Contents/MacOS/Kext`，但有些 kext 將可執行文件隱藏在 `Plugin` 資料夾下。注意，只包含 plist 的 kext 不需要填寫該屬性。
+  * 例：`Contents/MacOS/Lilu`
 * **MinKernel**
-  * Lowest kernel version your kext will be injected into, see below table for possible values
-  * ex. `12.00.00` for OS X 10.8
+  * Kext 可被注入的最低内核版本，有關可用的值，請參見下表
+  * 例：`12.00.00`（OS X 10.8）
 * **MaxKernel**
-  * Highest kernel version your kext will be injected into, see below table for possible values
-  * ex. `11.99.99` for OS X 10.7
+  * Kext 可被注入的最高内核版本，有關可用的值，請參見下表
+  * 例：`11.99.99`（OS X 10.7）
 * **PlistPath**
-  * Path to the `info.plist` hidden within the kext
-  * ex: `Contents/Info.plist`
+  * 隱藏在 kext 中的 info.Plist 的路徑
+  * 例：`Contents/Info.plist`
   
-::: details Kernel Support Table
+::: details Kernel 版本號列表
 
-| OS X Version | MinKernel | MaxKernel |
+| OS X 版本 | MinKernel | MaxKernel |
 | :--- | :--- | :--- |
 | 10.4 | 8.0.0 | 8.99.99 |
 | 10.5 | 9.0.0 | 9.99.99 |
@@ -194,71 +194,71 @@ A reminder that [ProperTree](https://github.com/corpnewt/ProperTree) users can r
 
 ### Emulate
 
-Needed for spoofing unsupported CPUs like Pentiums and Celerons
+用於隱藏不支援的 CPU 的資訊（如：Pentium 和 Celeron）來欺騙系統
 
-* **Cpuid1Mask**: Leave this blank
-* **Cpuid1Data**: Leave this blank
+* **Cpuid1Mask**：不用填寫
+* **Cpuid1Data**：不用填寫
 
 ### Force
 
-Used for loading kexts off system volume, only relevant for older operating systems where certain kexts are not present in the cache(ie. IONetworkingFamily in 10.6).
+用於從系統磁碟區中載入 kext，只適用於某些在緩存中沒有特定 kext 的老舊操作系統（如：10.16 中的 IONetworkingFamily）。
 
-For us, we can ignore.
+對於我們來說，我們可以略過它。
 
 ### Block
 
-Blocks certain kexts from loading. Not relevant for us.
+這裡將阻止載入某些 kext，而我們目前無需理會這裡。
 
 ### Patch
 
-Patches both the kernel and kexts.
+同時修補內核和 kext。
 
 ### Quirks
 
-::: tip Info
+::: tip 資訊
 
-Settings relating to the kernel, for us we'll be enabling the following:
+與內核相關的設定，我們將啟用以下功能：
 
-| Quirk | Enabled | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| DisableIoMapper | YES | Not needed if `VT-D` is disabled in the BIOS |
-| LapicKernelPanic | NO | HP Machines will require this quirk |
-| PanicNoKextDump | YES | Not required for 10.12 and older |
-| PowerTimeoutKernelPanic | YES | Not required for 10.14 and older |
-| XhciPortLimit | YES | Disable if running macOS 11.3+ |
+| DisableIoMapper | YES | 如果在 BIOS 中停用了 `VT-D` 則可以停用 |
+| LapicKernelPanic | NO | HP 品牌電腦則需要啟用這個選項 |
+| PanicNoKextDump | YES | 10.12 及更新版本則不需要啟用 |
+| PowerTimeoutKernelPanic | YES | 10.14 及更新版本則不需要啟用 |
+| XhciPortLimit | YES | 11.3 及更新版本則需要停用 |
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AppleCpuPmCfgLock**: NO
-  * CFG-Lock is not present on Penryn so no need for this quirk
+  * Penryn 平台沒有 CFG-Lock 問題，因此無需啟用這個選項值
 * **AppleXcpmCfgLock**: NO
-  * CFG-Lock is not present on Penryn so no need for this quirk
+  * Penryn 平台沒有 CFG-Lock 問題，因此無需啟用這個選項值
 * **CustomSMBIOSGuid**: NO
-  * Performs GUID patching for UpdateSMBIOSMode set to `Custom`. Usually relevant for Dell laptops
-  * Enabling this quirk with UpdateSMBIOSMode Custom mode can also disable SMBIOS injection into "non-Apple" OSes however we do not endorse this method as it breaks Bootcamp compatibility. Use at your own risk
+  * 在 UpdateSMBIOSMode 設為 `Custom` 時進行 GUID 修補。通常與 Dell 筆記型電腦有關
+  * 在 UpdateSMBIOSMode 自訂模式下啟用此選項時，可以同時將 SMBIOS 注入到「非蘋果」操作系統的功能停用，但我們不支持這種方法，因為它會破壞了 Bootcamp 的相容性。使用風險自負
 * **DisableIoMapper**: YES
-  * Needed to get around VT-D if either unable to disable in BIOS or needed for other operating systems, much better alternative to `dart=0` as SIP can stay on in Catalina
+  * 如果在 BIOS 中無法停用或其他操作系統需要啟用 VT-D，則需要繞過 VT-D，這是比 `dart=0` 更好的替代方案，因為 SIP 可以在 Catalina 維持啟用
 * **DisableLinkeditJettison**: YES
-  * Allows Lilu and others to have more reliable performance without `keepsyms=1`
+  * 允許 Lilu 和其他 kext 在不需要 `keepsyms=1` 的情況下擁有更可靠的性能
 * **DisableRtcChecksum**: NO
-  * Prevents AppleRTC from writing to primary checksum (0x58-0x59), required for users who either receive BIOS reset or are sent into Safe mode after reboot/shutdown
+  * 防止 AppleRTC 寫入主校驗碼 (0x58-0x59)，這對於接收到 BIOS 重置或在重新開機/關機後進入安全模式的用戶是必需的,
 * **ExtendBTFeatureFlags** NO
-  * Helpful for those having continuity issues with non-Apple/non-Fenvi cards
+  * 對於那些非蘋果或非 fenvi 卡有連接問題的人很有幫助
 * **LapicKernelPanic**: NO
-  * Disables kernel panic on AP core lapic interrupt, generally needed for HP systems. Clover equivalent is `Kernel LAPIC`
+  * 在 AP 核心 lapic 中斷上停用內核錯誤，一般 HP 系統需要啟用。相當於 Clover 的 Kernel LAPIC
 * **LegacyCommpage**: NO
-  * Resolves SSSE3 requirement for 64 Bit CPUs in macOS, mainly relevant for 64-Bit Pentium 4 CPUs(ie. Prescott)
+  * 解決了 macOS 中 64 位元 CPU 的 SSSE3 要求，主要適用於 64 位元 Pentium 4 CPU（即 Prescott）
 * **PanicNoKextDump**: YES
-  * Allows for reading kernel panics logs when kernel panics occur
+  * 允許在發生內核嚴重故障時讀取內核嚴重故障日誌
 * **PowerTimeoutKernelPanic**: YES
-  * Helps fix kernel panics relating to power changes with Apple drivers in macOS Catalina, most notably with digital audio.
+  * 幫助修復 macOS Catalina 中與蘋果驅動程式權限變化相關的內核錯誤，尤其是與數字音訊有關的問題。
 * **SetApfsTrimTimeout**: `-1`
-  * Sets trim timeout in microseconds for APFS filesystems on SSDs, only applicable for macOS 10.14 and newer with problematic SSDs.
+  * 為 SSD 上的 APFS 檔案系統設定以微秒為單位的 TRIM 超時時間，只適用於 macOS 10.14 及更新版本和有相關問題的 SSD。
 * **XhciPortLimit**: YES
-  * This is actually the 15 port limit patch, don't rely on it as it's not a guaranteed solution for fixing USB. Please create a [USB map](https://dortania.github.io/OpenCore-Post-Install/usb/) when possible.
-  * With macOS 11.3+, [XhciPortLimit may not function as intended.](https://github.com/dortania/bugtracker/issues/162) We recommend users either disable this quirk and map before upgrading or [map from Windows](https://github.com/USBToolBox/tool). You may also install macOS 11.2.3 or older.
+  * 這是 15 個連接埠限制的修補程式，不要依賴它，因為它不是一個保證修復 USB 連接埠的解決方案。如果可以的話，請建立一個[USB 映射表](https://dortania.github.io/OpenCore-Post-Install/usb/)。
+  * 在 macOS 11.3 及更新版本中, [XhciPortLimit 可能無法正常工作](https://github.com/dortania/bugtracker/issues/162)。我們建議用戶在升級前停用此選項值並進行映射，或是[從 Windows 映射](https://github.com/USBToolBox/tool)。你也可以安裝 macOS 11.2.3 或更舊的版本。
 
 :::
 
