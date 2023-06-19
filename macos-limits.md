@@ -190,12 +190,12 @@ SSE要求:
 | [GCN 2/3](https://en.wikipedia.org/wiki/Graphics_Core_Next) | 10.10.x | ^^ | ^^ |
 | [Polaris 10](https://en.wikipedia.org/wiki/Radeon_RX_400_series), [20](https://en.wikipedia.org/wiki/Radeon_RX_500_series) | 10.12.1 | <span style="color:green"> 目前最新版本 </span> | ^^ |
 | [Vega 10](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 10.12.6 | ^^ | ^^ |
-| [Raven Ridge(Vega 10)](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 11.0.1  | ^^ | <span style="color:yellow"> 需使用[第三方 kext](https://github.com/NootInc/NootedRed) 才能運作 </span> |
+| [Raven Ridge(Vega 10)](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 11.0.1  | ^^ | 需要使用 [NootedRed](https://github.com/NootInc/NootedRed) 而非 WhateverGreen |
 | [Vega 20](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 10.14.5 | ^^ | N/A |
-| [Picasso(Vega 10)](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 11.0.1 | ^^ | <span style="color:yellow"> 需使用[第三方 kext](https://github.com/NootInc/NootedRed) 才能運作 </span> |
+| [Picasso(Vega 10)](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 11.0.1 | ^^ | 需要使用 [NootedRed](https://github.com/NootInc/NootedRed) 而非 WhateverGreen |
 | [Navi 10](https://en.wikipedia.org/wiki/Radeon_RX_5000_series) | 10.15.1 | ^^ | 需要 `agdpmod=pikera` 啟動參數 |
 | [Navi 20](https://en.wikipedia.org/wiki/Radeon_RX_6000_series) | 11.4 | ^^ | <span style="color:yellow"> 目前只有一些 Navi 21 型號可以正常運作 </span> |
-| [Dalí(Vega 20？)](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 11.0.1 | ^^ | <span style="color:yellow"> 需使用[第三方 kext](https://github.com/NootInc/NootedRed) 才能運作 </span> |
+| [Dalí(Vega 20？)](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 11.0.1 | ^^ | 需要使用 [NootedRed](https://github.com/NootInc/NootedRed) 而非 WhateverGreen |
 | [Renoir(Vega 20？)](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 11.0.1 | ^^ | ^^ |
 | [Lucienne(Vega 20？)](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 11.0.1 | ^^ | ^^ |
 | [Cezanne(Vega 20？)](https://en.wikipedia.org/wiki/Radeon_RX_Vega_series) | 11.0.1 | ^^ | ^^ |
@@ -214,7 +214,7 @@ SSE要求:
 | [Fermi](https://en.wikipedia.org/wiki/Fermi_(microarchitecture)) | 10.7.x | ^^ | ^^ |
 | [Kepler](https://en.wikipedia.org/wiki/Kepler_(microarchitecture)) | 10.7.x | 11.7.x | N/A |
 | [Kepler v2](https://en.wikipedia.org/wiki/Kepler_(microarchitecture)) | 10.8.x | ^^ | ^^ |
-| [Maxwell](https://en.wikipedia.org/wiki/Maxwell_(microarchitecture)) | 10.10.x | 10.13.6 | [Requires NVIDIA Web Drivers](https://www.nvidia.com/download/driverResults.aspx/149652/) |
+| [Maxwell](https://en.wikipedia.org/wiki/Maxwell_(microarchitecture)) | 10.10.x | 10.13.6 | [需要 NVIDIA Web Drivers](https://www.nvidia.com/download/driverResults.aspx/149652/) |
 | [Pascal](https://en.wikipedia.org/wiki/Pascal_(microarchitecture)) | 10.12.4 | ^^ | ^^ |
 | [Turing](https://en.wikipedia.org/wiki/Turing_(microarchitecture)) | <span style="color:red"> N/A </span> | <span style="color:red"> N/A </span> | <span style="color:red"> 無可用的驅動程式 </span> |
 | [Ampere](https://en.wikipedia.org/wiki/Ampere_(microarchitecture)) | ^^ | ^^ | ^^ |
