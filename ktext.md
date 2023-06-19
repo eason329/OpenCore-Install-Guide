@@ -463,11 +463,11 @@ BlueToolFixup 可以放在 Lilu 之後的任何地方。
 
 ## SSDT
 
-你在 AcpiSamples 資料夾中可以看到所有 SSDT，你可能想知道是否需要它們。對於我們來說，我們將在 config.plist 中有關你的平台特定的 ACPI 部分中討論你需要的 SSDT，因為您需要的 SSDT 是特定於平台的。有些甚至是特定於系統並需要額外的設定，如果我現在就給你一個 SSDT 列表讓你選擇，你很容易就會迷失方向。
+你在 AcpiSamples 資料夾中可以看到所有 SSDT，你可能想知道是否需要它們。對於我們來說，我們將在 config.plist 中有關你的平台特定的 ACPI 部分中討論你需要的 SSDT，因為您需要的 SSDT 是按平台獨立設定的。有些甚至需要特定的系統並要進行額外的設定，如果我現在就給你一個 SSDT 列表讓你選擇，你很容易就會迷失方向。
 
 [ACPI 入門教學](https://sumingyd.github.io/Getting-Started-With-ACPI/) 有更多關於 SSDT 的內容，包括在不同的平台上編譯它們。
 
-對需要的 SSDT 感到 TL;DR 的話（這是源代碼，你必須將它們編譯為 .aml 檔案）:
+對需要的 SSDT 感到 TL;DR 的話（這是原始碼，你必須將它們編譯為 .aml 檔案）:
 
 ### 桌面電腦
 
@@ -475,7 +475,7 @@ BlueToolFixup 可以放在 Lilu 之後的任何地方。
 | :-------: | :-----: | :----: | :------: | :-------: | :-----: |
 | Penryn | N/A | [SSDT-EC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | N/A | N/A | N/A |
 | Lynnfield and Clarkdale | ^^ | ^^ | ^^ | ^^ | ^^ |
-| SandyBridge | [CPU-PM](https://sumingyd.github.io/OpenCore-Post-Install/universal/pm.html#sandy-and-ivy-bridge-power-management) (安装后运行) | ^^ | ^^ | ^^ | ^^ |
+| SandyBridge | [CPU-PM](https://sumingyd.github.io/OpenCore-Post-Install/universal/pm.html#sandy-and-ivy-bridge-power-management) (安裝完畢後執行) | ^^ | ^^ | ^^ | ^^ |
 | Ivy Bridge | ^^ | ^^ | ^^ | ^^ | ^^ |
 | Haswell | [SSDT-PLUG](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/plug.html) | ^^ | ^^ | ^^ | ^^ |
 | Broadwell | ^^ | ^^ | ^^ | ^^ | ^^ |
