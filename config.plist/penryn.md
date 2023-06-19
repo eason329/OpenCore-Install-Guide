@@ -9,7 +9,7 @@
 
 ## 起點
 
-製作一個 config.plist 看起來可能很難，其實不然，只是需要一些時間。本指南将告诉您如何配置所有内容，您不会被冷落。這也意味著如果你有問題，你需要檢查你的配置設定以確保它們是正確的。設定 OpenCore 時需要注意的主要事項：
+製作一個 config.plist 看起來可能很難，其實不然，只是需要一些時間。本指南將告訴您如何設定所有內容，您不會被冷落。這也意味著如果你有問題，你需要檢查你的配置設定以確保它們是正確的。設定 OpenCore 時需要注意的主要事項：
 
 * **所有屬性均必須定義**，OpenCore 不設任何預設的回退值，因此**除非明確地告訴你可以刪除，否則不要刪除任何章節**。如果指南沒有提到該選項，請將其保留為預設值。
 * **Sample.plist 不能按原樣使用**，你必須根據自己的系統進行配置
@@ -457,43 +457,44 @@ OpenCore 的 NVRAM GUID，主要針對 RTCMemoryFixup 用戶
 
 * **csr-active-config**: `00000000`
   * 「系統完整性保護」 (SIP) 的設定。通常建議通過恢復模式使用 `csrutil` 進行更改。
-  * csr-active-config by default is set to `00000000` which enables System Integrity Protection. You can choose a number of different values but overall we recommend keeping this enabled for best security practices. More info can be found in our troubleshooting page: [Disabling SIP](../troubleshooting/extended/post-issues.md#disabling-sip)
+  * 預設情況下，csr-active-config 會設定為 `00000000`，以啓用系統完整性保護。你可以選擇許多不同的值，但總的來說，為了最佳安全實踐，我們建議啟用此選項。更多訊息可以在我們的除錯頁面中找到：[停用 SIP](../troubleshooting/extended/post-issues.md#disabling-sip)
 
 * **run-efi-updater**: `No`
-  * This is used to prevent Apple's firmware update packages from installing and breaking boot order; this is important as these firmware updates (meant for Macs) will not work.
+  * 這用於防止蘋果的韌體更新包安裝的時候破壞開機順序；這很重要，因為這些韌體更新（用於真正的 Mac）無法在黑蘋果電腦工作。
 
 * **prev-lang:kbd**: <>
-  * Needed for non-latin keyboards in the format of `lang-COUNTRY:keyboard`, recommended to keep blank though you can specify it(**Default in Sample config is Russian**):
-  * American: `en-US:0`(`656e2d55533a30` in HEX)
-  * Full list can be found in [AppleKeyboardLayouts.txt](https://github.com/acidanthera/OpenCorePkg/blob/master/Utilities/AppleKeyboardLayouts/AppleKeyboardLayouts.txt)
-  * Hint: `prev-lang:kbd` can be changed into a String so you can input `en-US:0` directly instead of converting to HEX
-  * Hint 2: `prev-lang:kbd` can be set to a blank variable (eg. `<>`) which will force the Language Picker to appear instead at first boot up.
+  * 用於非拉丁文鍵盤（格式為：`lang-COUNTRY:keyboard`），儘管你可以指定它，但建議保持空白（**示例配置檔案中的預設值是俄文**):
+  * 繁體中文（使用倉頡鍵盤）：`zh-Hant:16899`（十六進制值是 `7a682d48616e743a3136383939`）
+  * 繁體中文（使用注音鍵盤）：`zh-Hant:16900`（十六進制值是 `7a682d48616e743a3136393030`）
+  * 完整列表可前往 [AppleKeyboardLayouts.txt](https://github.com/acidanthera/OpenCorePkg/blob/master/Utilities/AppleKeyboardLayouts/AppleKeyboardLayouts.txt)
+  * 提示：`prev-lang:kbd` 可以被轉換成字串，所以你可以直接輸入 `en-US:0`，而不需要轉換至十六進制值
+  * 提示 2：`prev-lang:kbd` 可以設定為一個空白變量（eg：`<>`），這將強制在首次啟動時顯示語言選擇器。
 
 | Key | Type | Value |
 | :--- | :--- | :--- |
-| prev-lang:kbd | String | en-US:0 |
+| prev-lang:kbd | String | zh-Hant:16900 |
 
 :::
 
 ### Delete
 
-::: tip Info
+::: tip 資訊
 
-Forcibly rewrites NVRAM variables, do note that `Add` **will not overwrite** values already present in NVRAM so values like `boot-args` should be left alone. For us, we'll be changing the following:
+強制重寫 NVRAM 變量，請注意，`Add` **不會覆蓋** NVRAM 中已經存在的值，所以像 `boot-args` 這樣的值應該保持不變。對我們來說，我們將更改以下內容：
 
-| Quirk | Enabled |
+| 選項值 | 是否啟用 |
 | :--- | :--- |
 | WriteFlash | YES |
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **LegacySchema**
-  * Used for assigning NVRAM variables, used with `OpenVariableRuntimeDxe.efi`. Only needed for systems without native NVRAM
+  * 用於賦予 NVRAM 變量，與 `OpenVariableRuntimeDxe.efi` 一起使用。只適用於沒有原生 NVRAM 的系統
 
 * **WriteFlash**: YES
-  * Enables writing to flash memory for all added variables.
+  * 允許所有新增的變量寫入快閃記憶體。
 
 :::
 
@@ -501,7 +502,7 @@ Forcibly rewrites NVRAM variables, do note that `Add` **will not overwrite** val
 
 ![PlatformInfo](../images/config/config.plist/ivy-bridge/smbios.png)
 
-::: tip Info
+::: tip 資訊
 
 For setting up the SMBIOS info, we'll use CorpNewt's [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) application.
 
