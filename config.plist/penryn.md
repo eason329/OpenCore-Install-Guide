@@ -58,62 +58,62 @@
 
 ### Patch
 
-This section allows us to dynamically modify parts of the ACPI (DSDT, SSDT, etc.) via OpenCore. For us, our patches are handled by our SSDTs. This is a much cleaner solution as this will allow us to boot Windows and other OSes with OpenCore
+這個章節允許我們通過 OpenCore 動態修改 ACPI 部分内容（DSDT、SSDT 等）。對我們來說，我們的修補程式將由我們的 SSDT 處理。這是一個更簡潔的解決方案，因為這將允許我們使用 OpenCore 啟動 Windows 和其他操作系統。
 
 ### Quirks
 
-Settings relating to ACPI, leave everything here as default as we have no use for these quirks.
+與 ACPI 相關的設定，請將所有內容保留為預設值，我們不需要這些選項值。
 
 ## Booter
 
-| Legacy | UEFI
+| 傳統 BIOS | UEFI
 | :--- | :--- |
 | ![](../images/config/config-legacy/booter-duetpkg.png) | ![](../images/config/config-universal/aptio-iv-booter-sl.png) |
 
-This section is dedicated to quirks relating to boot.efi patching with OpenRuntime, the replacement for AptioMemoryFix.efi
+這個章節專門討論利用選項值並配合 OpenRuntime（AptioMemoryFix.efi 的替代品）修補 boot.efi 時的相關問題。
 
 ### MmioWhitelist
 
-This section is allowing spaces to be passthrough to macOS that are generally ignored, useful when paired with `DevirtualiseMmio`
+這個章節允許將通常被忽略的空間傳送予 macOS，與 `DevirtualiseMmio` 配合使用時會很有用。
 
 ### Quirks
 
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, depending where your board has UEFI, you have 2 options depending what your motherboard supports:
+::: tip 資訊
+與修補 boot.efi 及修復韌體相關的設定（取決於你的主板是否支援 UEFI），按照你的主板支援的韌體，你將有兩個選項：
 
-#### Legacy Settings
+#### 傳統 BIOS 設定
 
-| Quirk | Enabled | Comment |
+| Quirk | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| AvoidRuntimeDefrag | No | Big Sur may require this quirk enabled |
+| AvoidRuntimeDefrag | No | Big Sur 可能需要啟用這個選項值 |
 | EnableSafeModeSlide | No | |
 | EnableWriteUnprotector | No | |
 | ProvideCustomSlide | No | |
-| RebuildAppleMemoryMap | Yes | This is required to boot OS X 10.4 through 10.6 |
+| RebuildAppleMemoryMap | Yes | 這個選項值在啟動 OS X 10.4 至 10.6 時是必須的 |
 | SetupVirtualMap | No | |
 
-#### UEFI Settings
+#### UEFI 設定
 
-| Quirk | Enabled | Comment |
+| Quirk | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| RebuildAppleMemoryMap | Yes | This is required to boot OS X 10.4 through 10.6 |
+| RebuildAppleMemoryMap | Yes | 這個選項值在啟動 OS X 10.4 至 10.6 時是必須的 |
 
 :::
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AvoidRuntimeDefrag**: NO
-  * Fixes UEFI runtime services like date, time, NVRAM, power control;
-  * macOS Big Sur however requires the APIC table present, otherwise causing early kernel panics so this quirk is recommended for those users.
+  * 修復 UEFI 執行期服務，如日期、時間、NVRAM、電源控制等；
+  * 但 macOS Big Sur 會要求提供 APIC 表，否則會導致內核出現早期錯誤，因此建議這些用戶啟用這個選項值。
 * **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode.
+  * 允許 Slide 變量在安全模式下使用。
 * **EnableWriteUnprotector**: NO
-  * Needed to remove write protection from CR0 register on UEFI platforms.
+  * 需要從 UEFI 平台的CR0寄存器中移除寫入保護。
 * **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
+  * 用於 Slide 變量計算。然而，這個選項的必要性取決於除錯日誌中是否出現 `OCABC: Only N/256 slide values are usable!` 訊息。如果在日誌中顯示 `OCABC: All slides are usable! You can disable ProvideCustomSlide!` 訊息，你可以停用 `ProvideCustomSlide`。
 * **RebuildAppleMemoryMap**: YES
-  * Resolves early memory kernel panics on 10.6 and below.
+  * 解決 10.6 及更低版本的早期內存內核錯誤問題。
 * **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses on UEFI boards.
+  * 在 UEFI 主板上修復了 SetVirtualAddresses 對虛擬地址的調用問題
 
 :::
 
@@ -123,7 +123,7 @@ Settings relating to boot.efi patching and firmware fixes, depending where your 
 
 ### Add
 
-Sets device properties from a map.
+從映射中設定裝置屬性。
 
 By default, the Sample.plist has this section set for audio which we'll be setting up by setting the layout ID in the boot-args section, so removal of `PciRoot(0x0)/Pci(0x1b,0x0)` is also recommended from the `Add` section. On other platforms this section is also used for iGPU setup, on Penryn however it is covered in [another guide](https://dortania.github.io/OpenCore-Post-Install/gpu-patching/legacy-intel/).
 
