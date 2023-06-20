@@ -702,23 +702,23 @@ macOS Sierra 及更舊版本使用 HFS 而非 APFS。如果要啟動舊版 macOS
 
 現在，你可以儲存你的 config.plist 並將它放進位於 EFI/OC 的 EFI 資料夾裡。
 
-For those having booting issues, please make sure to read the [Troubleshooting section](../troubleshooting/troubleshooting.md) first and if your questions are still unanswered we have plenty of resources at your disposal:
+對於那些在啟動時發生問題的人，請確定你已閱讀[故障診斷部分](../troubleshooting/troubleshooting.md)。 如果你仍然有尚未解答的問題，我們有許多資源供你使用：
 
 * [r/Hackintosh Subreddit](https://www.reddit.com/r/hackintosh/)
 * [r/Hackintosh Discord](https://discord.gg/2QYd7ZT)
 
-## Intel BIOS settings
+## Intel BIOS 設定
 
-* Note: Most of these options may not be present in your firmware, we recommend matching up as closely as possible but don't be too concerned if many of these options are not available in your BIOS
+* 注意：大多數選項可能不在你的韌體中找到，我們建議設定應盡可能匹配，但如果這些選項在你的 BIOS 中沒有出現，你亦不要太擔心
 
 ### 停用
 
-* Fast Boot
-* Secure Boot
-* Serial/COM Port
-* Parallel Port
-* VT-d (can be enabled if you set `DisableIoMapper` to YES)
-* Compatibility Support Module (CSM) (**Must be off in most cases, GPU errors/stalls like `gIO` are common when this option is enabled**)
+* 快速啟動
+* 安全開機
+* Serial/COM 連接埠
+* Parallel 連接埠
+* VT-d（如果你已將 `DisableIoMapper` 設為 YES，則可以啟用）
+* Compatibility Support Module（CSM）（**在大多數情況下，你必須關閉此選項，當該選項啟用時，像 `gIO` 等等的 GPU 錯誤或停頓會很常見**）
 * Intel SGX
 * Intel Platform Trust
 
@@ -726,11 +726,11 @@ For those having booting issues, please make sure to read the [Troubleshooting s
 
 * VT-x
 * Above 4G Decoding
-* Hyper-Threading
+* 超線程
 * Execute Disable Bit
 * EHCI/XHCI Hand-off
-* OS type: Windows 8.1/10 UEFI Mode (some motherboards may require "Other OS" instead)
-* DVMT Pre-Allocated(iGPU Memory): 32MB or higher
-* SATA Mode: AHCI
+* 操作系統類型：Windows 8.1/10 UEFI 模式（某些主板可能需要選用「其他操作系統」）
+* 預先分配的 DVMT（iGPU 記憶體）：32MB 或更多
+* SATA 模式：AHCI
 
-# Once done here, we need to edit a couple extra values. Head to the [Apple Secure Boot Page](../config.plist/security.md)
+# 完成以後，我們需要編輯額外的值。請前往[蘋果安全開機](../config.plist/security.md)頁面
