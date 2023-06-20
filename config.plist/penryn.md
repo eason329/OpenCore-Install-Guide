@@ -588,21 +588,21 @@ SmUUID:       A154B586-874B-4E57-A1FF-9D6E503E4580
 
 **ConnectDrivers**: YES
 
-* Forces .efi drivers, change to NO will automatically connect added UEFI drivers. This can make booting slightly faster, but not all drivers connect themselves. E.g. certain file system drivers may not load.
+* 強制 .efi 驅動，更改為 NO 將自動連接新增的 UEFI 驅動。这可以使稍微加快開機速度，但不是所有驅動程式都連接自己。例如某些檔案系統驅動程式可能無法載入。
 
 ### Drivers
 
-Add your .efi drivers here.
+在這裡加入你的 .efi 驅動程式。
 
-Only drivers present here should be:
+必須要放入下列的驅動程式：
 
 * HfsPlusLegacy.efi
 * OpenRuntime.efi
-* OpenUsbKbDxe.efi(If your firmware does not support UEFI)
+* OpenUsbKbDxe.efi（如果你的韌體不支援 UEFI）
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
-| Key | Type | Description |
+| Key | Type | 說明 |
 | :--- | :--- | :--- |
 | Path | String | Path of the file from `OC/Drivers` directory |
 | LoadEarly | Boolean | Load the driver early before NVRAM setup, should only be enabled for `OpenRuntime.efi` and `OpenVariableRuntimeDxe.efi` if using legacy NVRAM |
@@ -711,7 +711,7 @@ For those having booting issues, please make sure to read the [Troubleshooting s
 
 * Note: Most of these options may not be present in your firmware, we recommend matching up as closely as possible but don't be too concerned if many of these options are not available in your BIOS
 
-### Disable
+### 停用
 
 * Fast Boot
 * Secure Boot
@@ -722,7 +722,7 @@ For those having booting issues, please make sure to read the [Troubleshooting s
 * Intel SGX
 * Intel Platform Trust
 
-### Enable
+### 啟用
 
 * VT-x
 * Above 4G Decoding
