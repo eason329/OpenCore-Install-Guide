@@ -515,9 +515,9 @@ OpenCore 的 NVRAM GUID，主要針對 RTCMemoryFixup 用戶
 | iMac10,1 | Penryn SMBIOS(64-Bit, SSE4) | 10.6 至 10.13.6 |
 | MacPro6,1 | Mojave 和更新的 SMBIOS | 10.9 至 12.6.4 |
 
-* If you plan to later run macOS 10.14, Mojave or newer, MacPro6,1 will be the recommended SMBIOS. However please note you will need [telemetrap.kext](https://forums.macrumors.com/threads/mp3-1-others-sse-4-2-emulation-to-enable-amd-metal-driver.2206682/page-4?post=28447707#post-28447707) to resolve install issues
+* 如果你打算稍後執行 macOS 10.14、Mojave 或更新版本，那麼推薦使用 MacPro6,1 這個 SMBIOS。但請注意，你將需要 [telemetrap.kext](https://forums.macrumors.com/threads/mp3-1-others-sse-4-2-emulation-to-enable-amd-metal-driver.2206682/page-4?post=28447707#post-28447707) 來解決安裝問題
 
-Run GenSMBIOS, pick option 1 for downloading MacSerial and Option 3 for selecting out SMBIOS.  This will give us an output similar to the following:
+執行 GenSMBIOS，選擇選項 1 下載 MacSerial，選擇選項 3 下載 SMBIOS。這將給我們一個類似於下面的輸出：
 
 ```sh
   #######################################################
@@ -530,55 +530,55 @@ Board Serial: C02309301QXF2FRJC
 SmUUID:       A154B586-874B-4E57-A1FF-9D6E503E4580
 ```
 
-The `Type` part gets copied to Generic -> SystemProductName.
+將 `Type` 部分複製到 Generic -> SystemProductName。
 
-The `Serial` part gets copied to Generic -> SystemSerialNumber.
+將 `Serial` 部分複製到 Generic -> SystemSerialNumber。
 
-The `Board Serial` part gets copied to Generic -> MLB.
+將 `Board Serial` 部分複製到 Generic -> MLB。
 
-The `SmUUID` part gets copied to Generic -> SystemUUID.
+將 `SmUUID` 部分複製到 Generic -> SystemUUID。
 
-We set Generic -> ROM to either an Apple ROM (dumped from a real Mac), your NIC MAC address, or any random MAC address (could be just 6 random bytes, for this guide we'll use `11223300 0000`. After install follow the [Fixing iServices](https://dortania.github.io/OpenCore-Post-Install/universal/iservices.html) page on how to find your real MAC Address)
+我們將 Generic -> ROM 設定為蘋果 ROM（從真正的 Mac 中傾印），你的網路卡 MAC 地址，或任何隨機的 MAC 地址的其中之一 （可以是 6 個隨機位元組，在本指南中我們將使用 `11223300 0000`。安裝後，請跟隨[修復 iServices](https://eason329.github.io/OpenCore-Post-Install/universal/iservices.html) 頁面了解如何找到你的真實 MAC 地址）
 
-**Reminder that you need an invalid serial! When inputting your serial number in [Apple's Check Coverage Page](https://checkcoverage.apple.com), you should get a message such as "Unable to check coverage for this serial number."**
+**提醒：你需要一個無效的序列號！當你在蘋果的[查看裝置保固範圍](https://checkcoverage.apple.com)頁面中輸入你的序列號時，你會得到一條訊息，如「請輸入有效的序號」。**
 
 **Automatic**: YES
 
-* Generates PlatformInfo based on Generic section instead of DataHub, NVRAM, and SMBIOS sections
+* 基於 Generic 章節而不是 DataHub、NVRAM 和 SMBIOS 節來生成 PlatformInfo
 
 :::
 
 ### Generic
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AdviseFeatures**: NO
-  * Used for when the EFI partition isn't first on the Windows drive
+  * 當 EFI 分割不是 Windows 磁碟上的第一個分割時使用
 
 * **MaxBIOSVersion**: NO
-  * Sets BIOS version to Max to avoid firmware updates in Big Sur+, mainly applicable for genuine Macs.
+  * 設定 BIOS 版本為 Max，以避免在 Big Sur 及以上版本進行韌體更新，主要適用於正版 Mac。
 
 * **ProcessorType**: `0`
-  * Set to `0` for automatic type detection, however this value can be overridden if desired. See [AppleSmBios.h](https://github.com/acidanthera/OpenCorePkg/blob/master/Include/Apple/IndustryStandard/AppleSmBios.h) for possible values
+  * 設定為 `0` 以用於自動類型檢測，但是如果需要，這個值可以被覆蓋。參見 [AppleSmBios.h](https://github.com/acidanthera/OpenCorePkg/blob/master/Include/Apple/IndustryStandard/AppleSmBios.h) 取得可能的值
 
 * **SpoofVendor**: YES
-  * Swaps vendor field for Acidanthera, generally not safe to use Apple as a vendor in most case
+  * 將供應商欄位替換為 Acidanthera，在大多數情況下使用蘋果作為供應商通常不安全
 
 * **SystemMemoryStatus**: Auto
-  * Sets whether memory is soldered or not in SMBIOS info, purely cosmetic and so we recommend `Auto`
+  * 在 SMBIOS 訊息中設定記憶體是否焊接，純粹用於修飾，因此我們建議使用 `Auto`
 
 * **UpdateDataHub**: YES
-  * Update Data Hub fields
+  * 更新 Data Hub 欄位
 
 * **UpdateNVRAM**: YES
-  * Update NVRAM fields
+  * 更新 NVRAM 欄位
 
 * **UpdateSMBIOS**: YES
-  * Updates SMBIOS fields
+  * 更新 SMBIOS 欄位
 
 * **UpdateSMBIOSMode**: Create
-  * Replace the tables with newly allocated EfiReservedMemoryType, use `Custom` on Dell laptops requiring `CustomSMBIOSGuid` quirk
-  * Setting to `Custom` with `CustomSMBIOSGuid` quirk enabled can also disable SMBIOS injection into "non-Apple" OSes however we do not endorse this method as it breaks Bootcamp compatibility. Use at your own risk
+  * 用新分配的 EfiReservedMemoryType 替換表, 在需要 `CustomSMBIOSGuiduse` 的 Dell 筆記型電腦上使用 `Custom`
+  * 設定為 `Custom` 並啟用 `CustomSMBIOSGuid` 也可以阻止 SMBIOS 注入到「非蘋果」作業系統，但是我們不支持這種方法，因為它破壞了 Bootcamp 的相容性。使用風險自負
 
 :::
 
