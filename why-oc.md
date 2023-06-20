@@ -1,4 +1,4 @@
-# 為什麼 OpenCore 超越 Clover 和其他程序
+# 為什麼 OpenCore 超越 Clover 和其他程式
 
 本節簡單介紹了為什麼社群已經過渡到 OpenCore，並旨在消除社群中常見的一些誤解。那些只是想要一台 macOS 電腦的人可以跳過這一頁。
 
