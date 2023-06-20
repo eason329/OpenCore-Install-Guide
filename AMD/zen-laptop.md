@@ -11,9 +11,11 @@
 
 在 AMD 筆記型電腦平台安裝 macOS 是一件非常新鮮和充滿各種問題的事情。這些問題包括：無法使用觸控板、macOS 無法檢測到內置 SATA 磁碟（因為 macOS 不支援 AMD 原生的 SATA 的控制器）、電池消耗嚴重等。
 
-對於 AMD 筆記本電腦是否能夠**較**完美地安裝 macOS，這很大程度上與 [NootedRed](https://github.com/NootInc/NootedRed) 插件，以及其開發者 NootInc 在其他問題的開發進度高度相關（他們也正在修復在 AMD 筆記型電腦無法使用觸控板的問題）。即使他們成功修復這些功能，但 AMD CPU 在部分功能仍然與 Intel 有一定差別。因此，若你的 AMD 筆記型電腦是用於完成重要工作的，你不應在該電腦安裝 macOS。
+對於 AMD 筆記本電腦是否能夠**較**完美地安裝 macOS，這很大程度上與 [NootedRed](https://github.com/NootInc/NootedRed) 插件，以及其開發者 [NootInc](https://github.com/NootInc) 在其他問題的開發進度高度相關（他們也正在修復在 AMD 筆記型電腦無法使用觸控板的問題）。即使他們成功修復這些功能，但 AMD CPU 在部分功能仍然與 Intel CPU 有一定差別。因此，若你的 AMD 筆記型電腦是用於完成重要工作的，你不應在該電腦安裝 macOS。
 
 因此，譯者原則上 **極不建議** 在 AMD 筆記型電腦安裝 macOS，除非你願意承擔後果。
+
+:::
 
 ## 起點
 
