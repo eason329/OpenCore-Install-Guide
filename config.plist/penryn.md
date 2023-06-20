@@ -687,20 +687,20 @@ macOS Sierra 及更舊版本使用 HFS 而非 APFS。如果要啟動舊版 macOS
   * 如果是 Microsoft Surface 裝置，則建議啟用這個選項
 
 * **RequestBootVarRouting**: YES
-  * Redirects AptioMemoryFix from `EFI_GLOBAL_VARIABLE_GUID` to `OC_VENDOR_VARIABLE_GUID`. Needed for when firmware tries to delete boot entries and is recommended to be enabled on all systems for correct update installation, Startup Disk control panel functioning, etc.
+  * 將 AptioMemoryFix 從 `EFI_GLOBAL_VARIABLE_GUID` 重定向至 `OC_VENDOR_VARIABLE_GUID`。當韌體嘗試刪除啟動項時則需要啟用，建議在所有系統上啟用，以確保正確地安裝更新，啟動磁碟控制台的功能等等。
 
 * **UnblockFsConnect**: NO
-  * Some firmware block partition handles by opening them in By Driver mode, which results in File System protocols being unable to install. Mainly relevant for HP systems when no drives are listed
-  
+  * 某些韌體的按驅動程式模式會在磁碟分割控制代碼阻止它們工作，這將導致檔案系統協議無法安裝。主要適用於沒有列出磁碟的 HP 電腦
+
 :::
 
 ### ReservedMemory
 
-Used for exempting certain memory regions from OSes to use, mainly relevant for Sandy Bridge iGPUs or systems with faulty memory. Use of this quirk is not covered in this guide
+用於將某些記憶體區域從操作系統中移除，避免它們被使用。這主要與 Sandy Bridge iGPU 或具有錯誤記憶體的系統有關。本指南中不會有涉及這個選項的用法
 
-## Cleaning up
+## 整理你的 plist
 
-And now you're ready to save and place it into your EFI under EFI/OC.
+現在，你可以儲存你的 config.plist 並將它放進位於 EFI/OC 的 EFI 資料夾裡。
 
 For those having booting issues, please make sure to read the [Troubleshooting section](../troubleshooting/troubleshooting.md) first and if your questions are still unanswered we have plenty of resources at your disposal:
 
