@@ -1,33 +1,33 @@
-# Desktop Sandy Bridge
+# 桌面平台的 Sandy Bridge
 
-| Support | Version |
+| 支援 | 版本 |
 | :--- | :--- |
-| Initial macOS Support | OS X 10.6.7, Snow Leopard |
-| Last Supported OS | macOS 12 Monterey |
-| Note 1 | For Ventura information, see [macOS 13 Ventura](../extras/ventura.md#dropped-cpu-support) |
-| Note 2 | Sandy Bridge's iGPU is only officially supported up-to macOS 10.13 |
-| Note 3 | Most Sandy bridge boards do not support UEFI |
+| 最初支援的 macOS 版本 | OS X 10.6.7, Snow Leopard |
+| 最後支援的版本 | macOS 12 Monterey |
+| 備註 1 | 有關 Ventura 的資訊，請參閱 [macOS 13 Ventura](../extras/ventura.md#dropped-cpu-support) |
+| 備註 2 | Sandy Bridge 的 iGPU 的官方最後支援版本是 macOS 10.13 |
+| 備註 3 | 多數支援 Sandy Bridge 的主板都不支援 UEFI |
 
-## Starting Point
+## 起點
 
-So making a config.plist may seem hard, it's not. It just takes some time but this guide will tell you how to configure everything, you won't be left in the cold. This also means if you have issues, review your config settings to make sure they're correct. Main things to note with OpenCore:
+製作一個 config.plist 看起來可能很難，其實不然，只是需要一些時間。本指南將告訴您如何設定所有內容，您不會被冷落。這也意味著如果你有問題，你需要檢查你的配置設定以確保它們是正確的。設定 OpenCore 時需要注意的主要事項：
 
-* **All properties must be defined**, there are no default OpenCore will fall back on so **do not delete sections unless told explicitly so**. If the guide doesn't mention the option, leave it at default.
-* **The Sample.plist cannot be used As-Is**, you must configure it to your system
-* **DO NOT USE CONFIGURATORS**, these rarely respect OpenCore's configuration and even some like Mackie's will add Clover properties and corrupt plists!
+* **所有屬性均必須定義**，OpenCore 不設任何預設的回退值，因此**除非明確地告訴你可以刪除，否則不要刪除任何章節**。如果指南沒有提到該選項，請將其保留為預設值。
+* **Sample.plist 不能按原樣使用**，你必須根據自己的系統進行配置
+* **不要使用配置器**, 這些配置器很少遵守 OpenCore 的配置設定，甚至一些像 Mackie 製作的配置器還會增加 Clover 屬性和破壞 plist！
 
-Now with all that, a quick reminder of the tools we need
+現在，我們來快速回顧一下我們需要的工具
 
 * [ProperTree](https://github.com/corpnewt/ProperTree)
-  * Universal plist editor
+  * 通用的 plist 編輯器
 * [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS)
-  * For generating our SMBIOS data
+  * 用於生成 SMBIOS 資料
 * [Sample/config.plist](https://github.com/acidanthera/OpenCorePkg/releases)
-  * See previous section on how to obtain: [config.plist Setup](../config.plist/README.md)
+  * 參閱上一章節了解如何取得：[config.plist 設定](../config.plist/README.md)
 
 ::: warning
 
-Read this guide more than once before setting up OpenCore and make sure you have it set up correctly. Do note that images will not always be the most up-to-date so please read the text below them, if nothing's mentioned then leave as default.
+在設定 OpenCore 之前，請多次閱讀本指南，並確保你已正確設定。請注意，圖片並不總是最新的，所以請閱讀圖片下面的文字，如果沒有提到，那麼請將其保持為預設值。
 
 :::
 
@@ -37,31 +37,31 @@ Read this guide more than once before setting up OpenCore and make sure you have
 
 ### Add
 
-::: tip Info
+::: tip 資訊
 
-This is where you'll add SSDTs for your system, these are very important to **booting macOS** and have many uses like [USB maps](https://dortania.github.io/OpenCore-Post-Install/usb/), [disabling unsupported GPUs](../extras/spoof.md) and such. And with our system, **it's even required to boot**. Guide on making them found here: [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/)
+這裡是你將為系統加入 SSDT 的地方，它們對**啟動 macOS** 非常重要，且有許多用途，如 [USB 映射](https://eason329.github.io/OpenCore-Post-Install/usb/)、[停用不支援的 GPU](../extras/spoof.md) 等。在我們的系統中, **甚至需要這些才可以啟動**. 你可以在 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/)了解如何製作 SSDT
 
-For us we'll need a couple of SSDTs to bring back functionality that Clover provided:
+對於我們來說，我們需要一些 SSDT 來帶回 Clover 提供的功能：
 
-| Required SSDTs | Description |
+| 需要的 SSDT | 描述 |
 | :--- | :--- |
-| **[SSDT-PM](https://github.com/Piker-Alpha/ssdtPRGen.sh)** | Needed for proper CPU power management, you will need to run Pike's ssdtPRGen.sh script to generate this file. This will be run in [post install](https://dortania.github.io/OpenCore-Post-Install/). |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-IMEI](https://dortania.github.io/Getting-Started-With-ACPI/)** | Needed to add a missing IMEI device on Sandy Bridge CPU with 7 series motherboards |
+| **[SSDT-PM](https://github.com/Piker-Alpha/ssdtPRGen.sh)** | 用於進行正確的 CPU 電潔管理。你將需要執行 Pike 的 ssdtPRGen.sh 腳本生成該檔案。這步驟會在[安裝 macOS 後](https://dortania.github.io/OpenCore-Post-Install/)進行。 |
+| **[SSDT-EC](https://eason329.github.io/Getting-Started-With-ACPI/)** | 修復嵌入式控制器，參見 [ACPI 入門教學](https://eason329.github.io/Getting-Started-With-ACPI/)了解更多詳細資訊。 |
+| **[SSDT-IMEI](https://eason329.github.io/Getting-Started-With-ACPI/)** | 用於在 7 系列主板中加入缺失的 Sandy Bridge CPU 的 IMEI 裝置的代碼 |
 
-Note that you **should not** add your generated `DSDT.aml` here, it is already in your firmware. So if present, remove the entry for it in your `config.plist` and under EFI/OC/ACPI.
+請注意，你**不應該**在這裡加入您生成的 DSDT.aml，它已經在你的韌體中了。因此，如果存在的話，請刪除 config plist 和 EFI/OC/ACPI 下的相關條目。
 
-For those wanting a deeper dive into dumping your DSDT, how to make these SSDTs, and compiling them, please see the [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/) **page.** Compiled SSDTs have a **.aml** extension(Assembled) and will go into the `EFI/OC/ACPI` folder and **must** be specified in your config under `ACPI -> Add` as well.
+對於那些想要更深入地傾印你的 DSDT、如何製作這些 SSDT 及編譯它們的人，請參閱 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/)**頁面**。編譯後的 SSDT 會有一個 **.aml** 副檔名（已編譯）並會放入 `EFI/OC/ACPI` 資料夾，且**必須**在你的配置檔案裡的 `ACPI -> Add` 下指定。
 
 :::
 
 ### Delete
 
-::: tip Info
+::: tip 資訊
 
-This blocks certain ACPI tables from loading, for us we really care about this. Main reason is that Apple's XCPM does not support SandyBridge all too well and can cause AppleIntelCPUPowerManagement panics on boot. To avoid this we make our own PM SSDT in [Post-Install](https://dortania.github.io/OpenCore-Post-Install/) and drop the old tables(Note that this is only temporary until we've made our SSDT-PM, we'll re-enable these tables later):
+這裡將阻止載入某些 ACPI 表，對於我們來說要特別注意。這是由於蘋果的 XCPM 對 SandyBridge 的支援不太好，會導致開機時令 AppleIntelCPUPowerManagement 出現錯誤。要避免這種情況，我們要在 [安裝後](https://dortania.github.io/OpenCore-Post-Install/) 建立我們自己的 PM SSDT，並「刪除」原有的表（注意：這是暫時性的，直至我們建立了自己的 SSDT-PM，我們稍後會重新啟用這些表）。
 
-Removing CpuPm:
+刪除 CpuPm:
 
 | Key | Type | Value |
 | :--- | :--- | :--- |
@@ -72,7 +72,7 @@ Removing CpuPm:
 | TableLength | Number | 0 |
 | TableSignature | Data | `53534454` |
 
-Removing Cpu0Ist:
+刪除 Cpu0Ist:
 
 | Key | Type | Value |
 | :--- | :--- | :--- |
@@ -87,39 +87,39 @@ Removing Cpu0Ist:
 
 ### Patch
 
-This section allows us to dynamically modify parts of the ACPI (DSDT, SSDT, etc.) via OpenCore. For us, our patches are handled by our SSDTs. This is a much cleaner solution as this will allow us to boot Windows and other OSes with OpenCore
+這個章節允許我們通過 OpenCore 動態修改 ACPI 部分内容（DSDT、SSDT 等）。對我們來說，我們的修補程式將由我們的 SSDT 處理。這是一個更簡潔的解決方案，因為這將允許我們使用 OpenCore 啟動 Windows 和其他操作系統。
 
 ### Quirks
 
-Settings relating to ACPI, leave everything here as default as we have no use for these quirks.
+與 ACPI 相關的設定，請將所有內容保留為預設值，我們不需要這些選項值。
 
 ## Booter
 
 ![Booter](../images/config/config-universal/aptio-iv-booter.png)
 
-This section is dedicated to quirks relating to boot.efi patching with OpenRuntime, the replacement for AptioMemoryFix.efi
+這個章節專門討論利用選項值並配合 OpenRuntime（AptioMemoryFix.efi 的替代品）修補 boot.efi 時的相關問題。
 
 ### MmioWhitelist
 
-This section is allowing spaces to be passthrough to macOS that are generally ignored, useful when paired with `DevirtualiseMmio`
+這個章節允許將通常被忽略的空間傳送予 macOS，與 `DevirtualiseMmio` 配合使用時會很有用。
 
 ### Quirks
 
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, for us, we leave it as default
+::: tip 資訊
+與修補 boot.efi 及修復韌體相關的設定，對於我們來說，我們會保留預設值。
 :::
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AvoidRuntimeDefrag**: YES
-  * Fixes UEFI runtime services like date, time, NVRAM, power control, etc.
+  * 修復 UEFI 執行期服務，如日期、時間、NVRAM、電源控制等；但使用傳統 BIOS 的電腦應該停用這選項
 * **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode, however this quirk is only applicable to UEFI platforms.
+  * 允許 Slide 變量在安全模式下使用。但這個選項只適用於使用 UEFI 的電腦。
 * **EnableWriteUnprotector**: YES
-  * Needed to remove write protection from CR0 register.
+  * 需要從 UEFI 平台的 CR0 寄存器中移除寫入保護。
 * **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
+  * 用於 Slide 變量計算。然而，這個選項的必要性取決於除錯日誌中是否出現 `OCABC: Only N/256 slide values are usable!` 訊息。如果在日誌中顯示 `OCABC: All slides are usable! You can disable ProvideCustomSlide!` 訊息，你可以停用 `ProvideCustomSlide`。
 * **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses, required for Gigabyte boards to resolve early kernel panics
+  * 修復了 SetVirtualAddresses 對虛擬地址的調用問題，Gigabyte 主板需要啟用這個選項來解決早期內核錯誤
 
 :::
 
@@ -129,36 +129,36 @@ Settings relating to boot.efi patching and firmware fixes, for us, we leave it a
 
 ### Add
 
-Sets device properties from a map.
+從映射中設定裝置屬性。
 
 ::: tip PciRoot(0x0)/Pci(0x2,0x0)
 
-This section is set up via WhateverGreen's [Framebuffer Patching Guide](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md) and is used for setting important iGPU properties.
+本章節是通過 WhateverGreen 的 [Framebuffer 修補指南](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md)建立的，用來設定重要的 iGPU 屬性。
 
-The config.plist doesn't already have a section for this so you will have to create it manually.
+config.plist 還沒有這個部分，所以你必須手動建立它。
 
-The `AAPL,snb-platform-id` is what macOS uses to determine how the iGPU drivers interact with our system, and the two values choose between are as follows:
+macOS 使用 `AAPL,snb-platform-id` 來確定 iGPU 驅動程式如何與我們的系統交互，可以選擇的兩個值如下：
 
-| AAPL,snb-platform-id | Comment |
+| AAPL,snb-platform-id | 說明 |
 | :--- | :--- |
-| **`10000300`** | Used when the Desktop iGPU is used to drive a display |
-| **`00000500`** | Used when the Desktop iGPU is only used for computing tasks and doesn't drive a display |
+| **`10000300`** | 以桌面 iGPU 來驅動顯示器時使用 |
+| **`00000500`** | 以桌面 iGPU 來進行計算任務而不驅動顯示器時使用 |
 
-We also have the issue of requiring a supported device-id, just like with the above table you'll want to match up to your hardware configuration:
+我們還需要一個支援的 device-id，就像上面的表一樣，你需要與你的硬體配置匹配：
 
-| device-id | Comment |
+| device-id | 說明 |
 | :--- | :--- |
-| **`26010000`** | Used when the Desktop iGPU is used to drive a display |
-| **`02010000`** | Used when the Desktop iGPU is only used for computing tasks and doesn't drive a display |
+| **`26010000`** | 以桌面 iGPU 來驅動顯示器時使用 |
+| **`02010000`** | 以桌面 iGPU 來進行計算任務而不驅動顯示器時使用 |
 
-And finally, you should have something like this:
+最後，你應該有類似下表的內容：
 
 | Key | Type | Value |
 | :--- | :--- | :--- |
 | AAPL,snb-platform-id | Data | `00000500` |
 | device-id | Data | `26010000` |
 
-(This is an example for a desktop HD 3000 with a dGPU used as the output)
+（這是一個桌面平台的 HD 3000，並使用 dGPU 作為輸出的例子）
 
 :::
 
@@ -170,7 +170,7 @@ This is needed if you're pairing an Sandy Bridge CPU with a 7 series motherboard
 | :--- | :--- | :--- |
 | device-id | Data | `3A1C0000` |
 
-**Note**: This is not needed if you have a 6 series motherboard(ie. H61, B65, Q65, P67, H67, Q67, Z68)
+**註**：如果你使用 6 系列主板（如：H61, B65, Q65, P67, H67, Q67, Z68）則無需加入
 
 :::
 
@@ -179,15 +179,15 @@ This is needed if you're pairing an Sandy Bridge CPU with a 7 series motherboard
 `layout-id`
 
 * Applies AppleALC audio injection, you'll need to do your own research on which codec your motherboard has and match it with AppleALC's layout. [AppleALC Supported Codecs](https://github.com/acidanthera/AppleALC/wiki/Supported-codecs).
-* You can delete this property outright as it's unused for us at this time
+* 你可以直接刪除這個屬性，因為目前我們還沒有需要使用它
 
-For us, we'll be using the boot-arg `alcid=xxx` instead to accomplish this. `alcid` will override all other layout-IDs present. More info on this is covered in the [Post-Install Page](https://dortania.github.io/OpenCore-Post-Install/)
+對於我們來說，我們將使用開機參數 `alcid=xxx` 來完成此操作。 `alcid` 將覆蓋所有其他 layout-ID。更多訊息請參閱[安裝後完善指南](https://eason329.github.io/OpenCore-Post-Install/)
 
 :::
 
 ### Delete
 
-Removes device properties from the map, for us we can ignore this
+這裡將移除某些裝置屬性，對於我們來說，我們可以略過它。
 
 ## Kernel
 
@@ -195,38 +195,38 @@ Removes device properties from the map, for us we can ignore this
 
 ### Add
 
-Here's where we specify which kexts to load, in what specific order to load, and what architectures each kext is meant for. By default we recommend leaving what ProperTree has done, however for 32-bit CPUs please see below:
+在這裡，我們將指定要載入哪些 kext，載入的次序，及 kext 適用的架構。預設情況下，我們建議保留 ProperTree 所做的操作，但對於 32 位元 CPU，請參見以下内容：
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
-The main thing you need to keep in mind is:
+你需要記住的主要事項：
 
-* Load order
-  * Remember that any plugins should load *after* its dependencies
-  * This means kexts like Lilu **must** come before VirtualSMC, AppleALC, WhateverGreen, etc
+* 載入次序
+  * 請記住，任何插件都應該在其依賴項**以後**才載入
+  * 這意味著像 Lilu 這樣的 kext 必須出現在 VirtualSMC、AppleALC、WhateverGreen 等插件之前
 
-A reminder that [ProperTree](https://github.com/corpnewt/ProperTree) users can run **Cmd/Ctrl + Shift + R** to add all their kexts in the correct order without manually typing each kext out.
+提醒：[ProperTree](https://github.com/corpnewt/ProperTree) 用戶可以執行 **Cmd/Ctrl + Shift + R** 以正確的次序加入所有 kext 而無需手動輸入。
 
 * **Arch**
-  * Architectures supported by this kext
-  * Currently supported values are `Any`, `i386` (32-bit), and `x86_64` (64-bit)
+  * Kext 支援的架構
+  * 目前支援的值包括 `Any`、`i386`（32 位元）及 `x86_64`（64位元）
 * **BundlePath**
-  * Name of the kext
-  * ex: `Lilu.kext`
+  * Kext 的名稱
+  * 例：`Lilu.kext`
 * **Enabled**
-  * Self-explanatory, either enables or disables the kext
+  * 不必多做解釋了，就是啟用或停用 kext
 * **ExecutablePath**
-  * Path to the actual executable is hidden within the kext, you can see what path your kext has by right-clicking and selecting `Show Package Contents`. Generally, they'll be `Contents/MacOS/Kext` but some have kexts hidden within under `Plugin` folder. Do note that plist only kexts do not need this filled in.
-  * ex: `Contents/MacOS/Lilu`
+  * 隱藏在 kext 中的實際可執行文件的路徑，您可以通過點擊右鍵並選擇`顯示套裝內容`來查看 kext 的路徑。它們一般都是 `Contents/MacOS/Kext`，但有些 kext 將可執行文件隱藏在 `Plugin` 資料夾下。注意，只包含 plist 的 kext 不需要填寫該屬性。
+  * 例：`Contents/MacOS/Lilu`
 * **MinKernel**
-  * Lowest kernel version your kext will be injected into, see below table for possible values
-  * ex. `12.00.00` for OS X 10.8
+  * Kext 可被注入的最低内核版本，有關可用的值，請參見下表
+  * 例：`12.00.00`（OS X 10.8）
 * **MaxKernel**
-  * Highest kernel version your kext will be injected into, see below table for possible values
-  * ex. `11.99.99` for OS X 10.7
+  * Kext 可被注入的最高内核版本，有關可用的值，請參見下表
+  * 例：`11.99.99`（OS X 10.7）
 * **PlistPath**
-  * Path to the `info.plist` hidden within the kext
-  * ex: `Contents/Info.plist`
+  * 隱藏在 kext 中的 info.Plist 的路徑
+  * 例：`Contents/Info.plist`
 
 ::: details Kernel Support Table
 
