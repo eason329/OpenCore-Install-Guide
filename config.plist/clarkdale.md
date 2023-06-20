@@ -1,33 +1,33 @@
-# Desktop Lynnfield and Clarkdale
+# 桌面平台的 Lynnfield 和 Clarkdale
 
-| Support | Version |
+| 支援 | 版本 |
 | :--- | :--- |
-| Initial macOS Support | OS X 10.6.3, Snow Leopard |
-| Last Supported OS | macOS 12 Monterey |
-| Note 1 | For Ventura information, see [macOS 13 Ventura](../extras/ventura.md#dropped-cpu-support) |
-| Note 2 | Apple does not support desktop Iron Lake iGPUs |
-| Note 3 | Most Lynnfield and Clarkdale boards do not support UEFI |
+| 最初支援的 macOS 版本 | OS X 10.6.3, Snow Leopard |
+| 最後支援的版本 | macOS 12 Monterey |
+| 備註 1 | 有關 Ventura 的資訊，請參閱 [macOS 13 Ventura](../extras/ventura.md#dropped-cpu-support) |
+| 備註 2 | macOS 不支援桌面平台的 Iron Lake iGPU |
+| 備註 3 | 多數支援 Lynnfield 和 Clarkdale 的主板都不支援 UEFI |
 
-## Starting Point
+## 起點
 
-So making a config.plist may seem hard, it's not. It just takes some time but this guide will tell you how to configure everything, you won't be left in the cold. This also means if you have issues, review your config settings to make sure they're correct. Main things to note with OpenCore:
+製作一個 config.plist 看起來可能很難，其實不然，只是需要一些時間。本指南將告訴您如何設定所有內容，您不會被冷落。這也意味著如果你有問題，你需要檢查你的配置設定以確保它們是正確的。設定 OpenCore 時需要注意的主要事項：
 
-* **All properties must be defined**, there are no default OpenCore will fall back on so **do not delete sections unless told explicitly so**. If the guide doesn't mention the option, leave it at default.
-* **The Sample.plist cannot be used As-Is**, you must configure it to your system
-* **DO NOT USE CONFIGURATORS**, these rarely respect OpenCore's configuration and even some like Mackie's will add Clover properties and corrupt plists!
+* **所有屬性均必須定義**，OpenCore 不設任何預設的回退值，因此**除非明確地告訴你可以刪除，否則不要刪除任何章節**。如果指南沒有提到該選項，請將其保留為預設值。
+* **Sample.plist 不能按原樣使用**，你必須根據自己的系統進行配置
+* **不要使用配置器**, 這些配置器很少遵守 OpenCore 的配置設定，甚至一些像 Mackie 製作的配置器還會增加 Clover 屬性和破壞 plist！
 
-Now with all that, a quick reminder of the tools we need
+現在，我們來快速回顧一下我們需要的工具
 
 * [ProperTree](https://github.com/corpnewt/ProperTree)
-  * Universal plist editor
+  * 通用的 plist 編輯器
 * [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS)
-  * For generating our SMBIOS data
+  * 用於生成 SMBIOS 資料
 * [Sample/config.plist](https://github.com/acidanthera/OpenCorePkg/releases)
-  * See previous section on how to obtain: [config.plist Setup](../config.plist/README.md)
+  * 參閱上一章節了解如何取得：[config.plist 設定](../config.plist/README.md)
 
 ::: warning
 
-Read this guide more than once before setting up OpenCore and make sure you have it set up correctly. Do note that images will not always be the most up-to-date so please read the text below them, if nothing's mentioned then leave as default.
+在設定 OpenCore 之前，請多次閱讀本指南，並確保你已正確設定。請注意，圖片並不總是最新的，所以請閱讀圖片下面的文字，如果沒有提到，那麼請將其保持為預設值。
 
 :::
 
@@ -37,84 +37,86 @@ Read this guide more than once before setting up OpenCore and make sure you have
 
 ### Add
 
-::: tip Info
+::: tip 資訊
 
-This is where you'll add SSDTs for your system, these are very important to **booting macOS** and have many uses like [USB maps](https://dortania.github.io/OpenCore-Post-Install/usb/), [disabling unsupported GPUs](../extras/spoof.md) and such. And with our system, **it's even required to boot**. Guide on making them found here: [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/)
+這裡是你將為系統加入 SSDT 的地方，它們對**啟動 macOS** 非常重要，且有許多用途，如 [USB 映射](https://eason329.github.io/OpenCore-Post-Install/usb/), [停用不支援的 GPU](../extras/spoof.md) 等。在我們的系統中, **甚至需要這些才可以啟動**. 你可以在 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/)了解如何製作 SSDT
 
-For us we'll need a couple of SSDTs to bring back functionality that Clover provided:
+對於我們來說，我們需要一些 SSDT 來帶回 Clover 提供的功能：
 
-| Required SSDTs | Description |
+| 需要的 SSDT | 描述 |
 | :--- | :--- |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
+| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | 修復嵌入式控制器，參見 [ACPI 入門教學](https://eason329.github.io/Getting-Started-With-ACPI/)了解更多詳細資訊。 |
 
-Note that you **should not** add your generated `DSDT.aml` here, it is already in your firmware. So if present, remove the entry for it in your `config.plist` and under EFI/OC/ACPI.
+請注意，你**不應該**在這裡加入您生成的 DSDT.aml，它已經在你的韌體中了。因此，如果存在的話，請刪除 config plist 和 EFI/OC/ACPI 下的相關條目。
 
-For those wanting a deeper dive into dumping your DSDT, how to make these SSDTs, and compiling them, please see the [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/) **page.** Compiled SSDTs have a **.aml** extension(Assembled) and will go into the `EFI/OC/ACPI` folder and **must** be specified in your config under `ACPI -> Add` as well.
+對於那些想要更深入地傾印你的 DSDT、如何製作這些 SSDT 及編譯它們的人，請參閱 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/) **页面**。編譯後的 SSDT 會有一個 **.aml** 副檔名（已編譯）並會放入 `EFI/OC/ACPI` 資料夾，且**必須**在你的配置檔案裡的 `ACPI -> Add` 下指定。
 
 :::
 
 ### Delete
 
-This blocks certain ACPI tables from loading, for us we can ignore this.
+這裡將阻止載入某些 ACPI 表，對於我們來說，我們可以略過它。
 
 ### Patch
 
-This section allows us to dynamically modify parts of the ACPI (DSDT, SSDT, etc.) via OpenCore. For us, our patches are handled by our SSDTs. This is a much cleaner solution as this will allow us to boot Windows and other OSes with OpenCore
+這個章節允許我們通過 OpenCore 動態修改 ACPI 部分内容（DSDT、SSDT 等）。對我們來說，我們的修補程式將由我們的 SSDT 處理。這是一個更簡潔的解決方案，因為這將允許我們使用 OpenCore 啟動 Windows 和其他操作系統。
+
 
 ### Quirks
 
-Settings relating to ACPI, leave everything here as default as we have no use for these quirks.
+與 ACPI 相關的設定，請將所有內容保留為預設值，我們不需要這些選項值。
 
 ## Booter
 
-| Legacy | UEFI
+| 傳統 BIOS | UEFI
 | :--- | :--- |
 | ![](../images/config/config-legacy/booter-duetpkg.png) | ![](../images/config/config-universal/aptio-iv-booter-sl.png) |
 
-This section is dedicated to quirks relating to boot.efi patching with OpenRuntime, the replacement for AptioMemoryFix.efi
+這個章節專門討論利用選項值並配合 OpenRuntime（AptioMemoryFix.efi 的替代品）修補 boot.efi 時的相關問題。
 
 ### MmioWhitelist
 
-This section is allowing spaces to be passthrough to macOS that are generally ignored, useful when paired with `DevirtualiseMmio`
+這個章節允許將通常被忽略的空間傳送予 macOS，與 `DevirtualiseMmio` 配合使用時會很有用。
 
 ### Quirks
 
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, depending where your board has UEFI, you have 2 options depending what your motherboard supports:
+::: tip 資訊
+與修補 boot.efi 及修復韌體相關的設定（取決於你的主板是否支援 UEFI），按照你的主板支援的韌體，你將有兩個選項：
 
-#### Legacy Settings
 
-| Quirk | Enabled | Comment |
+#### 傳統 BIOS 設定
+
+| Quirk | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| AvoidRuntimeDefrag | No | Big Sur may require this quirk enabled |
+| AvoidRuntimeDefrag | No | Big Sur 可能需要啟用這個選項值 |
 | EnableSafeModeSlide | No | |
 | EnableWriteUnprotector | No | |
 | ProvideCustomSlide | No | |
-| RebuildAppleMemoryMap | Yes | This is required to boot OS X 10.4 through 10.6 |
+| RebuildAppleMemoryMap | Yes | 這個選項值在啟動 OS X 10.4 至 10.6 時是必須的 |
 | SetupVirtualMap | No | |
 
-#### UEFI Settings
+#### UEFI 設定
 
-| Quirk | Enabled | Comment |
+| Quirk | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| RebuildAppleMemoryMap | Yes | This is required to boot OS X 10.4 through 10.6 |
+| RebuildAppleMemoryMap | Yes | 這個選項值在啟動 OS X 10.4 至 10.6 時是必須的 |
 
 :::
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AvoidRuntimeDefrag**: NO
-  * Fixes UEFI runtime services like date, time, NVRAM, power control;
-  * macOS Big Sur however requires the APIC table present, otherwise causing early kernel panics so this quirk is recommended for those users.
+  * 修復 UEFI 執行期服務，如日期、時間、NVRAM、電源控制等；
+  * 但 macOS Big Sur 會要求提供 APIC 表，否則會導致內核出現早期錯誤，因此建議這些用戶啟用這個選項值。
 * **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode.
+  * 允許 Slide 變量在安全模式下使用。
 * **EnableWriteUnprotector**: NO
-  * Needed to remove write protection from CR0 register.
+  * 需要從 UEFI 平台的 CR0 寄存器中移除寫入保護。
 * **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
+  * 用於 Slide 變量計算。然而，這個選項的必要性取決於除錯日誌中是否出現 `OCABC: Only N/256 slide values are usable!` 訊息。如果在日誌中顯示 `OCABC: All slides are usable! You can disable ProvideCustomSlide!` 訊息，你可以停用 `ProvideCustomSlide`。
 * **RebuildAppleMemoryMap**: YES
-  * Resolves early memory kernel panics on 10.6 and below.
+  * 解決 10.6 及更低版本的早期內存內核錯誤問題。
 * **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses.
+  * 修復了 SetVirtualAddresses 對虛擬地址的調用問題
 
 :::
 
@@ -124,13 +126,13 @@ Settings relating to boot.efi patching and firmware fixes, depending where your 
 
 ### Add
 
-Sets device properties from a map.
+從映射中設定裝置屬性。
 
-By default, the Sample.plist has this section set for audio which we'll be setting up by setting the layout ID in the boot-args section, so removal of `PciRoot(0x0)/Pci(0x1b,0x0)` is also recommended from the `Add` section.
+預設情況下，Sample.plist 已經加入了音訊部分的設定，我們將通過在 boot-args 部分設定 Layout ID 來設置音訊，因此建議從 `Add` 章節中刪除 `PciRoot(0x0)/Pci(0x1b,0x0)`。
 
 ### Delete
 
-Removes device properties from the map, for us we can ignore this
+這裡將移除某些裝置屬性，對於我們來說，我們可以略過它。
 
 ## Kernel
 
@@ -138,42 +140,42 @@ Removes device properties from the map, for us we can ignore this
 
 ### Add
 
-Here's where we specify which kexts to load, in what specific order to load, and what architectures each kext is meant for. By default we recommend leaving what ProperTree has done, however for 32-bit CPUs please see below:
+在這裡，我們將指定要載入哪些 kext，載入的次序，及 kext 適用的架構。預設情況下，我們建議保留 ProperTree 所做的操作，但對於 32 位元 CPU，請參見以下内容：
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
-The main thing you need to keep in mind is:
+你需要記住的主要事項：
 
-* Load order
-  * Remember that any plugins should load *after* its dependencies
-  * This means kexts like Lilu **must** come before VirtualSMC, AppleALC, WhateverGreen, etc
+* 載入次序
+  * 請記住，任何插件都應該在其依賴項**以後**才載入
+  * 這意味著像 Lilu 這樣的 kext 必須出現在 VirtualSMC、AppleALC、WhateverGreen 等插件之前
 
-A reminder that [ProperTree](https://github.com/corpnewt/ProperTree) users can run **Cmd/Ctrl + Shift + R** to add all their kexts in the correct order without manually typing each kext out.
+提醒：[ProperTree](https://github.com/corpnewt/ProperTree) 用戶可以執行 **Cmd/Ctrl + Shift + R** 以正確的次序加入所有 kext 而無需手動輸入。
 
 * **Arch**
-  * Architectures supported by this kext
-  * Currently supported values are `Any`, `i386` (32-bit), and `x86_64` (64-bit)
+  * Kext 支援的架構
+  * 目前支援的值包括 `Any`、`i386`（32 位元）及 `x86_64`（64位元）
 * **BundlePath**
-  * Name of the kext
-  * ex: `Lilu.kext`
+  * Kext 的名稱
+  * 例：`Lilu.kext`
 * **Enabled**
-  * Self-explanatory, either enables or disables the kext
+  * 不必多做解釋了，就是啟用或停用 kext
 * **ExecutablePath**
-  * Path to the actual executable is hidden within the kext, you can see what path your kext has by right-clicking and selecting `Show Package Contents`. Generally, they'll be `Contents/MacOS/Kext` but some have kexts hidden within under `Plugin` folder. Do note that plist only kexts do not need this filled in.
-  * ex: `Contents/MacOS/Lilu`
+  * 隱藏在 kext 中的實際可執行文件的路徑，您可以通過點擊右鍵並選擇`顯示套裝內容`來查看 kext 的路徑。它們一般都是 `Contents/MacOS/Kext`，但有些 kext 將可執行文件隱藏在 `Plugin` 資料夾下。注意，只包含 plist 的 kext 不需要填寫該屬性。
+  * 例：`Contents/MacOS/Lilu`
 * **MinKernel**
-  * Lowest kernel version your kext will be injected into, see below table for possible values
-  * ex. `12.00.00` for OS X 10.8
+  * Kext 可被注入的最低内核版本，有關可用的值，請參見下表
+  * 例：`12.00.00`（OS X 10.8）
 * **MaxKernel**
-  * Highest kernel version your kext will be injected into, see below table for possible values
-  * ex. `11.99.99` for OS X 10.7
+  * Kext 可被注入的最高内核版本，有關可用的值，請參見下表
+  * 例：`11.99.99`（OS X 10.7）
 * **PlistPath**
-  * Path to the `info.plist` hidden within the kext
-  * ex: `Contents/Info.plist`
+  * 隱藏在 kext 中的 info.Plist 的路徑
+  * 例：`Contents/Info.plist`
 
-::: details Kernel Support Table
+::: details Kernel 版本號列表
 
-| OS X Version | MinKernel | MaxKernel |
+| OS X 版本 | MinKernel | MaxKernel |
 | :--- | :--- | :--- |
 | 10.4 | 8.0.0 | 8.99.99 |
 | 10.5 | 9.0.0 | 9.99.99 |
@@ -195,99 +197,98 @@ A reminder that [ProperTree](https://github.com/corpnewt/ProperTree) users can r
 
 ### Emulate
 
-Needed for spoofing unsupported CPUs like Pentiums and Celerons
+用於隱藏不支援的 CPU 的資訊（如：Pentium 和 Celeron）來欺騙系統
 
-* **Cpuid1Mask**: Leave this blank
-* **Cpuid1Data**: Leave this blank
+* **Cpuid1Mask**：不用填寫
+* **Cpuid1Data**：不用填寫
 
 ### Force
 
-Used for loading kexts off system volume, only relevant for older operating systems where certain kexts are not present in the cache(ie. IONetworkingFamily in 10.6).
+用於從系統磁碟區中載入 kext，只適用於某些在緩存中沒有特定 kext 的老舊操作系統（如：10.16 中的 IONetworkingFamily）。
 
-For us, we can ignore.
+對於我們來說，我們可以略過它。
 
 ### Block
 
-Blocks certain kexts from loading. Not relevant for us.
+這裡將阻止載入某些 kext，而我們目前無需理會這裡。
 
 ### Patch
 
-Patches both the kernel and kexts.
+同時修補內核和 kext。
 
 ### Quirks
 
-::: tip Info
+::: tip 資訊
 
-Settings relating to the kernel, for us we'll be enabling the following:
+與內核相關的設定，我們將啟用以下功能：
 
-| Quirk | Enabled | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| AppleCpuPmCfgLock | YES | Not needed if `CFG-Lock` is disabled in the BIOS |
-| DisableIoMapper | YES | Not needed if `VT-D` is disabled in the BIOS |
-| LapicKernelPanic | NO | HP Machines will require this quirk |
+| AppleCpuPmCfgLock | YES | 如果在 BIOS 中停用了 `CFG-Lock` 則可以停用 |
+| DisableIoMapper | YES | 如果在 BIOS 中停用了 `VT-D` 則可以停用 |
+| LapicKernelPanic | NO | HP 品牌電腦則需要啟用這個選項 |
 | PanicNoKextDump | YES | |
 | PowerTimeoutKernelPanic | YES | |
-| XhciPortLimit | YES | Disable if running macOS 11.3+ |
+| XhciPortLimit | YES | 11.3 及更新版本則需要停用 |
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AppleCpuPmCfgLock**: YES
-  * Only needed when CFG-Lock can't be disabled in BIOS
-  * Only applicable for Ivy Bridge and older
-    * Note: Broadwell and older require this when running 10.10 or older
+  * 只有無法從 BIOS 停用 CFG-Lock 的時候才需要
+  * 只適用於 Ivy Bridge 或更老舊平台
+    * 註：Broadwell 或更老舊平台在運行 10.10 或更老舊版本時需要啟用
 * **AppleXcpmCfgLock**: NO
-  * Only needed when CFG-Lock can't be disabled in BIOS
-  * Only applicable for Haswell and newer
-    * Note: Ivy Bridge-E is also included as it's XCPM capable
+  * 只有無法從 BIOS 停用 CFG-Lock 的時候才需要
+  * 只適用於 Haswell 或更老舊平台
+    * 註：Ivy Bridge-E 平台也包括在內，因為該平台支援 XCPM
 * **CustomSMBIOSGuid**: NO
-  * Performs GUID patching for UpdateSMBIOSMode set to `Custom`. Usually relevant for Dell laptops
-  * Enabling this quirk with UpdateSMBIOSMode Custom mode can also disable SMBIOS injection into "non-Apple" OSes however we do not endorse this method as it breaks Bootcamp compatibility. Use at your own risk
+  * 在 UpdateSMBIOSMode 設為 `Custom` 時進行 GUID 修補。通常與 Dell 筆記型電腦有關
+  * 在 UpdateSMBIOSMode 自訂模式下啟用此選項時，可以同時將 SMBIOS 注入到「非蘋果」操作系統的功能停用，但我們不支持這種方法，因為它會破壞了 Bootcamp 的相容性。使用風險自負
 * **DisableIoMapper**: YES
-  * Needed to get around VT-D if either unable to disable in BIOS or needed for other operating systems, much better alternative to `dart=0` as SIP can stay on in Catalina
+  * 如果在 BIOS 中無法停用或其他操作系統需要啟用 VT-D，則需要繞過 VT-D，這是比 `dart=0` 更好的替代方案，因為 SIP 可以在 Catalina 維持啟用
 * **DisableLinkeditJettison**: YES
-  * Allows Lilu and others to have more reliable performance without `keepsyms=1`
+  * 允許 Lilu 和其他 kext 在不需要 `keepsyms=1` 的情況下擁有更可靠的性能
 * **DisableRtcChecksum**: NO
-  * Prevents AppleRTC from writing to primary checksum (0x58-0x59), required for users who either receive BIOS reset or are sent into Safe mode after reboot/shutdown
+  * 防止 AppleRTC 寫入主校驗碼 (0x58-0x59)，這對於接收到 BIOS 重置或在重新開機/關機後進入安全模式的用戶是必需的,
 * **ExtendBTFeatureFlags** NO
-  * Helpful for those having continuity issues with non-Apple/non-Fenvi cards
+  * 對於那些非蘋果或非 fenvi 卡有連接問題的人很有幫助
 * **LapicKernelPanic**: NO
-  * Disables kernel panic on AP core lapic interrupt, generally needed for HP systems. Clover equivalent is `Kernel LAPIC`
+  * 在 AP 核心 lapic 中斷上停用內核錯誤，一般 HP 系統需要啟用。相當於 Clover 的 Kernel LAPIC
 * **LegacyCommpage**: NO
-  * Resolves SSSE3 requirement for 64 Bit CPUs in macOS, mainly relevant for 64-Bit Pentium 4 CPUs(ie. Prescott)
+  * 解決了 macOS 中 64 位元 CPU 的 SSSE3 要求，主要適用於 64 位元 Pentium 4 CPU（即 Prescott）
 * **PanicNoKextDump**: YES
-  * Allows for reading kernel panics logs when kernel panics occur
+  * 允許在發生內核嚴重故障時讀取內核嚴重故障日誌
 * **PowerTimeoutKernelPanic**: YES
-  * Helps fix kernel panics relating to power changes with Apple drivers in macOS Catalina, most notably with digital audio.
+  * 幫助修復 macOS Catalina 中與蘋果驅動程式權限變化相關的內核錯誤，尤其是與數字音訊有關的問題。
 * **SetApfsTrimTimeout**: `-1`
-  * Sets trim timeout in microseconds for APFS filesystems on SSDs, only applicable for macOS 10.14 and newer with problematic SSDs.
+  * 為 SSD 上的 APFS 檔案系統設定以微秒為單位的 TRIM 超時時間，只適用於 macOS 10.14 及更新版本和有相關問題的 SSD。
 * **XhciPortLimit**: YES
-  * This is actually the 15 port limit patch, don't rely on it as it's not a guaranteed solution for fixing USB. Please create a [USB map](https://dortania.github.io/OpenCore-Post-Install/usb/) when possible.
-  * With macOS 11.3+, [XhciPortLimit may not function as intended.](https://github.com/dortania/bugtracker/issues/162) We recommend users either disable this quirk and map before upgrading or [map from Windows](https://github.com/USBToolBox/tool). You may also install macOS 11.2.3 or older.
+  * 這是 15 個連接埠限制的修補程式，不要依賴它，因為它不是一個保證修復 USB 連接埠的解決方案。如果可以的話，請建立一個[USB 映射表](https://dortania.github.io/OpenCore-Post-Install/usb/)。
+  * 在 macOS 11.3 及更新版本中, [XhciPortLimit 可能無法正常工作](https://github.com/dortania/bugtracker/issues/162)。我們建議用戶在升級前停用此選項值並進行映射，或是[從 Windows 映射](https://github.com/USBToolBox/tool)。你也可以安裝 macOS 11.2.3 或更舊的版本。
 
 :::
 
 ### Scheme
 
-Settings related to legacy booting(ie. 10.4-10.6), for majority you can skip however for those planning to boot legacy OSes you can see below:
+與傳統 BIOS 開機（如：10.4-10.6）相關的設定，大多數的用戶都可以略過。但對於計劃啟動老舊操作系統的人，你可以查看以下内容：
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **FuzzyMatch**: True
-  * Used for ignoring checksums with kernelcache, instead opting for the latest cache available. Can help improve boot performance on many machines in 10.6
+  * 用於略過 kernelcache 的校驗碼，而不是選擇可用的最新緩存。可以幫助提高許多使用 10.6 系統的電腦的啟動性能
 * **KernelArch**: x86_64
-  * Set the kernel's arch type, you can choose between `Auto`, `i386` (32-bit), and `x86_64` (64-bit).
-  * If you're booting older OSes which require a 32-bit kernel(ie. 10.4 and 10.5) we recommend to set this to `Auto` and let macOS decide based on your SMBIOS. See below table for supported values:
-    * 10.4-10.5 — `x86_64`, `i386` or `i386-user32`
-      * `i386-user32` refers 32-bit userspace, so 32-bit CPUs must use this(or CPUs missing SSSE3)
-      * `x86_64` will still have a 32-bit kernelspace however will ensure 64-bit userspace in 10.4/5
-    * 10.6 — `i386`, `i386-user32`, or `x86_64`
-    * 10.7 — `i386` or `x86_64`
-    * 10.8 or newer — `x86_64`
-
+  * 設定內核的架構類型, 你可以在 `Auto`, `i386`（32 位元）和 `x86_64`（64 位元）之間選擇。
+  * 如果你要啟動需要 32 位元的舊版操作系統（如：10.4 和 10.5），我們建議將其設置為 `Auto`，讓 macOS 根據您的 SMBIOS 決定。支援的值請見下表：
+    * 10.4-10.5 — `x86_64`, `i386` 或 `i386-user32`
+      * `i386-user32` 代表 32 位元用戶空間，32 位元（或缺少 SSSE3 支援）的 CPU 必須使用這個
+      * `x86_64` 仍然使用 32 位元內核空間，但在 10.4/5 中會保留 64 位元用戶空間
+    * 10.6 — `i386`, `i386-user32`, 或 `x86_64`
+    * 10.7 — `i386` 或 `x86_64`
+    * 10.8 或更新 — `x86_64`
 * **KernelCache**: Auto
-  * Set kernel cache type, mainly useful for debugging and so we recommend `Auto` for best support
+  * 設定內核緩存類型，主要用於除錯，因此我們建議使用 `Auto` 以取得最佳支援
 
 :::
 

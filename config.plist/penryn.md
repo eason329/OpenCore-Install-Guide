@@ -1,10 +1,10 @@
-# 桌面平台的 Yonah, Conroe and Penryn
+# 桌面平台的 Yonah, Conroe 和 Penryn
 
 | 支援 | 版本 |
 | :--- | :--- |
-| 最初支援的 macOS 版本：Penryn | OS X 10.4.10, Tiger |
-| 最後支援的版本: Penryn | macOS 10.13.6 High Sierra |
-| 備註 | iGPU 支援不會在本指南中介紹，請參閱：[GMA 的修補](https://sumingyd.github.io/OpenCore-Post-Install/gpu-patching/)|
+| 最初支援的 macOS 版本（Penryn） | OS X 10.4.10, Tiger |
+| 最後支援的版本（Penryn） | macOS 10.13.6 High Sierra |
+| 備註 1 | iGPU 支援不會在本指南中介紹，請參閱：[GMA 的修補](https://sumingyd.github.io/OpenCore-Post-Install/gpu-patching/)|
 | 備註 2 | 啟動 macOS 10.12 Sierra 及更新版本需要 SSE4，因此不支援 Conroe 及更老舊的硬體 |
 
 ## 起點
@@ -44,7 +44,7 @@
 
 | 需要的 SSDT | 描述 |
 | :--- | :--- |
-| **[SSDT-EC](https://eason329.github.io/Getting-Started-With-ACPI/)** | 修復嵌入式控制器，參見 [ACPI 入門教學](https://eason329.github.io/Getting-Started-With-ACPI/)瞭解更多詳細資訊。 |
+| **[SSDT-EC](https://eason329.github.io/Getting-Started-With-ACPI/)** | 修復嵌入式控制器，參見 [ACPI 入門教學](https://eason329.github.io/Getting-Started-With-ACPI/)了解更多詳細資訊。 |
 
 請注意，你**不應該**在這裡加入您生成的 DSDT.aml，它已經在你的韌體中了。因此，如果存在的話，請刪除 config plist 和 EFI/OC/ACPI 下的相關條目。
 
@@ -107,7 +107,7 @@
 * **EnableSafeModeSlide**: YES
   * 允許 Slide 變量在安全模式下使用。
 * **EnableWriteUnprotector**: NO
-  * 需要從 UEFI 平台的CR0寄存器中移除寫入保護。
+  * 需要從 UEFI 平台的 CR0 寄存器中移除寫入保護。
 * **ProvideCustomSlide**: YES
   * 用於 Slide 變量計算。然而，這個選項的必要性取決於除錯日誌中是否出現 `OCABC: Only N/256 slide values are usable!` 訊息。如果在日誌中顯示 `OCABC: All slides are usable! You can disable ProvideCustomSlide!` 訊息，你可以停用 `ProvideCustomSlide`。
 * **RebuildAppleMemoryMap**: YES
@@ -141,7 +141,7 @@
 
 ::: details 更深入的資訊
 
-你需要記住的主要事項:
+你需要記住的主要事項：
 
 * 載入次序
   * 請記住，任何插件都應該在其依賴項**以後**才載入
@@ -279,7 +279,6 @@
     * 10.6 — `i386`, `i386-user32`, 或 `x86_64`
     * 10.7 — `i386` 或 `x86_64`
     * 10.8 或更新 — `x86_64`
-
 * **KernelCache**: Auto
   * 設定內核緩存類型，主要用於除錯，因此我們建議使用 `Auto` 以取得最佳支援
 
