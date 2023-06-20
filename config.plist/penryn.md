@@ -604,87 +604,87 @@ SmUUID:       A154B586-874B-4E57-A1FF-9D6E503E4580
 
 | Key | Type | 說明 |
 | :--- | :--- | :--- |
-| Path | String | Path of the file from `OC/Drivers` directory |
-| LoadEarly | Boolean | Load the driver early before NVRAM setup, should only be enabled for `OpenRuntime.efi` and `OpenVariableRuntimeDxe.efi` if using legacy NVRAM |
-| Arguments | String | Some drivers accept additional arguments which are specified here. |
+| Path | String | 檔案在 `OC/Drivers` 目錄的路徑 |
+| LoadEarly | Boolean | Load the driver early before在設定 NVRAM 前先行載入驅動程式，如果系統使用舊版 NVRAM，應該只在 `OpenRuntime.efi` 和 `OpenVariableRuntimeDxe.efi` 啟用 |
+| Arguments | String | 有些驅動程式接受這裡指定的其他參數。 |
 
 :::
 
 ### APFS
 
-By default, OpenCore only loads APFS drivers from macOS Big Sur and newer. If you are booting macOS Catalina or earlier, you may need to set a new minimum version/date.
-Not setting this can result in OpenCore not finding your macOS partition!
+預設情況下，OpenCore 只會載入 macOS Big Sur 及更新版本的 APFS 驅動程式。如果你要啟動 macOS Catalina 或更舊版本，你可能需要設定新的最低版本或日期。
+不設定這個選項可能導致 OpenCore 無法找到你的 macOS 磁碟區！
 
-macOS Sierra and earlier use HFS instead of APFS. You can skip this section if booting older versions of macOS.
+macOS Sierra 及更舊版本使用 HFS 而非 APFS。如果要啟動舊版 macOS，你可以略過這個章節。
 
-::: tip APFS Versions
+::: tip APFS 版本
 
-Both MinVersion and MinDate need to be set if changing the minimum version.
+如果要修改最小版本，需要同時設定 MinVersion 和 MinDate。
 
-| macOS Version | Min Version | Min Date |
+| macOS 版本 | 最低版本（MinVersion） | 最低日期（MinDate） |
 | :------------ | :---------- | :------- |
 | High Sierra (`10.13.6`) | `748077008000000` | `20180621` |
 | Mojave (`10.14.6`) | `945275007000000` | `20190820` |
 | Catalina (`10.15.4`) | `1412101001000000` | `20200306` |
-| No restriction | `-1` | `-1` |
+| 無限制 | `-1` | `-1` |
 
 :::
 
 ### Audio
 
-Related to AudioDxe settings, for us we'll be ignoring(leave as default). This is unrelated to audio support in macOS.
+針對 AudioDxe 的設定，我們可以略過這個章節（保留預設值）。這與 macOS 的音訊支援無關。
 
-* For further use of AudioDxe and the Audio section, please see the Post Install page: [Add GUI and Boot-chime](https://dortania.github.io/OpenCore-Post-Install/)
+* 有關 AudioDxe 和音訊章節的進一步使用，請參見安裝後完善指南的：[增設 GUI 和開機聲音](https://eason329.github.io/OpenCore-Post-Install/)
 
 ### Input
 
-::: tip Info
+::: tip 資訊
 
-Related to boot.efi keyboard passthrough used for FileVault and Hotkey support, leave everything here as default besides:
+用於 FileVault 和熱鍵支援的 boot.efi 鍵盤直連相關的設定，此部分請保留預設值，除了下列選項：
 
-| Quirk | Value | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| KeySupport | NO | Enable if your BIOS supports UEFI |
+| KeySupport | NO | 如果你的 BIOS 支援 UEFI，則可以啟用 |
 
 :::
 
 ### Output
 
-Relating to OpenCore's visual output, leave everything here as default as we have no use for these quirks.
+與 OpenCore 的視訊輸出有關的設定，這些選項對我們來說沒有作用，因此這部分請保留預設值。
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
-| Output | Value | Comment |
+| Output | Value | 說明 |
 | :--- | :--- | :--- |
-| UIScale | `0` | `0` will automatically set based on resolution<br/>`-1` will leave it unchanged<br/>`1` for 1x scaling, for normal displays<br/>`2` for 2x scaling, for HiDPI displays |
+| UIScale | `0` | `0` 根據解析度自動調整<br/>`-1` 保持不變<br/>`1` 1x 縮放，適用於一般顯示器<br/>`2` 2x 縮放，適用於 HiDPI 顯示器 |
 
 :::
 
 ### ProtocolOverrides
 
-Mainly relevant for Virtual machines, legacy macs and FileVault users. See here for more details: [Security and FileVault](https://dortania.github.io/OpenCore-Post-Install/)
+主要適用於虛擬機器、舊 Mac 和 FileVault 用戶。詳細訊息請見: [安全與 FileVault](https://eason329.github.io/OpenCore-Post-Install/)
 
 ### Quirks
 
-::: tip Info
-Relating to quirks with the UEFI environment, for us we'll be changing the following:
+::: tip 資訊
+與 UEFI 環境有關的設定，我們將會更改以下選項：
 
-| Quirk | Enabled | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| IgnoreInvalidFlexRatio | NO | Enable this if you have a UEFI BIOS |
-| UnblockFsConnect | NO | Needed mainly by HP motherboards |
+| IgnoreInvalidFlexRatio | NO | 如果你使用 UEFI BIOS，請啟用這選項 |
+| UnblockFsConnect | NO | 主要用於 HP 主版 |
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **IgnoreInvalidFlexRatio**: NO
-  * Fix for when MSR_FLEX_RATIO (0x194) can't be disabled in the BIOS, required for all pre-Skylake based systems
-  * Only relevant on UEFI BIOS
+  * 修復 MSR_FLEX_RATIO (0x194) 無法在 BIOS 停用的問題，所有比 Skylake 舊的平台的電腦均需要啟用
+  * 只適用於 UEFI BIOS
 
 * **DisableSecurityPolicy**: NO
-  * Disables platform security policy in firmware, recommended for buggy firmwares where disabling Secure Boot does not allow 3rd party firmware drivers to load.
-  * If running a Microsoft Surface device, recommended to enable this option
+  * 停用韌體的平台安全策略，建議用於有問題的韌體（例如：停用安全開機會導致第三方韌體驅動程式無法載入）。
+  * 如果是 Microsoft Surface 裝置，則建議啟用這個選項
 
 * **RequestBootVarRouting**: YES
   * Redirects AptioMemoryFix from `EFI_GLOBAL_VARIABLE_GUID` to `OC_VENDOR_VARIABLE_GUID`. Needed for when firmware tries to delete boot entries and is recommended to be enabled on all systems for correct update installation, Startup Disk control panel functioning, etc.
