@@ -726,7 +726,7 @@ macOS Sierra 及更舊版本使用 HFS 而非 APFS。如果要啟動舊版 macOS
 * VT-x
 * Above 4G Decoding
 * 超線程
-* Execute Disable Bit
+* 執行禁用位元
 * EHCI/XHCI Hand-off
 * 操作系統類型：Windows 8.1/10 UEFI 模式（某些主板可能需要選用「其他操作系統」）
 * 預先分配的 DVMT（iGPU 記憶體）：32MB 或更多
