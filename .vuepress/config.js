@@ -190,12 +190,13 @@ module.exports = {
                             ]
                         },
                         {
-                            title: 'AMD 桌面電腦配置檔案',
+                            title: 'AMD 電腦配置檔案',
                             collapsable: true,
                             sidebarDepth: 1,
                             children: [
                                 '/AMD/fx',
                                 '/AMD/zen',
+                                '/AMD/zen-laptop',
                             ]
                         },
                         ['/config.plist/security', '蘋果安全啟動']

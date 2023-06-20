@@ -110,7 +110,8 @@ config.plist **必須** 與 EFI 資料夾的內容相匹配. 如果您刪除了�
 | 代號名稱 | 系列 | 發行日期 |
 | :--- | :--- | :--- |
 | [Bulldozer/Jaguar](../AMD/fx.md) | [非常奇怪](https://en.wikipedia.org/wiki/List_of_AMD_processors#Bulldozer_architecture;_Bulldozer,_Piledriver,_Steamroller,_Excavator_(2011%E2%80%932017)) | [AMD 當時（2011-2017 年）的命名可謂是雜亂無章](https://en.wikipedia.org/wiki/List_of_AMD_processors#Bulldozer_architecture;_Bulldozer,_Piledriver,_Steamroller,_Excavator_(2011%E2%80%932017)) |
-| [Zen](../AMD/zen.md) | 1XXX, 2XXX, 3XXX, 4XXX, 5XXX | 2017-2020 年 |
+| [Zen（桌面平台）](../AMD/zen.md) | 1XXX, 2XXX, 3XXX, 4XXX, 5XXX | 2017-2020 年 |
+| [Zen（筆記本電腦平台）](../AMD/zen-laptop.md) | 2XXX, 3XXX, 4XXX, 5XXX | 2018-2020 年 |
 
 * 注意：~~第 3 代 Threadripper (39XX) 目前不支援，但是 1 代和 2 代都是支援的~~
   * 最新版本的 BIOS 和 OpenCore 已經修復了該問題，所有 Threadripper 平台的 CPU 都已支援。

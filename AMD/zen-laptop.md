@@ -1,32 +1,40 @@
-# 桌面平台的 Ryzen 和 Threadripper(17h and 19h)
+# 筆記型電腦平台的 Ryzen(17h and 19h)
 
-| Support | Version |
+| 支援 | 版本 |
 | :--- | :--- |
-| Initial macOS Support | macOS 10.13, High Sierra |
+| 最初支援的 macOS 版本 | macOS 11.0.1, Big Sur |
+| 備註 | 目前不支援使用 Navi iGPU 的筆記型電腦 CPU |
 
-## Starting Point
+::: warning 在開始之前
 
-So making a config.plist may seem hard, it's not. It just takes some time but this guide will tell you how to configure everything, you won't be left in the cold. This also means if you have issues, review your config settings to make sure they're correct. Main things to note with OpenCore:
+目前，只有正體中文版本才設有本頁面。**請不要到 dortania 詢問他們為何沒有本頁面，或建議他們新增本頁面**。
 
-* **All properties must be defined**, there are no default OpenCore will fall back on so **do not delete sections unless told explicitly so**. If the guide doesn't mention the option, leave it at default.
-* **The Sample.plist cannot be used As-Is**, you must configure it to your system
-* **DO NOT USE CONFIGURATORS**, these rarely respect OpenCore's configuration and even some like Mackie's will add Clover properties and corrupt plists!
+在 AMD 筆記型電腦平台安裝 macOS 是一件非常新鮮和充滿各種問題的事情。這些問題包括：無法使用觸控板、macOS 無法檢測到內置 SATA 磁碟（因為 macOS 不支援 AMD 原生的 SATA 的控制器）、電池消耗嚴重等。
 
-Now with all that, a quick reminder of the tools we need
+對於 AMD 筆記本電腦是否能夠**較**完美地安裝 macOS，這很大程度上與 [NootedRed](https://github.com/NootInc/NootedRed) 插件，以及其開發者 NootInc 在其他問題的開發進度高度相關（他們也正在修復在 AMD 筆記型電腦無法使用觸控板的問題）。即使他們成功修復這些功能，但 AMD CPU 在部分功能仍然與 Intel 有一定差別。因此，若你的 AMD 筆記型電腦是用於完成重要工作的，你不應在該電腦安裝 macOS。
+
+因此，譯者原則上 **極不建議** 在 AMD 筆記型電腦安裝 macOS，除非你願意承擔後果。
+
+## 起點
+
+製作一個 config.plist 看起來可能很難，其實不然，只是需要一些時間。本指南將告訴您如何設定所有內容，您不會被冷落。這也意味著如果你有問題，你需要檢查你的配置設定以確保它們是正確的。設定 OpenCore 時需要注意的主要事項：
+
+* **所有屬性均必須定義**，OpenCore 不設任何預設的回退值，因此**除非明確地告訴你可以刪除，否則不要刪除任何章節**。如果指南沒有提到該選項，請將其保留為預設值。
+* **Sample.plist 不能按原樣使用**，你必須根據自己的系統進行配置
+* **不要使用配置器**, 這些配置器很少遵守 OpenCore 的配置設定，甚至一些像 Mackie 製作的配置器還會增加 Clover 屬性和破壞 plist！
+
+現在，我們來快速回顧一下我們需要的工具
 
 * [ProperTree](https://github.com/corpnewt/ProperTree)
-  * Universal plist editor
+  * 通用的 plist 編輯器
 * [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS)
-  * For generating our SMBIOS data
+  * 用於生成 SMBIOS 資料
 * [Sample/config.plist](https://github.com/acidanthera/OpenCorePkg/releases)
-  * See previous section on how to obtain: [config.plist Setup](../config.plist/README.md)
-* [AMD Kernel Patches](https://github.com/AMD-OSX/AMD_Vanilla)
-  * Needed for booting macOS on AMD hardware(save these for later, we'll go over how to use them below)
-  * Supporting AMD Family 15h, 16h, 17h and 19h
+  * 參閱上一章節了解如何取得：[config.plist 設定](../config.plist/README.md)
 
 ::: warning
 
-Read this guide more than once before setting up OpenCore and make sure you have it set up correctly. Do note that images will not always be the most up-to-date so please read the text below them, if nothing's mentioned then leave as default.
+在設定 OpenCore 之前，請多次閱讀本指南，並確保你已正確設定。請注意，圖片並不總是最新的，所以請閱讀圖片下面的文字，如果沒有提到，那麼請將其保持為預設值。
 
 :::
 
@@ -36,10 +44,9 @@ Read this guide more than once before setting up OpenCore and make sure you have
 
 ### Add
 
-::: tip Info
+::: tip 資訊
 
-This is where you'll add SSDTs for your system, these are very important to **booting macOS** and have many uses like [USB maps](https://dortania.github.io/OpenCore-Post-Install/usb/), [disabling unsupported GPUs](../extras/spoof.md) and such. And with our system, **it's even required to boot**. Guide on making them found here: [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/)
-
+這裡是你將為系統加入 SSDT 的地方，它們對**啟動 macOS** 非常重要，且有許多用途，如 [USB 映射](https://eason329.github.io/OpenCore-Post-Install/usb/)、[停用不支援的 GPU](../extras/spoof.md) 等。在我們的系統中, **甚至需要這些才可以啟動**. 你可以在 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/)了解如何製作 SSDT
 | Required SSDTs | Description |
 | :--- | :--- |
 | **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
