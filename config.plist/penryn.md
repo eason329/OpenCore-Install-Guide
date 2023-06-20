@@ -604,7 +604,7 @@ SmUUID:       A154B586-874B-4E57-A1FF-9D6E503E4580
 | Key | Type | 說明 |
 | :--- | :--- | :--- |
 | Path | String | 檔案在 `OC/Drivers` 目錄的路徑 |
-| LoadEarly | Boolean | Load the driver early before在設定 NVRAM 前先行載入驅動程式，如果系統使用舊版 NVRAM，應該只在 `OpenRuntime.efi` 和 `OpenVariableRuntimeDxe.efi` 啟用 |
+| LoadEarly | Boolean | 在設定 NVRAM 前先行載入驅動程式，如果系統使用舊版 NVRAM，應該只在 `OpenRuntime.efi` 和 `OpenVariableRuntimeDxe.efi` 啟用 |
 | Arguments | String | 有些驅動程式接受這裡指定的其他參數。 |
 
 :::
@@ -661,7 +661,7 @@ macOS Sierra 及更舊版本使用 HFS 而非 APFS。如果要啟動舊版 macOS
 
 ### ProtocolOverrides
 
-主要適用於虛擬機器、舊 Mac 和 FileVault 用戶。詳細訊息請見: [安全與 FileVault](https://eason329.github.io/OpenCore-Post-Install/)
+主要適用於虛擬機器、舊 Mac 和 FileVault 用戶。詳細訊息請見：[安全與 FileVault](https://eason329.github.io/OpenCore-Post-Install/)
 
 ### Quirks
 
@@ -708,7 +708,7 @@ macOS Sierra 及更舊版本使用 HFS 而非 APFS。如果要啟動舊版 macOS
 
 ## Intel BIOS 設定
 
-* 注意：大多數選項可能不在你的韌體中找到，我們建議設定應盡可能匹配，但如果這些選項在你的 BIOS 中沒有出現，你亦不要太擔心
+* 注意：大多數選項可能不在你的韌體中找到，我們建議設定應儘可能匹配，但如果這些選項在你的 BIOS 中沒有出現，你亦不要太擔心
 
 ### 停用
 
