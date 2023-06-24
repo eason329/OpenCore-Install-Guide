@@ -1,4 +1,4 @@
-# config.plist 設定
+# 開始建構 config.plist
 
 現在，我們收集了所有需要的 Kext (.kext)、SSDT (.aml) 和韌體驅動程式 (.efi)，你的 USB 隨身碟應該開始看起來像這樣：
 
