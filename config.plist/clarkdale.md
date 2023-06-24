@@ -249,7 +249,7 @@
 * **DisableLinkeditJettison**: YES
   * 允許 Lilu 和其他 kext 在不需要 `keepsyms=1` 的情況下擁有更可靠的性能
 * **DisableRtcChecksum**: NO
-  * 防止 AppleRTC 寫入主校驗碼 (0x58-0x59)，這對於接收到 BIOS 重置或在重新開機/關機後進入安全模式的用戶是必需的,
+  * 防止 AppleRTC 寫入主校驗碼 (0x58-0x59)，這對於接收到 BIOS 重置或在重新開機/關機後進入安全模式的用戶是必需的
 * **ExtendBTFeatureFlags** NO
   * 對於那些非蘋果或非 fenvi 卡有連接問題的人很有幫助
 * **LapicKernelPanic**: NO
@@ -285,6 +285,7 @@
     * 10.6 — `i386`, `i386-user32`, 或 `x86_64`
     * 10.7 — `i386` 或 `x86_64`
     * 10.8 或更新 — `x86_64`
+
 * **KernelCache**: Auto
   * 設定內核緩存類型，主要用於除錯，因此我們建議使用 `Auto` 以取得最佳支援
 
@@ -362,7 +363,7 @@
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AllowSetDefault**: YES
   * 允許在選擇器中按 `CTRL+Enter` 和 `CTRL+Index` 設定預設啟動條目
@@ -472,7 +473,7 @@ OpenCore 的 NVRAM GUID，主要針對 RTCMemoryFixup 用戶
   * 繁體中文（使用倉頡鍵盤）：`zh-Hant:16899`（十六進制值是 `7a682d48616e743a3136383939`）
   * 繁體中文（使用注音鍵盤）：`zh-Hant:16900`（十六進制值是 `7a682d48616e743a3136393030`）
   * 完整列表可前往 [AppleKeyboardLayouts.txt](https://github.com/acidanthera/OpenCorePkg/blob/master/Utilities/AppleKeyboardLayouts/AppleKeyboardLayouts.txt)
-  * 提示：`prev-lang:kbd` 可以被轉換成字串，所以你可以直接輸入 `en-US:0`，而不需要轉換至十六進制值
+  * 提示：`prev-lang:kbd` 可以被轉換成字串，所以你可以直接輸入 `en-US:0`，而不需要轉換至十六進制值。然而，有用戶反映這個做法已經無效。如要解決，可直接轉換至十六進制值。
   * 提示 2：`prev-lang:kbd` 可以設定為一個空白變量（eg：`<>`），這將強制在首次啟動時顯示語言選擇器。
 
 | Key | Type | Value |
@@ -511,7 +512,7 @@ OpenCore 的 NVRAM GUID，主要針對 RTCMemoryFixup 用戶
 
 為了設定 SMBIOS 訊息，我們將使用 CorpNewt 的 [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) 應用程式。
 
-在這個 Clarkdale 示例中，我們選擇 iMac11,2 SMBIOS - 這樣做是為了相容性。這裡有 3 個主要用於傳統硬體的 SMBIOS：
+在這個 Clarkdale 示例中，我們選擇 iMac11,2 SMBIOS - 這樣做是為了相容性。這裡有 3 個主要用於該硬體的 SMBIOS：
 
 | SMBIOS | 硬體 |
 | :--- | :--- |
@@ -712,9 +713,9 @@ macOS Sierra 及更舊版本使用 HFS 而非 APFS。如果要啟動舊版 macOS
 
 ## Intel BIOS 設定
 
-* 注意：大多數選項可能不在你的韌體中找到，我們建議設定應儘可能匹配，但如果這些選項在你的 BIOS 中沒有出現，你亦不要太擔心
+* 注意：大多數選項可能無法在你的韌體中找到，我們建議設定應儘可能匹配，但如果這些選項在你的 BIOS 中沒有出現，你亦不要太擔心
 
-### Disable
+### 停用
 
 * 快速啟動
 * 安全開機
