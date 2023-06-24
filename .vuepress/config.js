@@ -150,7 +150,6 @@ module.exports = {
                             path: '/config.plist/',
                             sidebarDepth: 1,
                             children: [
-                                    '/config.plist/bios-settings',
                                     '/config.plist/acpi',
                                     '/config.plist/booter',
                                     '/config.plist/device-properties',
@@ -160,6 +159,7 @@ module.exports = {
                                     '/config.plist/platform-info',
                                     '/config.plist/uefi',
                                     '/config.plist/security',
+                                    '/config.plist/bios-settings',
                             ]
                         },
                         ]
