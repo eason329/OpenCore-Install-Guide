@@ -61,7 +61,7 @@ OpenCore 的 NVRAM GUID，主要針對 RTCMemoryFixup 用戶
 * **網路卡專用 boot-args**：
 | boot-args | 說明 |
 | :--- | :--- |
-| **e1000=0** | 阻止 `com.apple.DriverKit-AppleEthernetE1000`（Apple 的 DEXT 驅動程式）與高端 Comet Lake 主板上的 Intel I225-V 以太網控制器匹配，導致改為載入 Apple 的 I225 kext 驅動程式。<br/>這個參數在大多數主板上都是可選的，因為它們與 DEXT 驅動程序相容。但是，技嘉和某些其他品牌的主板上，由於 DEXT 驅動程序會導致當機，它們只能使用 kext 驅動程式，就需要加入這個參數。<br/>如果您的主板沒有 I225-V NIC，則不需要它。</br>用於 macOS 12.2.2 和更新版本。 |
+| **e1000=0** | 阻止 `com.apple.DriverKit-AppleEthernetE1000`（Apple 的 DEXT 驅動程式）與高端 Comet Lake 主板上的 Intel I225-V 以太網控制器匹配，導致改為載入 Apple 的 I225 kext 驅動程式。<br/>這個參數在大多數主板上都是可選的，因為它們與 DEXT 驅動程序相容。但是，技嘉和某些其他品牌的主板上，由於 DEXT 驅動程序會導致當機，它們只能使用 kext 驅動程式，就需要加入這個參數。<br/>如果您的主板沒有 I225-V NIC，則不需要它。<br/>用於 macOS 12.2.2 和更新版本。 |
 | **dk.e1000=0** | 與 `e1000=0` 的工作模式相同，但用於 macOS 12.2.1 和更舊版本。 |
 
 * **csr-active-config**: `00000000`
