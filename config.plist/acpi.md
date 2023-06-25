@@ -1,270 +1,138 @@
 # ACPI
 
-ACPI (Advanced Configuration and Power Interface) is an open standard to discover and configure computer hardware. The [ACPI specification](https://uefi.org/specifications) defines standard tables (e.g. `DSDT`, `SSDT`, `FACS`, `DMAR`) and various methods (e.g. `_DSM`, `_PRW`) for implementation. Modern hardware needs few changes to maintain `ACPI` compatibility and some options for such changes are provided as part of OpenCore.
+ACPI（進階組態與電源介面，Advanced Configuration and Power Interface）是用於發現和設定電腦硬體的開放標準。[ACPI 規範](https://uefi.org/specifications) 定義了標準的表（如：`DSDT`, `SSDT`, `FACS`, `DMAR`）和多種用於執行的方法（如：`_DSM`, `_PRW`）。現代硬體只需進行少量更改即可保持 ACPI 相容性，並 OpenCore 提供了一些用於此類更改的選項。
 
-To compile and disassemble ACPI tables, the [iASL compiler](https://github.com/acpica/acpica) developed by [ACPICA](https://www.acpica.org) can be used. A GUI front-end to iASL compiler can be downloaded from [Acidanthera/MaciASL](https://github.com/acidanthera/MaciASL/releases).
+要編譯和反彙編ACPI表，可以使用 [ACPICA](https://www.acpica.org) 開發的 [iASL compiler](https://github.com/acpica/acpica)。iASL 編譯器的 GUI 軟體可以從 [Acidanthera/MaciASL](https://github.com/acidanthera/MaciASL/releases) 下載。
 
 ACPI changes apply globally (to every operating system) with the following effective order:
+ACPI 修改（在所有操作系統）會循以下順序執行：
 
-* `Delete` is processed
-* `Quirks` are processed
-* `Patch` is processed
-* `Add` is processed
+* 處理 `Delete`
+* 處理 `Quirks`
+* 處理 `Patch`
+* 處理 `Add`
 
-Applying the changes globally resolves the problems of incorrect operating system detection (consistent with the ACPI specification, not possible before the operating system boots), operating system chainloading, and difficult ACPI debugging. Hence, more attention may be required when writing changes to `_OSI`.
+在所有操作系統套用修改可以解決操作系統檢測不正確（與 ACPI 規範一致，在操作系統啟動之前不可能）、多操作系統開機和困難的 ACPI 除錯等問題。 因此，在寫入“_OSI”更改時可能需要更多注意。
 
-Applying the patches early makes it possible to write so called “proxy” patches, where the original method is patched in the original table and is implemented in the patched table.
+提早套用修補可以編寫所謂的「代理」修補，其中原始方法在原始表中進行修補，並在修補後的表中執行。
 
 # Add
 
-::: tip Info
+::: tip 資訊
 
-This is where you'll add SSDTs for your system, these are very important to **booting macOS** and have many uses like [USB maps](https://dortania.github.io/OpenCore-Post-Install/usb/), [disabling unsupported GPUs](../extras/spoof.md) and such. And with our system, **it's even required to boot**. Guide on making them found here: [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/)
+這裡是你將為系統加入 SSDT 的地方，它們對**啟動 macOS** 非常重要，且有許多用途，如 [USB 映射](https://eason329.github.io/OpenCore-Post-Install/usb/)、[停用不支援的 GPU](../extras/spoof.md) 等。在我們的系統中, **甚至需要這些才可以啟動**. 你可以在 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/)了解如何製作 SSDT
 
-For us we'll need a couple of SSDTs to bring back functionality that Clover provided.
-
-Note that you **should not** add your generated `DSDT.aml` here, it is already in your firmware. So if present, remove the entry for it in your `config.plist` and under `EFI/OC/ACPI`.
-
-For those wanting a deeper dive into dumping your DSDT, how to make these SSDTs, and compiling them, please see the [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/) **page.** Compiled SSDTs have a **.aml** extension(Assembled) and will go into the `EFI/OC/ACPI` folder and **must** be specified in your config under `ACPI -> Add` as well.
+對於我們來說，我們需要一些 SSDT 來帶回 Clover 提供的功能。現在，我們來快速回顧一下不同平台所需要的 SSDT：
 
 :::
 
-## Desktop
+### 桌面電腦
 
-### Intel Desktop
+| 平台 | **CPU** | **EC** | **AWAC** | **NVRAM** | **USB** | **IMEI** |
+| :-------: | :-----: | :----: | :------: | :-------: | :-----: |
+| Penryn | N/A | [SSDT-EC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | N/A | N/A | N/A | N/A |
+| Lynnfield and Clarkdale | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| SandyBridge | [CPU-PM](https://sumingyd.github.io/OpenCore-Post-Install/universal/pm.html#sandy-and-ivy-bridge-power-management) (安裝完畢後執行) | ^^ | ^^ | ^^ | ^^ | [SSDT-IMEI](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/imei.html) |
+| Ivy Bridge | ^^ | ^^ | ^^ | ^^ | ^^ | [SSDT-IMEI](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/imei.html) |
+| Haswell | [SSDT-PLUG](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/plug.html) | ^^ | ^^ | ^^ | ^^ | N/A |
+| Broadwell | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Skylake | ^^ | [SSDT-EC-USBX](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | ^^ | ^^ | ^^ | ^^ |
+| Kaby Lake | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Coffee Lake | ^^ | ^^ | [SSDT-AWAC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/awac.html) | [SSDT-PMC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/nvram.html) | ^^ | ^^ |
+| Comet Lake | ^^ | ^^ | ^^ | N/A | [SSDT-RHUB](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/rhub.html) | ^^ |
+| AMD (15/16h) | N/A | ^^ | N/A | ^^ | N/A | ^^ |
+| AMD (17/19h) | [SSDT-CPUR for B550 and A520](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-CPUR.aml) | ^^ | ^^ | ^^ | ^^ | ^^ |
 
-#### Penryn
+### 高端桌面電腦（HEDT）
 
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
+| 平台 | **CPU** | **EC** | **RTC** | **PCI** |
+| :-------: | :-----: | :----: | :-----: | :-----: |
+| Nehalem and Westmere | N/A | [SSDT-EC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | N/A | N/A |
+| Sandy Bridge-E | ^^ | ^^ | ^^ | [SSDT-UNC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/unc0) |
+| Ivy Bridge-E | ^^ | ^^ | ^^ | ^^ |
+| Haswell-E | [SSDT-PLUG](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/plug.html) | [SSDT-EC-USBX](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | [SSDT-RTC0-RANGE](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/awac.html) | ^^ |
+| Broadwell-E | ^^ | ^^ | ^^ | ^^ |
+| Skylake-X | ^^ | ^^ | ^^ | N/A |
 
-#### Clarkdale
+### 筆記型電腦
 
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
+| 平台 | **CPU** | **EC** | **Backlight** | **I2C Trackpad** | **AWAC** | **USB** | **IRQ** |
+| :-------: | :-----: | :----: | :-----------: | :--------------: | :------: | :-----: | :-----: |
+| Clarksfield and Arrandale | N/A | [SSDT-EC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | [SSDT-PNLF](https://sumingyd.github.io/Getting-Started-With-ACPI/Laptops/backlight.html) | N/A | N/A | N/A | [IRQ SSDT](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/irq.html) |
+| SandyBridge | [CPU-PM](https://sumingyd.github.io/OpenCore-Post-Install/universal/pm.html#sandy-and-ivy-bridge-power-management) (Run in Post-Install) | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Ivy Bridge | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Haswell | [SSDT-PLUG](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/plug.html) | ^^ | ^^ | [SSDT-GPI0](https://sumingyd.github.io/Getting-Started-With-ACPI/Laptops/trackpad.html) | ^^ | ^^ | ^^ |
+| Broadwell | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Skylake | ^^ | [SSDT-EC-USBX](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | ^^ | ^^ | ^^ | ^^ | N/A |
+| Kaby Lake | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Coffee Lake (8th Gen) and Whiskey Lake | ^^ | ^^ | [SSDT-PNLF](https://sumingyd.github.io/Getting-Started-With-ACPI/Laptops/backlight.html) | ^^ | [SSDT-AWAC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/awac.html) | ^^ | ^^ |
+| Coffee Lake (9th Gen) | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Comet Lake | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Ice Lake | ^^ | ^^ | ^^ | ^^ | ^^ | [SSDT-RHUB](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/rhub.html) | ^^ |
 
-#### Sandy Bridge
+### 筆記型電腦（續）
 
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PM](https://github.com/Piker-Alpha/ssdtPRGen.sh)** | Needed for proper CPU power management, you will need to run Pike's ssdtPRGen.sh script to generate this file. This will be run in [post install](https://dortania.github.io/OpenCore-Post-Install/). |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-IMEI](https://dortania.github.io/Getting-Started-With-ACPI/)** | Needed to add a missing IMEI device on Sandy Bridge CPU with 7 series motherboards |
+| 平台 | **NVRAM** | **IMEI** |
+| :-------: | :-------: | :------: |
+| Clarksfield and Arrandale | N/A | N/A |
+| Sandy Bridge | ^^| [SSDT-IMEI](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/imei.html) |
+| Ivy Bridge | ^^ | ^^ |
+| Haswell | ^^ | N/A |
+| Broadwell | ^^ | ^^ |
+| Skylake | ^^ | ^^ |
+| Kaby Lake | ^^ | ^^ |
+| Coffee Lake (8th Gen) and Whiskey Lake | ^^ | ^^ |
+| Coffee Lake (9th Gen) | [SSDT-PMC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/nvram.html) | ^^ |
+| Comet Lake | N/A | ^^ |
+| Ice Lake | ^^ | ^^ |
 
-#### Ivy Bridge
+請注意，你**不應該**在這裡加入您生成的 DSDT.aml，它已經在你的韌體中了。因此，如果存在的話，請刪除 config plist 和 EFI/OC/ACPI 下的相關條目。
 
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PM](https://github.com/Piker-Alpha/ssdtPRGen.sh)** | Needed for proper CPU power management, you will need to run Pike's ssdtPRGen.sh script to generate this file. This will be run in [post install](https://dortania.github.io/OpenCore-Post-Install/). |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-IMEI](https://dortania.github.io/Getting-Started-With-ACPI/)** | Needed to add a missing IMEI device on Ivy Bridge CPU with 6 series motherboards |
-
-#### Haswell
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-#### Skylake
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-#### Kaby Lake
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-#### Coffee Lake
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-AWAC](https://dortania.github.io/Getting-Started-With-ACPI/)** | This is the [300 series RTC patch](https://www.hackintosh-forum.de/forum/thread/39846-asrock-z390-taichi-ultimate/?pageNo=2), required for most B360, B365, H310, H370, Z390 and some Z370 boards which prevent systems from booting macOS. The alternative is [SSDT-RTC0](https://dortania.github.io/Getting-Started-With-ACPI/) for when AWAC SSDT is incompatible due to missing the Legacy RTC clock, to check whether you need it and which to use please see [Getting started with ACPI](https://dortania.github.io/Getting-Started-With-ACPI/) page. |
-| **[SSDT-PMC](https://dortania.github.io/Getting-Started-With-ACPI/)** | So true 300 series motherboards(non-Z370) don't declare the FW chip as MMIO in ACPI and so XNU ignores the MMIO region declared by the UEFI memory map. This SSDT brings back NVRAM support. See [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-#### Comet Lake
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-AWAC](https://dortania.github.io/Getting-Started-With-ACPI/)** | This is the [300 series RTC patch](https://www.hackintosh-forum.de/forum/thread/39846-asrock-z390-taichi-ultimate/?pageNo=2), required for all B460 and Z490 boards which prevent systems from booting macOS. The alternative is [SSDT-RTC0](https://dortania.github.io/Getting-Started-With-ACPI/) for when AWAC SSDT is incompatible due to missing the Legacy RTC clock, to check whether you need it and which to use please see [Getting started with ACPI](https://dortania.github.io/Getting-Started-With-ACPI/) page. |
-| **[SSDT-RHUB](https://dortania.github.io/Getting-Started-With-ACPI/)** | Needed to fix Root-device errors on Asus and potentially MSI boards. Gigabyte and AsRock motherboards **do not** need this SSDT |
-
-### Intel Laptop
-
-#### Arrandale
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-XOSI](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-XOSI.aml)** | Makes all _OSI calls specific to Windows work for macOS (Darwin) Identifier. This may help enabling some features like XHCI and others. |
-| **[SSDT-PNLF](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes brightness control, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. Note that Intel NUCs do not need this |
-
-#### Sandy Bridge
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PM](https://github.com/Piker-Alpha/ssdtPRGen.sh)** | Needed for proper CPU power management, you will need to run Pike's ssdtPRGen.sh script to generate this file. This will be run in [post install](https://dortania.github.io/OpenCore-Post-Install/). |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-XOSI](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-XOSI.aml)** | Makes all _OSI calls specific to Windows work for macOS (Darwin) Identifier. This may help enabling some features like XHCI and others. |
-| **[SSDT-PNLF](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes brightness control, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. Note that Intel NUCs do not need this |
-| **[SSDT-IMEI](https://dortania.github.io/Getting-Started-With-ACPI/)** | Needed to add a missing IMEI device on Sandy Bridge CPU with 7 series motherboards. **This is not needed for 6-series motherboards** |
-
-#### Ivy Bridge
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PM](https://github.com/Piker-Alpha/ssdtPRGen.sh)** | Needed for proper CPU power management, you will need to run Pike's ssdtPRGen.sh script to generate this file. This will be run in [post install](https://dortania.github.io/OpenCore-Post-Install/). |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-XOSI](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-XOSI.aml)** | Makes all _OSI calls specific to Windows work for macOS (Darwin) Identifier. This may help enabling some features like XHCI and others. |
-| **[SSDT-PNLF](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes brightness control, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. Note that Intel NUCs do not need this |
-| **[SSDT-IMEI](https://dortania.github.io/Getting-Started-With-ACPI/)** | Needed to add a missing IMEI device on Ivy Bridge CPU with 6 series motherboards, **not needed for 7 series motherboards** |
-
-#### Haswell
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-GPIO](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/decompiled/SSDT-GPI0.dsl.zip)** | Creates a stub so VoodooI2C can connect, for those having troubles getting VoodooI2C working can try [SSDT-XOSI](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-XOSI.aml) instead. Note that Intel NUCs do not need this |
-| **[SSDT-PNLF](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes brightness control, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. Note that Intel NUCs do not need this |
-
-#### Broadwell
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-GPIO](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/decompiled/SSDT-GPI0.dsl)** | Creates a stub so VoodooI2C can connect, for those having troubles getting VoodooI2C working can try [SSDT-XOSI](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-XOSI.aml) instead. Note that Intel NUCs do not need this |
-| **[SSDT-PNLF](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes brightness control, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. Note that Intel NUCs do not need this |
-
-#### Skylake
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-GPIO](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/decompiled/SSDT-GPI0.dsl)** | Creates a stub so VoodooI2C can connect, for those having troubles getting VoodooI2C working can try [SSDT-XOSI](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-XOSI.aml) instead. Note that Intel NUCs do not need this |
-| **[SSDT-PNLF](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes brightness control, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. Note that Intel NUCs do not need this |
-
-#### Kaby Lake
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-GPIO](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/decompiled/SSDT-GPI0.dsl)** | Creates a stub so VoodooI2C can connect, for those having troubles getting VoodooI2C working can try [SSDT-XOSI](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-XOSI.aml) instead. Note that Intel NUCs do not need this |
-| **[SSDT-PNLF](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes brightness control, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. Note that Intel NUCs do not need this |
-
-#### Coffee Lake and Whiskey Lake
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-GPIO](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/decompiled/SSDT-GPI0.dsl)** | Creates a stub so VoodooI2C can connect, for those having troubles getting VoodooI2C working can try [SSDT-XOSI](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-XOSI.aml) instead. Note that Intel NUCs do not need this |
-| **[SSDT-PNLF](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes brightness control, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. Note that Intel NUCs do not need this |
-| **[SSDT-AWAC](https://dortania.github.io/Getting-Started-With-ACPI/)** | This is the [300 series RTC patch](https://www.hackintosh-forum.de/forum/thread/39846-asrock-z390-taichi-ultimate/?pageNo=2), required for most B360, B365, H310, H370, Z390 and some Z370 boards which prevent systems from booting macOS. The alternative is [SSDT-RTC0](https://dortania.github.io/Getting-Started-With-ACPI/) for when AWAC SSDT is incompatible due to missing the Legacy RTC clock, to check whether you need it and which to use please see [Getting started with ACPI](https://dortania.github.io/Getting-Started-With-ACPI/) page. |
-
-#### Coffee Lake Plus and Comet Lake
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-GPIO](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/decompiled/SSDT-GPI0.dsl)** | Creates a stub so VoodooI2C can connect, for those having troubles getting VoodooI2C working can try [SSDT-XOSI](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-XOSI.aml) instead. Note that Intel NUCs do not need this |
-| **[SSDT-PNLF](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes brightness control, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. Note that Intel NUCs do not need this |
-| **[SSDT-AWAC](https://dortania.github.io/Getting-Started-With-ACPI/)** | This is the [300 series RTC patch](https://www.hackintosh-forum.de/forum/thread/39846-asrock-z390-taichi-ultimate/?pageNo=2), required for most B360, B365, H310, H370, Z390 and some Z370 boards which prevent systems from booting macOS. The alternative is [SSDT-RTC0](https://dortania.github.io/Getting-Started-With-ACPI/) for when AWAC SSDT is incompatible due to missing the Legacy RTC clock, to check whether you need it and which to use please see [Getting started with ACPI](https://dortania.github.io/Getting-Started-With-ACPI/) page. |
-| **[SSDT-PMC](https://dortania.github.io/Getting-Started-With-ACPI/)** | So true 300 series motherboards(non-Z370) don't declare the FW chip as MMIO in ACPI and so XNU ignores the MMIO region declared by the UEFI memory map. This SSDT brings back NVRAM support. **Note that 10th gen CPUs do not need this**. See [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-#### Ice Lake
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-GPIO](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/decompiled/SSDT-GPI0.dsl)** | Creates a stub so VoodooI2C can connect, for those having troubles getting VoodooI2C working can try [SSDT-XOSI](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-XOSI.aml) instead. Note that Intel NUCs do not need this |
-| **[SSDT-PNLF](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes brightness control, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. Note that Intel NUCs do not need this |
-| **[SSDT-AWAC](https://dortania.github.io/Getting-Started-With-ACPI/)** | This is the [300 series RTC patch](https://www.hackintosh-forum.de/forum/thread/39846-asrock-z390-taichi-ultimate/?pageNo=2), required for most B360, B365, H310, H370, Z390 and some Z370 boards which prevent systems from booting macOS. The alternative is [SSDT-RTC0](https://dortania.github.io/Getting-Started-With-ACPI/) for when AWAC SSDT is incompatible due to missing the Legacy RTC clock, to check whether you need it and which to use please see [Getting started with ACPI](https://dortania.github.io/Getting-Started-With-ACPI/) page. |
-| **[SSDT-RHUB](https://dortania.github.io/Getting-Started-With-ACPI/)** | Needed to fix Root-device errors on many Icelake laptops |
-
-### Intel HEDT
-
-#### Nehalem and Westmere
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-#### Sandy and Ivy Bridge-E
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-UNC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Required for all Big Sur users to ensure their UNC devices are compatible, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-#### Haswell-E
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-RTC0-RANGE](https://dortania.github.io/Getting-Started-With-ACPI/)** | Required for all Big Sur users to ensure their RTC device is compatible, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-UNC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Required for all Big Sur users to ensure their UNC devices are compatible, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-#### Broadwell-E
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-RTC0-RANGE](https://dortania.github.io/Getting-Started-With-ACPI/)** | Required for all Big Sur users to ensure their RTC device is compatible, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-UNC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Required for all Big Sur users to ensure their UNC devices are compatible, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-#### Skylake-X/W and Cascade Lake-X/W
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-PLUG](https://dortania.github.io/Getting-Started-With-ACPI/)** | Allows for native CPU power management on Haswell and newer, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes both the embedded controller and USB power, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-RTC0-RANGE](https://dortania.github.io/Getting-Started-With-ACPI/)** | Required for enabling the legacy RTC clock in macOS, this is also required for all Big Sur users to ensure their RTC device is compatible. See [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-### AMD Desktop
-#### AMD Bulldozer (15h) and Jaguar (16h)
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-
-#### AMD Ryzen and Threadripper (17h and 19h)
-
-| Required SSDTs | Description |
-| :--- | :--- |
-| **[SSDT-EC-USBX](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-CPUR](https://github.com/naveenkrdy/Misc/blob/master/SSDTs/SSDT-CPUR.dsl)** | Fixes CPU definitions with B550 and A520 motherboards, **do not use** if you don't have an AMD B550 or A520 system. You can find a prebuilt here: [SSDT-CPUR.aml](https://github.com/dortania/Getting-Started-With-ACPI/blob/master/extra-files/compiled/SSDT-CPUR.aml) |
+對於那些想要更深入地傾印你的 DSDT、如何製作這些 SSDT 及編譯它們的人，請參閱 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/)**頁面**。編譯後的 SSDT 會有一個 **.aml** 副檔名（已編譯）並會放入 `EFI/OC/ACPI` 資料夾，且**必須**在你的配置檔案裡的 `ACPI -> Add` 下指定。
 
 # Delete
 
-This blocks certain ACPI tables from loading, for us we can ignore this.
+這裡將阻止載入某些 ACPI 表。
+
+* 大部分非 Sandy Bridge 和 Ivy Bridge 的電腦不需要設定這一部分。
+
+::: tip 資訊
+
+Sandy Bridge 和 Ivy Bridge 的電腦需要設定這一部分。這是由於蘋果的 XCPM 對 Sandy Bridge 和 Ivy Bridge 的支援不太好，會導致開機時令 AppleIntelCPUPowerManagement 出現錯誤。要避免這種情況，我們要在 [安裝後](https://dortania.github.io/OpenCore-Post-Install/) 建立我們自己的 PM SSDT，並「刪除」原有的表（注意：這是暫時性的，直至我們建立了自己的 SSDT-PM，我們稍後會重新啟用這些表）。
+
+刪除 CpuPm：
+
+| Key | Type | Value |
+| :--- | :--- | :--- |
+| All | Boolean | YES |
+| Comment | String | Delete CpuPm |
+| Enabled | Boolean | YES |
+| OemTableId | Data | `437075506d000000` |
+| TableLength | Number | 0 |
+| TableSignature | Data | `53534454` |
+
+刪除 Cpu0Ist：
+
+| Key | Type | Value |
+| :--- | :--- | :--- |
+| All | Boolean | YES |
+| Comment | String | Delete Cpu0Ist |
+| Enabled | Boolean | YES |
+| OemTableId | Data | `4370753049737400` |
+| TableLength | Number | 0 |
+| TableSignature | Data | `53534454` |
+
+:::
 
 # Patch
 
-This section allows us to dynamically modify parts of the ACPI (DSDT, SSDT, etc.) via OpenCore. For us, our patches are handled by our SSDTs. This is a much cleaner solution as this will allow us to boot Windows and other OSes with OpenCore.
+這個章節允許我們通過 OpenCore 動態修改 ACPI 部分内容（DSDT、SSDT 等）。對我們來說，我們的修補程式將由我們的 SSDT 處理。這是一個更簡潔的解決方案，因為這將允許我們使用 OpenCore 啟動 Windows 和其他操作系統。
 
-::: tip Info
+::: tip 資訊
 
-* OSI rename
-  * This is required when using SSDT-XOSI as we redirect all OSI calls to this SSDT, **this is not needed if you're using `SSDT-GPIO`**
+* 重新命名 OSI
+  * 筆記型電腦可能需要進行這個設定。
+  * 這個設定在使用 SSDT-XOSI 時是必需的，因為我們會將所有的 OSI 調用重定向到這個 SSDT，**如果你使用 `SSDT-GPIO` 則不需要**
 
 | Comment | String | Change _OSI to XOSI |
 | :--- | :--- | :--- |
@@ -278,4 +146,6 @@ This section allows us to dynamically modify parts of the ACPI (DSDT, SSDT, etc.
 
 # Quirks
 
-Settings relating to ACPI, leave everything here as default as we have no use for these quirks.
+與 ACPI 相關的設定，請將所有內容保留為預設值，我們不需要這些選項值。
+
+# 完成此部分後，請[編輯 Booter 部分](booter.md)

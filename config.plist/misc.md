@@ -108,3 +108,5 @@
 用於指定 OpenCore 無法自然找到的不規則的開機路徑。
 
 這裡不會介紹，更多信息請參見 [Configuration.pdf](https://github.com/acidanthera/OpenCorePkg/blob/master/Docs/Configuration.pdf) 第 8.6 節
+
+# 完成此部分後，請[編輯 NVRAM 部分](nvram.md)

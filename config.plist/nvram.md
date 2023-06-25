@@ -106,3 +106,5 @@ OpenCore 的 NVRAM GUID，主要針對 RTCMemoryFixup 用戶
   * 允許所有新增的變量寫入快閃記憶體。
 
 :::
+
+# 完成此部分後，請[編輯 PlatformInfo 部分](platform-info.md)

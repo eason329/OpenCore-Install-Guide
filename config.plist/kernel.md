@@ -122,6 +122,7 @@ Kernel（內核）是指操作系統中首先載入的部分。 它控制和監�
 現在，請將儲存庫下載至電腦。你會利用到儲存庫中的 patches.plist 檔案。
 
 修補程序：
+
 * 同時開啟 config.plist 及 patches.plist
 * 刪除原本在 config.plist 的 `Kernel -> Patch` 部分
 * 從 patches.plist 中複製 `Kernel -> Patch` 部分
@@ -289,3 +290,5 @@ Kernel（內核）是指操作系統中首先載入的部分。 它控制和監�
   * 設定內核緩存類型，主要用於除錯，因此我們建議使用 `Auto` 以取得最佳支援
 
 :::
+
+# 完成此部分後，請[編輯 Misc 部分](misc.md)

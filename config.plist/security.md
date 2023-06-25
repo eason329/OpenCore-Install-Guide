@@ -42,4 +42,4 @@ This enables security features such as the verification of macOS' `boot.efi`, wi
 
 :::
 
-# Now with all this done, head to the [Installation Page](../installation/installation-process.md)
+# 完成此部分後，請[編輯 BIOS 設定](bios-settings.md)

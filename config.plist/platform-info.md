@@ -82,7 +82,7 @@ SmUUID:       A154B586-874B-4E57-A1FF-9D6E503E4580
 | iMac15,1 | Ivy Bridge SMBIOS，有 dGPU | 僅 11 |
 | MacPro6,1 | Monterey的 SMBIOS | 最高 12 |
 
-** 注意，MacPro6,1 SMBIOS 不應用於 Catalina 或更舊版本，因為使用未最佳化的 SMBIOS 可能會使電源管理等功能出現問題。
+** 注意：MacPro6,1 SMBIOS 不應用於 Catalina 或更舊版本，因為使用未最佳化的 SMBIOS 可能會使電源管理等功能出現問題。
 
 * Haswell, Broadwell
 
@@ -169,7 +169,7 @@ SmUUID:       A154B586-874B-4E57-A1FF-9D6E503E4580
 | MacBookPro11,5 | 四核心 45W | iGPU: Iris Pro 5200 + dGPU: R9 M370X | 15" |
 | Macmini7,1 | NUC | HD 5000/Iris 5100 | N/A |
 
-** **註**: MacBookPro11,4, MacBookPro11,5 和 Macmini7,1 SMBIOS 支援 macOS Monterey。
+**注意：MacBookPro11,4, MacBookPro11,5 和 Macmini7,1 SMBIOS 支援 macOS Monterey。
 
 * Broadwell
 
@@ -185,7 +185,7 @@ SmUUID:       A154B586-874B-4E57-A1FF-9D6E503E4580
 | MacBookPro11,5 | 四核心 45W | iGPU: Iris Pro 5200 + dGPU: R9 M370X | 15" |
 | iMac16,1 | NUC Systems | HD 6000/Iris Pro 6200 |  N/A |
 
-** **註**: macOS Monterey 已放棄 MacBook8,1 的支援。要運行 macOS Monterey，請使用其他 SMBIOS。
+**注意：macOS Monterey 已放棄 MacBook8,1 的支援。要運行 macOS Monterey，請使用其他 SMBIOS。
 
 * Skylake
 
@@ -197,7 +197,7 @@ SmUUID:       A154B586-874B-4E57-A1FF-9D6E503E4580
 | MacBookPro13,3 | 四核心 45W | iGPU: HD 530 + dGPU: Radeon Pro 450/455 | 15" | 有 |
 | iMac17,1 | NUC | iGPU: HD 530 + R9 290 |  N/A | 沒有 |
 
-** **註**: macOS Ventura 已放棄 Skylake SMBIOS 的支援。
+**注意：macOS Ventura 已放棄 Skylake SMBIOS 的支援。
 
 * Kaby Lake
 
