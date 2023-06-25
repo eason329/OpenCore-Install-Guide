@@ -1,14 +1,14 @@
 # Kernel
 
-OpenCore is what we refer to as a "boot loader" – it is a complex piece of software that we use to prepare our systems for macOS – specifically by injecting new data for macOS such as SMBIOS, ACPI tables and kexts. How this tool differs from others like Clover is that it has been designed with security and quality in mind, allowing us to use many security features found on real Macs, such as [System Integrity Protection](https://support.apple.com/en-ca/HT204899) and [FileVault](https://support.apple.com/en-ca/HT204837). A more in-depth look can be found here: [Why OpenCore over Clover and others](why-oc.md)
+Kernel（內核）refers to the part of an operating system that loads first. It controls and monitors hardware resources like memory, CPU processor allocation and disk drives. Due to the nature of hackintosh, we need to inject several kexts (**K**ernel **Ext**ensions) to patch macOS in order to boot correctly.
 
-This guide specifically focuses on two main things:
+This section allows the application of different kinds of kernelspace modifications on Apple Kernel (XNU). The modifications currently provide driver (kext) injection, kernel and driver patching, and driver blocking.
 
-* Installing macOS on an X86-based PC
-* Teaching you what makes your Hack work
+Kernel and kext changes apply with the following effective order:
 
-Because of this, you will be expected to read, learn and even use Google. This is not a simple one-click install setup.
+* `Block` is processed
+* `Add` and `Force` are processed
+* `Emulate` and `Quirks` are processed
+* `Patch` is processed
 
-Please remember that OpenCore is still new and currently in beta. While quite stable, and arguably much more stable than Clover in pretty much every way, it is still being frequently updated, so chunks of configuration change quite often (i.e. new quirks replacing old ones).
-
-Lastly, those having issues can visit both the [r/Hackintosh subreddit](https://www.reddit.com/r/hackintosh/) and [r/Hackintosh Discord](https://discord.gg/u8V7N5C) for more help.
+Unlike ACPI, the patches most likely only applied in macOS.
