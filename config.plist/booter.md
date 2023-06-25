@@ -16,6 +16,7 @@ Booter 修改會循以下順序執行：
 ## Quirks
 
 ::: tip 資訊
+
 * **AvoidRuntimeDefrag**: YES
   * 修復 UEFI 執行期服務，如日期、時間、NVRAM、電源控制等
   * 使用傳統 BIOS 的電腦應該停用這個選項
@@ -206,7 +207,7 @@ Booter 修改會循以下順序執行：
 
 | 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| DevirtualiseMmio | NO | 如果你使用的是 TRx40 系統，請啟用這個選項並遵循以下說明：<br/>https://eason329.github.io/OpenCore-Install-Guide/extras/kaslr-fix.html |
+| DevirtualiseMmio | NO | 如果你使用的是 TRx40 系統，請啟用這個選項並參閱[這個指南](https://eason329.github.io/OpenCore-Install-Guide/extras/kaslr-fix.html) |
 | EnableWriteUnprotector | NO | |
 | RebuildAppleMemoryMap | YES | |
 | ResizeAppleGpuBars | -1 | 如果你的韌體支援增加 GPU Bar 大小（可調整大小的 BAR 的支援），請將其設定為 `0` |
