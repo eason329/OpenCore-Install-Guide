@@ -2,9 +2,8 @@
 
 ACPI（進階組態與電源介面，Advanced Configuration and Power Interface）是用於發現和設定電腦硬體的開放標準。[ACPI 規範](https://uefi.org/specifications) 定義了標準的表（如：`DSDT`, `SSDT`, `FACS`, `DMAR`）和多種用於執行的方法（如：`_DSM`, `_PRW`）。現代硬體只需進行少量更改即可保持 ACPI 相容性，並 OpenCore 提供了一些用於此類更改的選項。
 
-要編譯和反彙編ACPI表，可以使用 [ACPICA](https://www.acpica.org) 開發的 [iASL compiler](https://github.com/acpica/acpica)。iASL 編譯器的 GUI 軟體可以從 [Acidanthera/MaciASL](https://github.com/acidanthera/MaciASL/releases) 下載。
+要編譯和反彙編 ACPI 表，可以使用 [ACPICA](https://www.acpica.org) 開發的 [iASL compiler](https://github.com/acpica/acpica)。iASL 編譯器的 GUI 軟體可以從 [Acidanthera/MaciASL](https://github.com/acidanthera/MaciASL/releases) 下載。
 
-ACPI changes apply globally (to every operating system) with the following effective order:
 ACPI 修改（在所有操作系統）會循以下順序執行：
 
 * 處理 `Delete`

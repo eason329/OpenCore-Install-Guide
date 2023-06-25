@@ -1,323 +1,216 @@
 # Booter
 
-This section allows the application of different types of UEFI modifications to operating system bootloaders, primarily the Apple bootloader (boot.efi). The modifications currently provide various patches and environment alterations for different firmware types. Some of these features were originally implemented as part of [AptioMemoryFix.efi](https://github.com/acidanthera/AptioFixPkg), which is no longer maintained
+此部分允許對操作系統開機程式（主要是 Apple 開機程式 (boot.efi)）套用不同類型的 UEFI 修改。這些修改目前為不同的韌體類型提供了各種修補和環境更改。其中一些功能最初是作為現已不再維護的 [AptioMemoryFix.efi](https://github.com/acidanthera/AptioFixPkg) 的一部分實現的。
 
-Booter changes apply with the following effective order:
+Booter 修改會循以下順序執行：
 
-* `Quirks` are processed.
-* `Patch` is processed.
+* 處理 `Quirks`
+* 處理 `Patch`
 
-Please note that most of the time, `MmioWhitelist`, which is allowing spaces to be passthrough to macOS that are generally ignored, useful when paired with `DevirtualiseMmio`. For more info read [here](https://dortania.github.io/OpenCore-Install-Guide/extras/kaslr-fix.html#using-devirtualisemmio)
+請注意，大多數情況下，“MmioWhitelist” 允許將通常被忽略的空間傳遞到 macOS，與 “DevirtualiseMmio” 配合使用時非常有用。詳細訊息請參閱閱[這裡](https://dortania.github.io/OpenCore-Install-Guide/extras/kaslr-fix.html#using-devirtualisemmio)
 
-## Desktop
+## MmioWhitelist
 
-### Intel Desktop
+這個章節允許將通常被忽略的空間傳送予 macOS，與 `DevirtualiseMmio` 配合使用時會很有用。
 
-#### Penryn
+## Quirks
 
-| Legacy | UEFI
-| :--- | :--- |
-| ![](../images/config/config-legacy/booter-duetpkg.png) | ![](../images/config/config-universal/aptio-iv-booter-sl.png) |
-
-##### Quirks
-
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, depending where your board has UEFI, you have 2 options depending what your motherboard supports:
-
-##### Legacy Settings
-
-| Quirk | Enabled | Comment |
-| :--- | :--- | :--- |
-| AvoidRuntimeDefrag | No | Big Sur may require this quirk enabled |
-| EnableSafeModeSlide | No | |
-| EnableWriteUnprotector | No | |
-| ProvideCustomSlide | No | |
-| RebuildAppleMemoryMap | Yes | This is required to boot OS X 10.4 through 10.6 |
-| SetupVirtualMap | No | |
-
-##### UEFI Settings
-
-| Quirk | Enabled | Comment |
-| :--- | :--- | :--- |
-| RebuildAppleMemoryMap | Yes | This is required to boot OS X 10.4 through 10.6 |
-
-:::
-::: details More in-depth Info
-
-* **AvoidRuntimeDefrag**: NO
-  * Fixes UEFI runtime services like date, time, NVRAM, power control;
-  * macOS Big Sur however requires the APIC table present, otherwise causing early kernel panics so this quirk is recommended for those users.
+::: tip 資訊
+* **AvoidRuntimeDefrag**: YES
+  * 修復 UEFI 執行期服務，如日期、時間、NVRAM、電源控制等
+  * 使用傳統 BIOS 的電腦應該停用這個選項
+* **DevirtualiseMmio**: YES
+  * 減少被盜記憶體佔用，擴展 `slide=N` 值的選項，並對修復 Z390 上的記憶體分配問題非常有幫助。需要 Icelake 和 Z390 Coffee Lake 系統，並啟用 `ProtectUefiServices`。
 * **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode.
-* **EnableWriteUnprotector**: NO
-  * Needed to remove write protection from CR0 register on UEFI platforms.
+  * 允許 Slide 變量在安全模式下使用。但這個選項只適用於使用 UEFI 的電腦。
+* **EnableWriteUnprotector**: YES
+  * 需要從 UEFI 平台的 CR0 寄存器中移除寫入保護。
+  * 在 Coffee Lake 和更新的平台中，你應啟用 RebuildAppleMemoryMap 選項而停用本選項，因為兩個選項在新平台中經常有衝突。
+  * 然而，由於 OEM 沒有使用最新的 EDKII 版本，您可能會發現上述組合將導致早期啟動失敗。這是由於缺少 `MEMORY_ATTRIBUTE_TABLE` 而引起。如發生這種情況，我们建議停用 RebuildAppleMemoryMap 並啟用 EnableWriteUnprotector。更多訊息請參見[故障診斷部分](/troubleshooting/extended/kernel-issues.md#stuck-on-eb-log-exitbs-start)。
+* **ProtectMemoryRegions**: NO
+  * Patches memory region types for incorrectly mapped CSM/MMIO regions.
+  * 所有使用 coreboot UEFI 韌體的 Chromebook 都需要啟用這個選項。
+* **ProtectUefiServices**: NO
+  * 保護 UEFI 服務不被韌體覆蓋，主要與 VM、Icelake 和 Z390 系統有關。
+  * 在 Z390 系統中，**請啟用這個選項**。
 * **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
+  * 用於 Slide 變量計算。然而，這個選項的必要性取決於除錯日誌中是否出現 `OCABC: Only N/256 slide values are usable!` 訊息。如果在日誌中顯示 `OCABC: All slides are usable! You can disable ProvideCustomSlide!` 訊息，你可以停用 `ProvideCustomSlide`。
 * **RebuildAppleMemoryMap**: YES
-  * Resolves early memory kernel panics on 10.6 and below.
+  * 生成與 macOS 相容的記憶體映射，可能會在一些筆記型電腦 OEM 韌體上崩潰，如果你因此而收到早期開機失敗，請停用此功能。
+  * 在 Kaby Lake 和更舊的平台中，你應啟用 EnableWriteUnprotector 選項而停用本選項。
+* **ResizeAppleGpuBars**: -1
+  * 啟動 macOS 時，如果設定為 `0` ，將減少 GPU PCI 條的大小，設定為 `-1` 則停用
+  * 使用此選項可以設定其他 PCI Bar 值，但可能導致不穩定
+  * 只有在韌體中啟用了對 Resizable BAR 的支援時，才需要將此屬性設定為 0。
 * **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses on UEFI boards.
-
+  * 修復了 SetVirtualAddresses 對虛擬地址的調用問題，Gigabyte 主板需要啟用這個選項來解決早期內核錯誤
+  * 但是，此選項在 Comet Lake 因其記憶體保護而無法工作。ASUS，Gigabyte 和 AsRock 主板無法在本選項啟用的情況下開機。
+* **SyncRuntimePermissions**: YES
+  * 修正了與 MAT 表的對齊，並要求使用 MAT 表啟動 Windows 和 Linux，也推薦用於 macOS。主要適用於重建蘋果記憶體映射用戶。
 :::
 
-#### Clarkdale
+接下來，請根據平台進行設定。
 
-| Legacy | UEFI
+### 通用
+
+#### 啟動 OS X 10.4 至 10.6 的系統
+
+請進行以下設定：
+
+| 選項值 | 是否啟用 | 說明 |
+| :--- | :--- | :--- |
+| RebuildAppleMemoryMap | YES | |
+
+#### 使用 coreboot UEFI 韌體的 Chromebook
+
+請進行以下設定：
+
+| 選項值 | 是否啟用 | 說明 |
+| :--- | :--- | :--- |
+| ProtectMemoryRegions | YES | Fixes shutdown/restart on some Chromebooks that would otherwise result in a AppleEFINVRAM kernel panic. |
+
+### Intel 桌面平台
+
+| 傳統 BIOS | UEFI |
 | :--- | :--- |
-| ![](../images/config/config-legacy/booter-duetpkg.png) | ![](../images/config/config-universal/aptio-iv-booter-sl.png) |
+| ![](../images/config/config-legacy/booter-duetpkg.png) | ![](../images/config/config-universal/aptio-iv-booter.png) |
 
-##### Quirks
+#### 傳統 BIOS 系統（Yonah, Conroe, Penryn）
 
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, depending where your board has UEFI, you have 2 options depending what your motherboard supports:
+請進行以下設定：
 
-#### Legacy Settings
-
-| Quirk | Enabled | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| AvoidRuntimeDefrag | No | Big Sur may require this quirk enabled |
-| EnableSafeModeSlide | No | |
-| EnableWriteUnprotector | No | |
-| ProvideCustomSlide | No | |
-| RebuildAppleMemoryMap | Yes | This is required to boot OS X 10.4 through 10.6 |
-| SetupVirtualMap | No | |
-
-#### UEFI Settings
-
-| Quirk | Enabled | Comment |
-| :--- | :--- | :--- |
-| RebuildAppleMemoryMap | Yes | This is required to boot OS X 10.4 through 10.6 |
-
-:::
-::: details More in-depth Info
-
-* **AvoidRuntimeDefrag**: NO
-  * Fixes UEFI runtime services like date, time, NVRAM, power control;
-  * macOS Big Sur however requires the APIC table present, otherwise causing early kernel panics so this quirk is recommended for those users.
-* **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode.
-* **EnableWriteUnprotector**: NO
-  * Needed to remove write protection from CR0 register.
-* **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
-* **RebuildAppleMemoryMap**: YES
-  * Resolves early memory kernel panics on 10.6 and below.
-* **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses.
-
-:::
-#### Sandy Bridge
-
-![Booter](../images/config/config-universal/aptio-iv-booter.png)
-
-##### Quirks
-
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, for us, we leave it as default
-:::
-::: details More in-depth Info
-
-* **AvoidRuntimeDefrag**: YES
-  * Fixes UEFI runtime services like date, time, NVRAM, power control, etc.
-* **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode, however this quirk is only applicable to UEFI platforms.
-* **EnableWriteUnprotector**: YES
-  * Needed to remove write protection from CR0 register.
-* **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
-* **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses, required for Gigabyte boards to resolve early kernel panics
-
-:::
-#### Ivy Bridge
-
-![Booter](../images/config/config-universal/aptio-iv-booter.png)
-
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, for us, we leave it as default
-:::
-::: details More in-depth Info
-
-* **AvoidRuntimeDefrag**: YES
-  * Fixes UEFI runtime services like date, time, NVRAM, power control, etc.
-* **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode, however this quirk is only applicable to UEFI platforms.
-* **EnableWriteUnprotector**: YES
-  * Needed to remove write protection from CR0 register.
-* **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
-* **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses, required for Gigabyte boards to resolve early kernel panics.
-
-:::
-#### Haswell
-
-![Booter](../images/config/config-universal/aptio-iv-booter.png)
-
-##### Quirks
-
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, for us, we leave it as default
-:::
-::: details More in-depth Info
-
-* **AvoidRuntimeDefrag**: YES
-  * Fixes UEFI runtime services like date, time, NVRAM, power control, etc.
-* **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode, however this quirk is only applicable to UEFI platforms.
-* **EnableWriteUnprotector**: YES
-  * Needed to remove write protection from CR0 register.
-* **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
-* **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses, required for Gigabyte boards to resolve early kernel panics.
-
-:::
-#### Skylake
-
-![Booter](../images/config/config-universal/aptio-iv-booter.png)
-
-##### Quirks
-
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, for us, we leave it as default
-:::
-::: details More in-depth Info
-
-* **AvoidRuntimeDefrag**: YES
-  * Fixes UEFI runtime services like date, time, NVRAM, power control, etc.
-* **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode.
-* **EnableWriteUnprotector**: YES
-  * Needed to remove write protection from CR0 register.
-* **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
-* **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses, required for Gigabyte boards to resolve early kernel panics.
-
-:::
-#### Kaby Lake
-
-![Booter](../images/config/config-universal/aptio-iv-booter.png)
-
-##### Quirks
-
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, for us, we leave it as default
-:::
-::: details More in-depth Info
-
-* **AvoidRuntimeDefrag**: YES
-  * Fixes UEFI runtime services like date, time, NVRAM, power control, etc.
-* **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode.
-* **EnableWriteUnprotector**: YES
-  * Needed to remove write protection from CR0 register.
-* **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
-* **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses, required for Gigabyte boards to resolve early kernel panics.
-
-:::
+| AvoidRuntimeDefrag | NO | Big Sur 可能需要啟用這個選項值 |
+| EnableSafeModeSlide | NO | |
+| EnableWriteUnprotector | NO | |
+| ProvideCustomSlide | NO | |
+| SetupVirtualMap | NO | |
 
 #### Coffee Lake
 
-![Booter](../images/config/config-universal/hedt-booter.png)
+請進行以下設定：
 
-##### Quirks
-
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, for us, we need to change the following:
-
-| Quirk | Enabled | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
 | DevirtualiseMmio | YES | |
 | EnableWriteUnprotector | NO | |
-| ProtectUefiServices | YES | Needed on Z390 system |
+| ProtectUefiServices | YES | 在 Z390 系統上需要啟用 |
 | RebuildAppleMemoryMap | YES | |
-| ResizeAppleGpuBars | -1 | If your firmware supports increasing GPU Bar sizes (ie Resizable BAR Support), set this to `0` |
+| ResizeAppleGpuBars | -1 | 如果你的韌體支援增加 GPU Bar 大小（可調整大小的 BAR 的支援），請將其設定為 `0` |
 | SyncRuntimePermissions | YES | |
-:::
-
-::: details More in-depth Info
-
-* **AvoidRuntimeDefrag**: YES
-  * Fixes UEFI runtime services like date, time, NVRAM, power control, etc.
-* **DevirtualiseMmio**: YES
-  * Reduces Stolen Memory Footprint, expands options for `slide=N` values and very helpful with fixing Memory Allocation issues on Z390. Requires `ProtectUefiServices` as well on IceLake and Z390 Coffee Lake.
-* **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode.
-* **EnableWriteUnprotector**: NO
-  * This quirk and RebuildAppleMemoryMap can commonly conflict, recommended to enable the latter on newer platforms and disable this entry.
-  * However, due to issues with OEMs not using the latest EDKII builds you may find that the above combo will result in early boot failures. This is due to missing the `MEMORY_ATTRIBUTE_TABLE` and such we recommend disabling RebuildAppleMemoryMap and enabling EnableWriteUnprotector. More info on this is covered in the [troubleshooting section](/troubleshooting/extended/kernel-issues.md#stuck-on-eb-log-exitbs-start).
-* **ProtectUefiServices**: NO
-  * Protects UEFI services from being overridden by the firmware, mainly relevant for VMs, Icelake and Z390 systems'.
-  * If on Z390, **enable this quirk**.
-* **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
-* **RebuildAppleMemoryMap**: YES
-  * Generates Memory Map compatible with macOS, can break on some laptop OEM firmwares so if you receive early boot failures disable this.
-* **ResizeAppleGpuBars**: -1
-  * Will reduce the size of GPU PCI Bars if set to `0` when booting macOS, set to `-1` to disable
-  * Setting other PCI Bar values is possible with this quirk, though can cause instabilities
-  * This quirk being set to zero is only necessary if Resizable BAR Support is enabled in your firmware.
-* **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses, shouldn't be needed on Skylake and newer. Some firmware like Gigabyte may still require it, and will kernel panic without this.
-* **SyncRuntimePermissions**: YES
-  * Fixes alignment with MAT tables and required to boot Windows and Linux with MAT tables, also recommended for macOS. Mainly relevant for RebuildAppleMemoryMap users.
-
-:::
 
 #### Comet Lake
 
-![Booter](../images/config/config-universal/hedt-booter.png)
+請進行以下設定：
 
-##### Quirks
-
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, for us, we need to change the following:
-
-| Quirk | Enabled | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
 | DevirtualiseMmio | YES | |
 | EnableWriteUnprotector | NO | |
 | ProtectUefiServices | YES | |
 | RebuildAppleMemoryMap | YES | |
-| ResizeAppleGpuBars | -1 | If your firmware supports increasing GPU Bar sizes (ie Resizable BAR Support), set this to `0` |
+| ResizeAppleGpuBars | -1 | 如果你的韌體支援增加 GPU Bar 大小（可調整大小的 BAR 的支援），請將其設定為 `0` |
 | SetupVirtualMap | NO | |
 | SyncRuntimePermissions | YES | |
-:::
 
-::: details More in-depth Info
+#### 其他（未列出）UEFI 系統
 
-* **AvoidRuntimeDefrag**: YES
-  * Fixes UEFI runtime services like date, time, NVRAM, power control, etc.
-* **DevirtualiseMmio**: YES
-  * Reduces Stolen Memory Footprint, expands options for `slide=N` values and very helpful with fixing Memory Allocation issues , requires `ProtectUefiServices` as well for Z490.
-* **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode.
-* **EnableWriteUnprotector**: NO
-  * This quirk and RebuildAppleMemoryMap can commonly conflict, recommended to enable the latter on newer platforms and disable this entry.
-  * However, due to issues with OEMs not using the latest EDKII builds you may find that the above combo will result in early boot failures. This is due to missing the `MEMORY_ATTRIBUTE_TABLE` and such we recommend disabling RebuildAppleMemoryMap and enabling EnableWriteUnprotector. More info on this is covered in the [troubleshooting section](/troubleshooting/extended/kernel-issues.md#stuck-on-eb-log-exitbs-start).
-* **ProtectUefiServices**: YES
-  * Protects UEFI services from being overridden by the firmware, required for Z490.
-* **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
-* **RebuildAppleMemoryMap**: YES
-  * Generates Memory Map compatible with macOS, can break on some laptop OEM firmwares so if you receive early boot failures disable this.
-* **ResizeAppleGpuBars**: -1
-  * Will reduce the size of GPU PCI Bars if set to `0` when booting macOS, set to `-1` to disable
-  * Setting other PCI Bar values is possible with this quirk, though can cause instabilities
-  * This quirk being set to zero is only necessary if Resizable BAR Support is enabled in your firmware.
-* **SetupVirtualMap**: NO
-  * Fixes SetVirtualAddresses calls to virtual addresses, however broken due to Comet Lake's memory protections. ASUS, Gigabyte and AsRock boards will not boot with this on.
-* **SyncRuntimePermissions**: YES
-  * Fixes alignment with MAT tables and required to boot Windows and Linux with MAT tables, also recommended for macOS. Mainly relevant for RebuildAppleMemoryMap users.
+這些選項對這些系統沒有作用，請保留預設值。
 
-:::
-### Intel HEDT
+### Intel 高端桌面平台（HEDT）
 
-### AMD
+#### Nehalem 和 Westmere
 
-## Intel Laptop
+請進行以下設定：
 
+| 選項值 | 是否啟用 | 說明 |
+| :--- | :--- | :--- |
+| AvoidRuntimeDefrag | NO | Big Sur 可能需要啟用這個選項值 |
+| EnableSafeModeSlide | NO | |
+| EnableWriteUnprotector | NO | |
+| ProvideCustomSlide | NO | |
+| SetupVirtualMap | NO | |
+
+#### Skylake-X/W 和 Cascade Lake-X/W
+
+![Booter](../images/config/config-universal/hedt-booter.png)
+
+請進行以下設定：
+
+| 選項值 | 是否啟用 | 說明 |
+| :--- | :--- | :--- |
+| DevirtualiseMmio | YES | |
+| EnableWriteUnprotector | NO | |
+| RebuildAppleMemoryMap | YES | |
+| SetupVirtualMap | YES | |
+| SyncRuntimePermissions | YES | |
+
+#### 其他（未列出）系統
+
+這些選項對這些系統沒有作用，請保留預設值。
+
+### Intel 筆記型電腦平台
+
+#### Clarksfield 和 Arrandale
+
+請進行以下設定：
+
+| 選項值 | 是否啟用 | 說明 |
+| :--- | :--- | :--- |
+| AvoidRuntimeDefrag | NO | Big Sur 可能需要啟用這個選項值 |
+| EnableSafeModeSlide | NO | |
+| EnableWriteUnprotector | NO | |
+| ProvideCustomSlide | NO | |
+| SetupVirtualMap | NO | |
+
+#### Coffee Lake 和 Whiskey Lake
+
+![Booter](../images/config/config-universal/aptio-v-booter.png)
+
+請進行以下設定：
+
+| 選項值 | 是否啟用 | 說明 |
+| :--- | :--- | :--- |
+| EnableWriteUnprotector | NO | |
+| RebuildAppleMemoryMap | YES | |
+| SyncRuntimePermissions | YES | |
+
+#### Coffee Lake Plus 和 Comet Lake
+
+請進行以下設定：
+
+| 選項值 | 是否啟用 | 說明 |
+| :--- | :--- | :--- |
+| DevirtualiseMmio | YES | |
+| EnableWriteUnprotector | NO | |
+| ProtectUefiServices | YES | |
+| RebuildAppleMemoryMap | YES | |
+| SyncRuntimePermissions | YES | |
+
+#### 其他（未列出）UEFI 系統
+
+這些選項對這些系統沒有作用，請保留預設值。
+
+### AMD 平台
+
+#### Bulldozer(15h) 和 Jaguar(16h)
+
+這些選項對這些系統沒有作用，請保留預設值。
+
+#### Ryzen 和 Threadripper（17h and 19h）
+
+![Booter](../images/config/config-universal/amd-zen-booter.png)
+
+請進行以下設定：
+
+| 選項值 | 是否啟用 | 說明 |
+| :--- | :--- | :--- |
+| DevirtualiseMmio | NO | 如果你使用的是 TRx40 系統，請啟用這個選項並遵循以下說明：<br/>https://eason329.github.io/OpenCore-Install-Guide/extras/kaslr-fix.html |
+| EnableWriteUnprotector | NO | |
+| RebuildAppleMemoryMap | YES | |
+| ResizeAppleGpuBars | -1 | 如果你的韌體支援增加 GPU Bar 大小（可調整大小的 BAR 的支援），請將其設定為 `0` |
+| SetupVirtualMap | YES | X570、B550、A520、TRx40，及更新至 2020 年度後期 BIOS 的 X470、B450 主板則可能需要停用 |
+| SyncRuntimePermissions | YES | |
+
+# 完成此部分後，請[編輯 DeviceProperties 部分](device-properties.md)

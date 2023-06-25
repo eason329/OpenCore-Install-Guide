@@ -158,10 +158,10 @@ module.exports = {
                                     '/config.plist/nvram',
                                     '/config.plist/platform-info',
                                     '/config.plist/uefi',
-                                    '/config.plist/security',
-                                    '/config.plist/bios-settings',
                             ]
                         },
+                        '/config.plist/security',
+                        '/config.plist/bios-settings',
                         ]
                     },
                     {
