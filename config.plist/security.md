@@ -12,7 +12,7 @@ OpenCore 預設啟用 [Apple Secure Boot](https://eason329.github.io/OpenCore-Po
 * High Sierra 至 Catalina (10.13-10.15)：
   * 如果你欲使用的型號沒有在下表列出，請設定為 `Disabled`。
   * 如果要使用 NVIDIA Web Drivers，請設定為 `Disabled`。
-  * 如果你欲使用的 SMBIOS 有在下表列出，請將你欲安裝的版本與最低版本比較. 如果欲安裝的版本比你的 SMBIOS 要求的最低版本還要低的話，請設定為 `Disabled`。否則請設定為你所使用的 SMBIOS。
+  * 如果你欲使用的 SMBIOS 有在下表列出，請將你欲安裝的版本與最低版本比較。如果欲安裝的版本比你的 SMBIOS 要求的最低版本還要低的話，請設定為 `Disabled`，否則請設定為你所使用的 SMBIOS。
 * Sierra 及以下版本 (10.4-10.12)：這個設定沒有作用。
 * 如果需要啟動多個版本，你可能需要設定為 `Disabled`。
   * 示例：一個沒有 T2 的 SMBIOS 要同時啟動 High Sierra 和 Big Sur 的話，便需要設定為 `Disabled`。
