@@ -28,7 +28,7 @@ ACPI 修改（在所有操作系統）會循以下順序執行：
 ### 桌面電腦
 
 | 平台 | **CPU** | **EC** | **AWAC** | **NVRAM** | **USB** | **IMEI** |
-| :-------: | :-----: | :----: | :------: | :-------: | :-----: |
+| :-------: | :-----: | :----: | :------: | :-------: | :-----: | :-----: |
 | Penryn | N/A | [SSDT-EC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | N/A | N/A | N/A | N/A |
 | Lynnfield and Clarkdale | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
 | SandyBridge | [CPU-PM](https://sumingyd.github.io/OpenCore-Post-Install/universal/pm.html#sandy-and-ivy-bridge-power-management) (安裝完畢後執行) | ^^ | ^^ | ^^ | ^^ | [SSDT-IMEI](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/imei.html) |
@@ -56,7 +56,7 @@ ACPI 修改（在所有操作系統）會循以下順序執行：
 ### 筆記型電腦
 
 | 平台 | **CPU** | **EC** | **Backlight** | **I2C Trackpad** | **AWAC** |
-| :-------: | :-----: | :----: | :-----------: | :--------------: | :------: | :-----: | :-----: |
+| :-------: | :-----: | :----: | :-----------: | :--------------: | :------: |
 | Clarksfield and Arrandale | N/A | [SSDT-EC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | [SSDT-PNLF](https://sumingyd.github.io/Getting-Started-With-ACPI/Laptops/backlight.html) | N/A | N/A |
 | SandyBridge | [CPU-PM](https://sumingyd.github.io/OpenCore-Post-Install/universal/pm.html#sandy-and-ivy-bridge-power-management) (Run in Post-Install) | ^^ | ^^ | ^^ | ^^ |
 | Ivy Bridge | ^^ | ^^ | ^^ | ^^ | ^^ |
@@ -72,7 +72,7 @@ ACPI 修改（在所有操作系統）會循以下順序執行：
 ### 筆記型電腦（續）
 
 | 平台 | **USB** | **IRQ** | **NVRAM** | **IMEI** |
-| :-------: | :-------: | :------: |
+| :-------: | :-------: | :------: | :-----: | :-----: |
 | Clarksfield and Arrandale | N/A | [IRQ SSDT](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/irq.html) | N/A | N/A |
 | Sandy Bridge | ^^ | N/A | ^^ | [SSDT-IMEI](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/imei.html) |
 | Ivy Bridge | ^^ | ^^ | ^^ | ^^ |
