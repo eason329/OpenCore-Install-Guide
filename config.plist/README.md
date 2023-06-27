@@ -1,4 +1,4 @@
-# config.plist 設定
+# 開始建構 config.plist
 
 現在，我們收集了所有需要的 Kext (.kext)、SSDT (.aml) 和韌體驅動程式 (.efi)，你的 USB 隨身碟應該開始看起來像這樣：
 
@@ -58,59 +58,29 @@ config.plist **必須** 與 EFI 資料夾的內容相匹配. 如果您刪除了�
 如果你做了任何修改，你可以在 ProperTree 中使用 OC 快照工具（**Cmd/Ctrl + R**）來更新 config.plist。
 :::
 
-## 選擇你使用的平台
+## 起點
 
-接下来是重要的部分，根據你使用的平台進行配置。每個平台都有自己的選項值（Quirk）需要你的注意，所以了解你的硬體是非常重要的。接下來的步驟請參照下文指引：
+編輯 config.plist 看起來可能很難，其實不然，只是需要一些時間。本指南將告訴您如何設定所有內容，您不會被冷落。這也意味著如果你有問題，你需要檢查你的配置設定以確保它們是正確的。設定 OpenCore 時需要注意的主要事項：
 
-### Intel 桌面平台
+* **所有屬性均必須定義**，OpenCore 不設任何預設的回退值，因此**除非明確地告訴你可以刪除，否則不要刪除任何章節**。如果指南沒有提到該選項，請將其保留為預設值。
+* **Sample.plist 不能按原樣使用**，你必須根據自己的系統進行配置
+* **不要使用配置器**, 這些配置器很少遵守 OpenCore 的配置設定，甚至一些像 Mackie 製作的配置器還會增加 Clover 屬性和破壞 plist！
 
-* 備註：Intel 的 NUC 系列使用被認為是屬於筆記型電腦平台，如果你是這個系列，我們建議參照 [Intel 筆記型電腦平台的部分](#intel-筆記型電腦平台)
+現在，我們來快速回顧一下我們需要的工具
 
-| 代號名稱 | 系列 | 發行日期 |
-| :--- | :--- | :--- |
-| [Yonah, Conroe and Penryn](../config.plist/penryn.md) | E8XXX, Q9XXX, [註 1](https://en.wikipedia.org/wiki/Yonah_(microprocessor)), [註 2](https://en.wikipedia.org/wiki/Penryn_(microarchitecture)) | 2006-2009 年 |
-| [Lynnfield and Clarkdale](../config.plist/clarkdale.md) | 5XX-8XX | 2010 年 |
-| [Sandy Bridge](../config.plist/sandy-bridge.md) | 2XXX | 2011 年 |
-| [Ivy Bridge](../config.plist/ivy-bridge.md) | 3XXX | 2012 年 |
-| [Haswell](../config.plist/haswell.md) | 4XXX | 2013-2014 年 |
-| [Skylake](../config.plist/skylake.md) | 6XXX | 2015-2016 年 |
-| [Kaby Lake](../config.plist/kaby-lake.md) | 7XXX | 2017 年 |
-| [Coffee Lake](../config.plist/coffee-lake.md) | 8XXX-9XXX | 2017-2019 年 |
-| [Comet Lake](../config.plist/comet-lake.md) | 10XXX | 2020 年 |
+* [ProperTree](https://github.com/corpnewt/ProperTree)
+  * 通用的 plist 編輯器
+* [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS)
+  * 用於生成 SMBIOS 資料
+* [Sample/config.plist](https://github.com/acidanthera/OpenCorePkg/releases)
+  * 參閱上一章節了解如何取得：[config.plist 設定](../config.plist/README.md)
 
-### Intel 筆記型電腦平台
+::: warning
 
-| 代號名稱 | 系列 | 發行日期 |
-| :--- | :--- | :--- |
-| [Clarksfield and Arrandale](../config-laptop.plist/arrandale.md) | 3XX-9XX | 2010 年 |
-| [Sandy Bridge](../config-laptop.plist/sandy-bridge.md) | 2XXX | 2011 年 |
-| [Ivy Bridge](../config-laptop.plist/ivy-bridge.md) | 3XXX | 2012 年 |
-| [Haswell](../config-laptop.plist/haswell.md) | 4XXX | 2013-2014 年 |
-| [Broadwell](../config-laptop.plist/broadwell.md) | 5XXX | 2014-2015 年 |
-| [Skylake](../config-laptop.plist/skylake.md) | 6XXX | 2015-2016 年 |
-| [Kaby Lake and Amber Lake](../config-laptop.plist/kaby-lake.md) | 7XXX | 2017 年 |
-| [Coffee Lake and Whiskey Lake](../config-laptop.plist/coffee-lake.md) | 8XXX | 2017-2018 年 |
-| [Coffee Lake Plus and Comet Lake](../config-laptop.plist/coffee-lake-plus.md) | 9XXX-10XXX | 2019-2020 年 |
-| [Ice Lake](../config-laptop.plist/icelake.md) | 10XXX | 2019-2020 年 |
+在設定 OpenCore 之前，請多次閱讀本指南，並確保你已正確設定。請注意，圖片並不總是最新的，所以請閱讀圖片下面的文字，如果沒有提到，那麼請將其保持為預設值。
 
-### Intel 高端桌面平台（HEDT）
+:::
 
-本章節包括電腦愛好者及伺服器平台硬體。
+提醒你：你需要根據你使用的平台進行配置。每個平台都有自己的選項值（Quirk）需要你的注意，所以了解你的硬體是非常重要的。
 
-| 代號名稱 | 系列 | 發行日期 |
-| :--- | :--- | :--- |
-| [Nehalem and Westmere](../config-HEDT/nehalem.md) | 9XX, X3XXX, X5XXX, [註 1](https://en.wikipedia.org/wiki/Nehalem_(microarchitecture)), [註 2](https://en.wikipedia.org/wiki/Westmere_(microarchitecture)) | 2008-2010 年 |
-| [Sandy/Ivy Bridge-E](../config-HEDT/ivy-bridge-e.md) | 3XXX, 4XXX | 2011-2013 年 |
-| [Haswell-E](../config-HEDT/haswell-e.md) | 5XXX | 2014 年 |
-| [Broadwell-E](../config-HEDT/broadwell-e.md) | 6XXX | 2016 年 |
-| [Skylake/Cascade Lake-X/W](../config-HEDT/skylake-x.md) | 7XXX, 9XXX, 10XXX | 2017-2019 年 |
-
-### AMD
-
-| 代號名稱 | 系列 | 發行日期 |
-| :--- | :--- | :--- |
-| [Bulldozer/Jaguar](../AMD/fx.md) | [非常奇怪](https://en.wikipedia.org/wiki/List_of_AMD_processors#Bulldozer_architecture;_Bulldozer,_Piledriver,_Steamroller,_Excavator_(2011%E2%80%932017)) | [AMD 當時（2011-2017 年）的命名可謂是雜亂無章](https://en.wikipedia.org/wiki/List_of_AMD_processors#Bulldozer_architecture;_Bulldozer,_Piledriver,_Steamroller,_Excavator_(2011%E2%80%932017)) |
-| [Zen](../AMD/zen.md) | 1XXX, 2XXX, 3XXX, 4XXX, 5XXX | 2017-2020 年 |
-
-* 注意：~~第 3 代 Threadripper (39XX) 目前不支援，但是 1 代和 2 代都是支援的~~
-  * 最新版本的 BIOS 和 OpenCore 已經修復了該問題，所有 Threadripper 平台的 CPU 都已支援。
+# 現在，這些步驟都完成了，你可以[開始編輯 config.plist](acpi.md)
