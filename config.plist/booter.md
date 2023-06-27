@@ -29,7 +29,7 @@ Booter 修改會循以下順序執行：
   * 在 Coffee Lake 和更新的平台中，你應啟用 RebuildAppleMemoryMap 選項而停用本選項，因為兩個選項在新平台中經常有衝突。
   * 然而，由於 OEM 沒有使用最新的 EDKII 版本，您可能會發現上述組合將導致早期啟動失敗。這是由於缺少 `MEMORY_ATTRIBUTE_TABLE` 而引起。如發生這種情況，我们建議停用 RebuildAppleMemoryMap 並啟用 EnableWriteUnprotector。更多訊息請參見[故障診斷部分](/troubleshooting/extended/kernel-issues.md#stuck-on-eb-log-exitbs-start)。
 * **ProtectMemoryRegions**: NO
-  * Patches memory region types for incorrectly mapped CSM/MMIO regions.
+  * 修補錯誤映射的 CSM/MMIO 區域的記憶體區域類型。
   * 所有使用 coreboot UEFI 韌體的 Chromebook 都需要啟用這個選項。
 * **ProtectUefiServices**: NO
   * 保護 UEFI 服務不被韌體覆蓋，主要與 VM、Icelake 和 Z390 系統有關。
