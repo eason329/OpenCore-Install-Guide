@@ -3,34 +3,34 @@
 现在，你已經完成了 OpenCore 的設定，你終於能開始首次開機，需要記住的主要事情：
 
 * 為 macOS 啟用最適當的設定
-* 閱讀 [OpenCore 多系統開機指南](https://dortania.github.io/OpenCore-Multiboot/) as well as [設定 LauncherOption](https://dortania.github.io/OpenCore-Post-Install/multiboot/bootstrap)
-  * Mainly relevant for those running a single drive for multiple OSes
+* 閱讀 [OpenCore 多系統開機指南](https://dortania.github.io/OpenCore-Multiboot/) 和[設定 LauncherOption](https://dortania.github.io/OpenCore-Post-Install/multiboot/bootstrap) 頁面
+  * 主要適用於打算單磁碟多操作系統的用戶
 * 在其他裝置開啟[通用故障診斷](../troubleshooting/troubleshooting.md)頁面
 * 閱讀和了解 [macOS 開機過程](../troubleshooting/boot.md)
-  * Can help first time installers better understand where they may be getting stuck
-* And a ton of patience
+  * 可以幫助第一次安裝的用戶更好地了解他們可能在哪裡出現問題
+* 大量耐性
 
-## Double checking your work
+## 再次檢查你的準備工作
 
-One last thing we should go over before booting is how your EFI is setup:
+在開機之前，讓我們再次檢查一下你的 EFI 設置：
 
-Good EFI          |  Bad EFI
+良好的 EFI          |  不好的 EFI
 :-------------------------:|:-------------------------:
 ![](../images/installation/install-md/good-efi.png)  |  ![](../images/installation/install-md/bad-efi.png)
-EFI folder found on EFI partition | EFI folder missing
-ACPI Files are compiled(.aml) | ACPI Files are not compiled(.dsl)
-DSDT is not included |* DSDT is included
-Removed unneeded Drivers(.efi) | Leaves default Drivers
-Removed unneeded Tools(.efi) | Leaves default Tools
-All files in the Kexts folder end in .kext | Includes source code and folders
-config.plist found under EFI/OC | Neither renamed or placed the .plist in right location
-Only uses kexts that are needed | Downloaded every kext listed
+EFI 資料夾能在 EFI 磁碟分割中找到 | 找不到 EFI 資料夾
+ACPI 檔案都是已編譯的 (.aml) | ACPI 檔案是未編譯的 (.dsl)
+不包括 DSDT | 包含了 DSDT
+已移除不需要的驅動程式 (.efi) | 保留預設的驅動程式
+已移除不需要的工具程式 (.efi) | 保留預設的工具程式
+kext 資料夾的所有檔案皆以 .kext 為副檔名 | 包含原始碼和資料夾
+config.plist 在 EFI/OC 內 | 既沒有重新命名，也沒有將 .plist 放在正確位置
+只保留需要的 kext | 下載了每一個列出的 kext
 
-## Booting the OpenCore USB
+## 以 OpenCore USB 開機
 
-So you're now ready to finally put the USB stick into your computer and boot off of it. Remember that most laptops and some desktops will still default to the internal drive with Windows, and you'll need to manually select OpenCore in the BIOS boot options. You'll need to check in the user manual or use a bit of google to find out what Fn key accesses the BIOS and boot menu(ie. Esc, F2, F10 or F12)
+現在，你終於準備好你的 USB 隨身碟並將其插入電腦啟動了。請注意，大多數電腦仍然會預設使用 Windows 的磁碟區開機，你將需要在 BIOS 開機選單中手動選擇 OpenCore。你需要查看說明書或使用 Google 找出如何進入 BIOS 和開機選單（如：Esc, F2, F10 或 F12）
 
-Once you boot the USB, you'll likely be greeted to the following boot options:
+啟動隨身碟後，你會看到類似下面的開機選項：
 
 1. Windows
 2. macOS Base System (External) / Install macOS Big Sur (External) / *USB drive name* (External)
@@ -45,7 +45,7 @@ You might need to press space in order to see the installer, as in later version
 
 For us, **Option 2.** is the one we want. Depending how the installer was made, it may report as either **"macOS Base System (External)"**, **"Install macOS Big Sur (External)"** or **"*Your USB drive's name* (External)"**
 
-## macOS Installer
+## macOS 安裝程式
 
 So you've finally got the installer booted, got through the verbose and hit the installer! Now that you've gotten this far,  the main things to keep in mind:
 
@@ -59,5 +59,5 @@ Once you start the installation, you will want to wait until the system restarts
 
 ![](../images/installation/install-md/setup-your-mac.png)
 
-You're in! 🎉
+如果你看到這個畫面，你成功了！ 🎉
 You will want to go through the Post-Installation pages to finish setting up your system.
