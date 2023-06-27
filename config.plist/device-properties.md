@@ -9,11 +9,11 @@
 ::: warning 注意
 下面列出的大多數影格緩衝修補是讓 iGPU 和硬體加速正常工作的最低配置。如果你的顯示輸出無法正常工作，你可能需要更改 `AAPL,ig-platform-id` 和／或使用 Hackintool 加入顯示連接器數據並遵循一般的[影格緩衝修補指南](https://www.tonymacx86.com/threads/guide-general-framebuffer-patching-guide-hdmi-black-screen-problem.269149/)。
 
-有關更多影格緩衝選項，請參閱 WhateverGreen 的 [**Intel HD 常見問題解答**](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md)。但請注意，這些常見問題解答中的影格緩衝資料是以 Big Endian 形式提供的，因此你不能按原樣使用它 – 你必須首先[**將其轉換為 Little Endian**](https://www.save-editor.com/tools/wse_hex.html#littleendian)！
-
-[[toc]]
+有關更多影格緩衝選項，請參閱 WhateverGreen 的 [**Intel HD 常見問題解答**](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md)。但請注意，這些常見問題解答中的影格緩衝資料是以 Big Endian 形式提供的，你不能按原樣使用它 – 因為你必須首先[**將其轉換為 Little Endian**](https://www.save-editor.com/tools/wse_hex.html#littleendian)！
 
 :::
+
+[[toc]]
 
 ## Add
 
