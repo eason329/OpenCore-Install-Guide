@@ -40,7 +40,7 @@ Booter 修改會循以下順序執行：
   * 生成與 macOS 相容的記憶體映射，可能會在一些筆記型電腦 OEM 韌體上崩潰，如果你因此而收到早期開機失敗，請停用此功能。
   * 在 Kaby Lake 和更舊的平台中，你應啟用 EnableWriteUnprotector 選項而停用本選項。
 * **ResizeAppleGpuBars**: -1
-  * 啟動 macOS 時，如果設定為 `0` ，將減少 GPU PCI 條的大小，設定為 `-1` 則停用
+  * 啟動 macOS 時，如果設定為 `0`，將減少 GPU PCI 條的大小，設定為 `-1` 則停用
   * 使用此選項可以設定其他 PCI Bar 值，但可能導致不穩定
   * 只有在韌體中啟用了對 Resizable BAR 的支援時，才需要將此屬性設定為 0。
 * **SetupVirtualMap**: YES
@@ -58,9 +58,9 @@ Booter 修改會循以下順序執行：
 
 請進行以下設定：
 
-| 選項值 | 是否啟用 | 說明 |
+| 選項值 | 是否啟用 |
 | :--- | :--- | :--- |
-| RebuildAppleMemoryMap | YES | |
+| RebuildAppleMemoryMap | YES |
 
 #### 使用 coreboot UEFI 韌體的 Chromebook
 
