@@ -59,7 +59,7 @@ Booter 修改會循以下順序執行：
 請進行以下設定：
 
 | 選項值 | 是否啟用 |
-| :--- | :--- | :--- |
+| :--- | :--- |
 | RebuildAppleMemoryMap | YES |
 
 #### 使用 coreboot UEFI 韌體的 Chromebook
