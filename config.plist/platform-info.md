@@ -259,7 +259,7 @@ SmUUID:       A154B586-874B-4E57-A1FF-9D6E503E4580
 * 筆記型電腦平台的 Ryzen(17h and 19h)
 
 | SMBIOS | GPU | OS 支援限制 |
-| :--- | :--- |
+| :--- | :--- | :--- |
 | iMacPro1,1 | iGPU: Vega Raven ASIC family | 11 至最新版本 |
 | iMac20,1 | iGPU: Vega Raven ASIC family | 11 至最新版本 |
 | MacBookPro16,3 | iGPU: Vega Raven ASIC family | 11 至最新版本 |
