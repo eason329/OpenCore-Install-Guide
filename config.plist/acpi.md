@@ -55,35 +55,35 @@ ACPI 修改（在所有操作系統）會循以下順序執行：
 
 ### 筆記型電腦
 
-| 平台 | **CPU** | **EC** | **Backlight** | **I2C Trackpad** | **AWAC** | **USB** | **IRQ** |
+| 平台 | **CPU** | **EC** | **Backlight** | **I2C Trackpad** | **AWAC** | **USB** |
 | :-------: | :-----: | :----: | :-----------: | :--------------: | :------: | :-----: | :-----: |
-| Clarksfield and Arrandale | N/A | [SSDT-EC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | [SSDT-PNLF](https://sumingyd.github.io/Getting-Started-With-ACPI/Laptops/backlight.html) | N/A | N/A | N/A | [IRQ SSDT](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/irq.html) |
-| SandyBridge | [CPU-PM](https://sumingyd.github.io/OpenCore-Post-Install/universal/pm.html#sandy-and-ivy-bridge-power-management) (Run in Post-Install) | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
-| Ivy Bridge | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
-| Haswell | [SSDT-PLUG](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/plug.html) | ^^ | ^^ | [SSDT-GPI0](https://sumingyd.github.io/Getting-Started-With-ACPI/Laptops/trackpad.html) | ^^ | ^^ | ^^ |
-| Broadwell | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
-| Skylake | ^^ | [SSDT-EC-USBX](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | ^^ | ^^ | ^^ | ^^ | N/A |
-| Kaby Lake | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
-| Coffee Lake (8th Gen) and Whiskey Lake | ^^ | ^^ | [SSDT-PNLF](https://sumingyd.github.io/Getting-Started-With-ACPI/Laptops/backlight.html) | ^^ | [SSDT-AWAC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/awac.html) | ^^ | ^^ |
-| Coffee Lake (9th Gen) | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
-| Comet Lake | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
-| Ice Lake | ^^ | ^^ | ^^ | ^^ | ^^ | [SSDT-RHUB](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/rhub.html) | ^^ |
+| Clarksfield and Arrandale | N/A | [SSDT-EC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | [SSDT-PNLF](https://sumingyd.github.io/Getting-Started-With-ACPI/Laptops/backlight.html) | N/A | N/A |
+| SandyBridge | [CPU-PM](https://sumingyd.github.io/OpenCore-Post-Install/universal/pm.html#sandy-and-ivy-bridge-power-management) (Run in Post-Install) | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Ivy Bridge | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Haswell | [SSDT-PLUG](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/plug.html) | ^^ | ^^ | [SSDT-GPI0](https://sumingyd.github.io/Getting-Started-With-ACPI/Laptops/trackpad.html) | ^^ | ^^ |
+| Broadwell | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Skylake | ^^ | [SSDT-EC-USBX](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/ec-fix.html) | ^^ | ^^ | ^^ | N/A |
+| Kaby Lake | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Coffee Lake (8th Gen) and Whiskey Lake | ^^ | ^^ | [SSDT-PNLF](https://sumingyd.github.io/Getting-Started-With-ACPI/Laptops/backlight.html) | ^^ | [SSDT-AWAC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/awac.html) | ^^ |
+| Coffee Lake (9th Gen) | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Comet Lake | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
+| Ice Lake | ^^ | ^^ | ^^ | ^^ | ^^ | ^^ |
 
 ### 筆記型電腦（續）
 
-| 平台 | **NVRAM** | **IMEI** |
+| 平台 | **USB** | **IRQ** | **NVRAM** | **IMEI** |
 | :-------: | :-------: | :------: |
-| Clarksfield and Arrandale | N/A | N/A |
-| Sandy Bridge | ^^| [SSDT-IMEI](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/imei.html) |
-| Ivy Bridge | ^^ | ^^ |
-| Haswell | ^^ | N/A |
-| Broadwell | ^^ | ^^ |
-| Skylake | ^^ | ^^ |
-| Kaby Lake | ^^ | ^^ |
-| Coffee Lake (8th Gen) and Whiskey Lake | ^^ | ^^ |
-| Coffee Lake (9th Gen) | [SSDT-PMC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/nvram.html) | ^^ |
-| Comet Lake | N/A | ^^ |
-| Ice Lake | ^^ | ^^ |
+| Clarksfield and Arrandale | N/A | [IRQ SSDT](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/irq.html) | N/A | N/A |
+| Sandy Bridge | ^^ | N/A | ^^ | [SSDT-IMEI](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/imei.html) |
+| Ivy Bridge | ^^ | ^^ | ^^ | ^^ |
+| Haswell | ^^ | ^^ | ^^ | N/A |
+| Broadwell | ^^ | ^^ | ^^ | ^^ |
+| Skylake | ^^ | ^^ | ^^ | ^^ |
+| Kaby Lake | ^^ | ^^ | ^^ | ^^ |
+| Coffee Lake (8th Gen) and Whiskey Lake | ^^ | ^^ | ^^ | ^^ |
+| Coffee Lake (9th Gen) | ^^ | ^^ | [SSDT-PMC](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/nvram.html) | ^^ |
+| Comet Lake | ^^ | ^^ | N/A | ^^ |
+| Ice Lake | [SSDT-RHUB](https://sumingyd.github.io/Getting-Started-With-ACPI/Universal/rhub.html) | ^^ | ^^ | ^^ |
 
 請注意，你**不應該**在這裡加入您生成的 DSDT.aml，它已經在你的韌體中了。因此，如果存在的話，請刪除 config plist 和 EFI/OC/ACPI 下的相關條目。
 
