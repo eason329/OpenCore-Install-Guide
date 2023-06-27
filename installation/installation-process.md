@@ -1,12 +1,12 @@
-# Installation Process
+# 安裝程序
 
-Now that you've finished setting up OpenCore, you're finally able to boot, main things to keep in mind:
+现在，你已經完成了 OpenCore 的設定，你終於能開始首次開機，需要記住的主要事情：
 
-* Enable BIOS settings optimal for macOS
-* Read up on the [OpenCore Multiboot Guide](https://dortania.github.io/OpenCore-Multiboot/) as well as [Setting up LauncherOption](https://dortania.github.io/OpenCore-Post-Install/multiboot/bootstrap)
+* 為 macOS 啟用最適當的設定
+* 閱讀 [OpenCore 多系統開機指南](https://dortania.github.io/OpenCore-Multiboot/) as well as [設定 LauncherOption](https://dortania.github.io/OpenCore-Post-Install/multiboot/bootstrap)
   * Mainly relevant for those running a single drive for multiple OSes
-* And a copy of the [General Troubleshooting](../troubleshooting/troubleshooting.md) page
-* Read up on the [macOS Boot Process](../troubleshooting/boot.md)
+* 在其他裝置開啟[通用故障診斷](../troubleshooting/troubleshooting.md)頁面
+* 閱讀和了解 [macOS 開機過程](../troubleshooting/boot.md)
   * Can help first time installers better understand where they may be getting stuck
 * And a ton of patience
 
@@ -56,6 +56,8 @@ So you've finally got the installer booted, got through the verbose and hit the 
   * See the [Multiboot Guide](https://dortania.github.io/OpenCore-Multiboot/) for more info on partitioning a Windows Drive
 
 Once you start the installation, you will want to wait until the system restarts. You will once again want to boot into OpenCore, but rather than selecting your USB installer/recovery - you will want to select the macOS installer on the hard drive to continue installation. You should get an apple logo, and after a few minutes you should get a timer at the bottom saying "x minutes remaining". This may be a good time to get a drink or snack as this will take a while. It may restart a couple more times, but if all goes well, it should finally plop you at the "Setup your Mac screen"
+
+![](../images/installation/install-md/setup-your-mac.png)
 
 You're in! 🎉
 You will want to go through the Post-Installation pages to finish setting up your system.

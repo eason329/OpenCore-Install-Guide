@@ -53,4 +53,4 @@
 * iGPU 記憶體：512MB 或更多
 * SATA 模式：AHCI
 
-# 現在，你已完成所有開機前設定，請前往[安裝 macOS](../installation/installation-process.md)
+# 現在，你已完成所有開機前的設定，請開始[安裝 macOS](../installation/installation-process.md)
