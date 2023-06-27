@@ -40,7 +40,7 @@ Booter 修改會循以下順序執行：
   * 生成與 macOS 相容的記憶體映射，可能會在一些筆記型電腦 OEM 韌體上崩潰，如果你因此而收到早期開機失敗，請停用此功能。
   * 在 Kaby Lake 和更舊的平台中，你應啟用 EnableWriteUnprotector 選項而停用本選項。
 * **ResizeAppleGpuBars**: -1
-  * 啟動 macOS 時，如果設定為 `0` ，將減少 GPU PCI 條的大小，設定為 `-1` 則停用
+  * 啟動 macOS 時，如果設定為 `0`，將減少 GPU PCI 條的大小，設定為 `-1` 則停用
   * 使用此選項可以設定其他 PCI Bar 值，但可能導致不穩定
   * 只有在韌體中啟用了對 Resizable BAR 的支援時，才需要將此屬性設定為 0。
 * **SetupVirtualMap**: YES
@@ -58,9 +58,9 @@ Booter 修改會循以下順序執行：
 
 請進行以下設定：
 
-| 選項值 | 是否啟用 | 說明 |
+| 選項值 | 是否啟用 |
 | :--- | :--- | :--- |
-| RebuildAppleMemoryMap | YES | |
+| RebuildAppleMemoryMap | YES |
 
 #### 使用 coreboot UEFI 韌體的 Chromebook
 
@@ -68,7 +68,7 @@ Booter 修改會循以下順序執行：
 
 | 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| ProtectMemoryRegions | YES | Fixes shutdown/restart on some Chromebooks that would otherwise result in a AppleEFINVRAM kernel panic. |
+| ProtectMemoryRegions | YES | 修復了某些 Chromebook 上的關機／重新啟動問題，否則會導致 AppleEFINVRAM 內核錯誤。 |
 
 ### Intel 桌面平台
 
@@ -115,7 +115,7 @@ Booter 修改會循以下順序執行：
 | SetupVirtualMap | NO | |
 | SyncRuntimePermissions | YES | |
 
-#### 其他（未列出）UEFI 系統
+#### 其他（未列出的）系統
 
 這些選項對這些系統沒有作用，請保留預設值。
 
@@ -147,7 +147,7 @@ Booter 修改會循以下順序執行：
 | SetupVirtualMap | YES | |
 | SyncRuntimePermissions | YES | |
 
-#### 其他（未列出）系統
+#### 其他（未列出的）系統
 
 這些選項對這些系統沒有作用，請保留預設值。
 
@@ -189,7 +189,7 @@ Booter 修改會循以下順序執行：
 | RebuildAppleMemoryMap | YES | |
 | SyncRuntimePermissions | YES | |
 
-#### 其他（未列出）UEFI 系統
+#### 其他（未列出的）系統
 
 這些選項對這些系統沒有作用，請保留預設值。
 
