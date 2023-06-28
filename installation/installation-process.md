@@ -45,19 +45,25 @@ config.plist 在 EFI/OC 內 | 既沒有重新命名，也沒有將 .plist 放在
 
 對我們來說，**選項 2** 就是我們想要的。根據安裝程式製作方式的不同，它可能會稱為 **"macOS Base System (External)"**、**"Install macOS *version name* (External)"** 或 **"*Your USB drive's name* (External)"**
 
+你終於進入安裝程式的啟動過程，你可能會看到大量文字。這是「詳細模式」（Verbose Mode），這能幫助你解決開機過程中遇到的問題。如果你在這裡卡住了，請參閱[故障診斷指南](../troubleshooting/kernel-debugging.md)。
+
 ## macOS 安裝程式
 
-So you've finally got the installer booted, got through the verbose and hit the installer! Now that you've gotten this far,  the main things to keep in mind:
+當你看到畫面從詳細模式變成蘋果標誌的時候，你終於完成安裝程式的啟動過程！
 
-* Drives you wish to install macOS on **must** be both of GUID partition Scheme **and** APFS
-  * High Sierra on HDD and all Sierra users will need to use macOS Journaled(HFS+)
-* The drive **must** also have a 200MB partition
-  * By default, macOS will setup freshly formatted drives with 200MB
-  * See the [Multiboot Guide](https://dortania.github.io/OpenCore-Multiboot/) for more info on partitioning a Windows Drive
+現在你已經走到了這一步，需要記住的主要事情包括：
 
-Once you start the installation, you will want to wait until the system restarts. You will once again want to boot into OpenCore, but rather than selecting your USB installer/recovery - you will want to select the macOS installer on the hard drive to continue installation. You should get an apple logo, and after a few minutes you should get a timer at the bottom saying "x minutes remaining". This may be a good time to get a drink or snack as this will take a while. It may restart a couple more times, but if all goes well, it should finally plop you at the "Setup your Mac screen"
+* 你的 SATA 或 NVME 控制器必須是 macOS 所支援的
+  * AMD 原生的 FCH SATA Controller 就是其中一個不支援的控制器，即便你使用諸如 SATA-unsupported.kext 等等的插件也沒有用。如果你在 Linux 尋找硬體時只看到這個控制器，你可能要考慮安裝至外置硬碟或放棄了
+* 你希望安装 macOS 的磁碟區 **必須** 是以 GUID 分割區配置表來格式化的 APFS 磁碟
+  * 在機械硬碟（HDD）上安裝 High Sierra，和所有安裝 Sierra 及更舊的用戶應該使用 macOS 擴充格式 (HFS+)
+* 磁碟 **必須** 有一個 200MB 的（EFI）分割
+  * macOS 一般會在新磁碟中格式化一個 200MB 的分割
+  * 參閱[多系統開機指南](https://eason329.github.io/OpenCore-Multiboot/) 了解有關分割一個已安裝 Windows 的磁碟的更多資訊
+
+開始安裝後，請等待系統重新啟動，然後你將需要再次選擇以 OpenCore 隨身碟開機。不要選擇剛才的隨身碟安裝程式（標示為 External）或是 Recovery，而是要選擇硬碟上的 macOS Installer 來繼續安裝。在經過詳細模式後會出現蘋果標誌，幾分鐘後你會看到底部有計時器，並寫着「剩餘大約 x 分鐘」。這可能是休息或吃東西的好時機，因為這需要一段時間和數次的重新啟動。如果一切順利，它最終會把你帶到「設定你的 Mac」界面。
 
 ![](../images/installation/install-md/setup-your-mac.png)
 
 如果你看到這個畫面，你成功了！ 🎉
-You will want to go through the Post-Installation pages to finish setting up your system.
+你可以瀏覽[安裝後完善指南](https://eason329.github.io/OpenCore-Post-Install/)來完成後續的系統設定。
