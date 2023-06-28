@@ -54,7 +54,8 @@ config.plist 在 EFI/OC 內 | 既沒有重新命名，也沒有將 .plist 放在
 現在你已經走到了這一步，需要記住的主要事情包括：
 
 * 你的 SATA 或 NVME 控制器必須是 macOS 所支援的
-  * AMD 原生的 FCH SATA Controller 就是其中一個不支援的控制器，諸如 SATA-unsupported.kext 等等的插件也沒有對這個控制器的支援。如果你在 Linux 尋找硬體時只看到這個控制器，你可能要考慮安裝至外置硬碟或放棄了
+  * 如果無法在磁碟工具程式中找到你的硬碟，可以嘗加入諸如 SATA-unsupported.kext 等針對控制器的内核延伸插件。
+  * AMD 原生的 FCH SATA Controller 是少數連内核延伸插件也不支援的控制器。如果你在 Linux 尋找硬體時只看到這個控制器，你可能要考慮安裝至外置硬碟或放棄了
 * 你希望安装 macOS 的磁碟區 **必須** 是以 GUID 分割區配置表來格式化的 APFS 磁碟
   * 在機械硬碟（HDD）上安裝 High Sierra，和所有安裝 Sierra 及更舊的用戶應該使用 macOS 擴充格式 (HFS+)
 * 磁碟 **必須** 有一個 200MB 的（EFI）分割
