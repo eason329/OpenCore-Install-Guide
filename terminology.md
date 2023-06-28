@@ -5,7 +5,7 @@
 **macOS**        | 蘋果公司自己的基於 UNIX 的操作系統，用於 Mac 機器和 “使 Mac 成為 Mac” 的重點。
 **Windows**      | 微軟的專有操作系統，可在各種電腦上安裝和使用（如果你不想頭疼，就繼續使用這個操作系統）
 **Linux**        | 基於 Linux 内核的開源類 UNIX 操作系統家族，1991 年 9 月 17 日由 Linus Torvalds 首次發佈的操作系統内核。Linux 通常打包在 Linux 發行版中。注意，雖然 macOS 和 Linux 可能是基於 UNIX 的，但它們有很大的不同。
-**Distros**      | 發行版的縮寫。Linux 發行版是 Linux 的發行方式。然而，當涉及到 macOS 時，發行版混合了 macOS 安裝程式和一堆非蘋果公司的工具 **不要使用被修改過的 macOS**  
+**Distros**      | 發行版的縮寫。Linux 發行版是 Linux 的發行方式。然而，當涉及到 macOS 時，發行版混合了 macOS 安裝程式和一堆非蘋果公司的工具。**不要使用被修改過的 macOS**  
 **Hackintosh**   | 將 macOS 安裝到 PC 上的過程，請注意**Hackintosh 不是操作系統**，它也可以指被「黑客」攻擊的機器，以使 macOS 在其上運行。例如：*我在這台 Windows 機器上安裝了 macOS，因此我有一個 Hackintosh。但是我沒有安裝 “Hackintosh”。*
 **Bootloader**   | 載入操作系統的軟體，通常由操作系統建立者製作。從技術上講，OpenCore本身並不是一個開機程式（請參閱下面的開機管理器解釋）。蘋果的 boot.efi 將是 Mac 或 Hackintosh 中實際的引導程式。
 **Boot Manager** | 管理開機程式的軟體（開機管理器）- 我們有很多例子：Clover, systemd-boot, OpenCore, rEFInd, rEFIt… 這些通常被視為幫助系統實際的引導程式作準備。
