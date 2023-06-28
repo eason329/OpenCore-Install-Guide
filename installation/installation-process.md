@@ -18,7 +18,7 @@
 :-------------------------:|:-------------------------:
 ![](../images/installation/install-md/good-efi.png)  |  ![](../images/installation/install-md/bad-efi.png)
 EFI 資料夾能在 EFI 磁碟分割中找到 | 找不到 EFI 資料夾
-ACPI 檔案都是已編譯的 (.aml) | ACPI 檔案是未編譯的 (.dsl)
+ACPI 檔案都是已編譯的 (.aml) | 有 ACPI 檔案是未編譯的 (.dsl)
 不包括 DSDT | 包含了 DSDT
 已移除不需要的驅動程式 (.efi) | 保留預設的驅動程式
 已移除不需要的工具程式 (.efi) | 保留預設的工具程式
@@ -28,7 +28,7 @@ config.plist 在 EFI/OC 內 | 既沒有重新命名，也沒有將 .plist 放在
 
 ## 以 OpenCore USB 開機
 
-現在，你終於準備好你的 USB 隨身碟並將其插入電腦啟動了。請注意，大多數電腦仍然會預設使用 Windows 的磁碟區開機，你將需要在 BIOS 開機選單中手動選擇 OpenCore。你需要查看說明書或使用 Google 找出如何進入 BIOS 和開機選單（如：Esc, F2, F10 或 F12）
+現在，你終於準備好你的 USB 隨身碟並將其插入電腦啟動了。請注意，大多數電腦仍然會預設使用 Windows 的磁碟區開機，你將需要在 BIOS 開機選單中手動選擇 OpenCore。請查看主版說明書或使用 Google 找出如何進入 BIOS 和開機選單（如：Esc, F2, F10 或 F12）
 
 啟動隨身碟後，你會看到類似下面的開機選項：
 
@@ -39,11 +39,11 @@ config.plist 在 EFI/OC 內 | 既沒有重新命名，也沒有將 .plist 放在
 
 ::: warning
 
-You might need to press space in order to see the installer, as in later versions of OpenCore `HideAuxiliary` is enabled by default.
+你可能需按下空格鍵才能看到安裝程式，因為 OpenCore 較後期的版本已預設啟用 `HideAuxiliary`。
 
 :::
 
-For us, **Option 2.** is the one we want. Depending how the installer was made, it may report as either **"macOS Base System (External)"**, **"Install macOS Big Sur (External)"** or **"*Your USB drive's name* (External)"**
+對我們來說，**選項 2** 就是我們想要的。根據安裝程式製作方式的不同，它可能會稱為 **"macOS Base System (External)"**、**"Install macOS *version name* (External)"** 或 **"*Your USB drive's name* (External)"**
 
 ## macOS 安裝程式
 
