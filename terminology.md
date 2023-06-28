@@ -18,7 +18,7 @@
 **DSDT/SSDT**    | ACPI 中的表格描述了裝置以及操作系統應該如何與它們進行交互，例如使電腦進入休眠、喚醒、切換 GPU、USB 連接埠等等。
 **.AML**         | 編譯後的 ACPI 檔案格式，以及你的 PC 將執行的內容。 `.DAT` 是另一個具有完全相同用途的副檔名。
 **.DSL**         | ACPI 的源代碼 - 這是您為電腦編輯和編譯的內容。**不要** 將這種檔案格式與 `.asl` 混淆。
-**Kexts**        | 也稱為 **K**ernel **Ext**，是 macOS 的驅動程式。它們用於執行不同的任務，如裝置驅動程式，或用於不同的目的（在駭客編程中），如修補操作系統，注入訊息或執行任務。kext 並不是優秀 Hackintosh 的唯一組成部分，因為它們通常與 ACPI 補丁和修復一起使用。
+**Kexts**        | 內核延伸，是 **K**ernel **Ext** 的簡稱。這是 macOS 的驅動程式。它們用於執行不同的任務，如裝置驅動程式，或用於不同的目的（在駭客編程中），如修補操作系統，注入訊息或執行任務。kext 並不是優秀 Hackintosh 的唯一組成部分，因為它們通常與 ACPI 補丁和修復一起使用。
 **BIOS**         | 基本輸入／輸出系統是用於在啟動過程（通電啟動）中執行硬體初始化的韌體，並為操作系統和程式提供執行期服務。BIOS 韌體預先安裝在 PC 的主板上，它是在通電時第一個執行的軟體（資料來源：維基百科）。它是 70 年代製作的舊式軟體，由於其成熟度，至今仍在使用。
 **UEFI**         | 統一可延伸韌體介面（Unified Extensible Firmware Interface）是定義操作系統與平台韌體之間的軟件介面的規範。UEFI 取代了最初出現在所有 IBM PC 相容 PC 上的傳統 BIOS （Basic Input/Output System）韌體介面，大部分 UEFI 韌體實作都支持傳統 BIOS 服務。UEFI 可以支持遠端診斷和修復電腦，即使沒有安裝操作系統。（資料來源：維基百科）
 **UEFI Drivers** | 與其他操作系統一樣，UEFI 也有驅動程式，由 Clover 或 OpenCore 載入。它們還可以載入裝置或執行其他任務，如用 HfsPlus 載入蘋果的 HfsPlus.efi, 修補 macOS 的 `boot.efi` 等等. 你可能會發現它們是 `Clover Drivers` 或 `OpenCore Drivers`, 它們都是 UEFI 驅動程式。（注意：只使用針對特定開機管理器的驅動程式。更多資訊可以在 [Clover 轉換頁面](https://github.com/eason329/OpenCore-Install-Guide/tree/master/clover-conversion)上找到）。
