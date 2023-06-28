@@ -56,6 +56,10 @@ And there's also some special notes with SMBIOS:
 * iMac20,2 is a custom SMBIOS meant only for Apple's custom i9-10910 CPU, so unless you have an i9-10900K we recommend using iMac20,1
 * Mac Mini SMBIOS should be avoided unless you're running mobile hardware without a built-in display
   * Intel NUCs are the ideal hardware for this SMBIOS
+* AMD APUs (AMD CPUs with iGPU) have a limited choices of SMBIOS:
+  * `iMacPro1,1` and `iMac20,1` for desktop APUs.
+  * `MacBookPro16.3` for laptop APUs.
+  * Details of the SMBIOS are listed below
 * iGPU-less CPUs **MUST** pay very close attention when selecting a SMBIOS, as Apple always assumes the iGPU is present on the iMac SMBIOS, so you will need to find a SMBIOS without this requirement like iMac Pro or Mac Pro.
   * This also applies to AMD CPUs
 

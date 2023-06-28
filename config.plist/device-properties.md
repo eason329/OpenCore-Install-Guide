@@ -51,7 +51,7 @@ VGA 在一般情況下都是 **不支援** 的。（除非它是通過內置 DP 
 
 ::: tip PciRoot(0x0)/Pci(0x2,0x0)
 
-macOS 需要至少 64MB 的 DVMT 才能正常開機。許多電腦的預設 DVMT 只有 32MB，在這種情況下，系統可能會出現內核錯誤。如果你的系統無法從 UEFI BIOS 設定中更改 iGPU 圖形記憶體和 DVMT 等相關設定，你需要在這個屬性中加入 `framebuffer-patch-enable`、`framebuffer-stolenmem` 和 `framebuffer-fbmem` 參數（但不是所有電腦都需要加入全部參數）。詳情請見下表：
+macOS 需要至少 64MB 的 DVMT 才能正常開機。但許多電腦的預設 DVMT 只有 32MB，在這種情況下，系統可能會出現內核錯誤。如果你的系統無法從 UEFI BIOS 設定中更改 iGPU 圖形記憶體和 DVMT 等相關設定，你需要在這個屬性中加入 `framebuffer-patch-enable`、`framebuffer-stolenmem` 和 `framebuffer-fbmem` 參數（但不是所有電腦都需要加入全部參數）。詳情請見下表：
 
 | Key | Type | Value |
 | :--- | :--- | :--- |
@@ -59,7 +59,7 @@ macOS 需要至少 64MB 的 DVMT 才能正常開機。許多電腦的預設 DVMT
 | framebuffer-stolenmem | Data | `00003001` |
 | framebuffer-fbmem | Data | `00009000` |
 
-* **注意**：Headless framebuffer（使用 dGPU 驅動顯示器）便不需要設定這些參數。
+* **注意**：使用 dGPU 或 AMD Vega iGPU 驅動顯示器（即 Headless framebuffer）便不需要設定這些參數。
 
 示例：
 
