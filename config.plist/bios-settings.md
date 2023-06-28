@@ -45,12 +45,13 @@
 
 * Above 4G Decoding（**這是必須啟用的選項。如果你找不到這個選項，請在 boot-args 加入 `npci=0x3000` 參數。但請不要既啟用這個選項，又加入 npci 參數。**）
   * 如果你使用的是 Gigabyte/Aorus 或 AsRock 主板，啟用這個選項可能會破壞某些驅動程式(如：以太網）和／或導致其他操作系統無法啟動，如果發生了這種情況，請停用這個選項並改為加入 npci 參數。
-  * 2020 或以後的 BIOS 請注意：當啟用這個選項時，, 一些 X570 和更新的主板上可能會提供可調整的 BAR 的支援，如果啓用的話，請確保 Booter -> Quirks -> ResizeAppleGpuBars 已設定為 `0`。
+  * 2020 或以後的 BIOS 請注意：當啟用這個選項時，, 一些 X570 和更新的主板上可能會提供可調整的 BAR 的支援，如果啟用的話，請確保 Booter -> Quirks -> ResizeAppleGpuBars 已設定為 `0`。
 * 超線程
-  * **3990X 用戶請特别注意**：macOS 内核目前不支援超過 64 個線程，如果内核發現線程超過 64 個會導致內核錯誤。3990X CPU 共有 128 個線程，因此需要停用其中的一半。對於這種情況，我們建議在 BIOS 中停用超線程。
+  * **Threadripper 用戶請特别注意**：macOS 内核目前不支援超過 64 個線程，如果内核發現線程超過 64 個會導致內核錯誤。目前，數款 Threadripper CPU（如：3990X、5995WX）共有 128 個線程，因此需要停用其中的一半。對於這種情況，我們建議在 BIOS 中停用超線程。
 * EHCI/XHCI 切換（Hand-off）
 * 操作系統類型：Windows 8.1/10 UEFI 模式（某些主板可能需要選用「其他操作系統」）
 * iGPU 記憶體：512MB 或更多
+  * 適用於使用 Vega iGPU 的系統
 * SATA 模式：AHCI
 
 # 現在，你已完成所有開機前的設定，請開始[安裝 macOS](../installation/installation-process.md)
