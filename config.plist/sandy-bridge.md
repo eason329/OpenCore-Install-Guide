@@ -1,33 +1,33 @@
-# Desktop Sandy Bridge
+# 桌面平台的 Sandy Bridge
 
-| Support | Version |
+| 支援 | 版本 |
 | :--- | :--- |
-| Initial macOS Support | OS X 10.6.7, Snow Leopard |
-| Last Supported OS | macOS 12 Monterey |
-| Note 1 | For Ventura information, see [macOS 13 Ventura](../extras/ventura.md#dropped-cpu-support) |
-| Note 2 | Sandy Bridge's iGPU is only officially supported up-to macOS 10.13 |
-| Note 3 | Most Sandy bridge boards do not support UEFI |
+| 最初支援的 macOS 版本 | OS X 10.6.7, Snow Leopard |
+| 最後支援的版本 | macOS 12 Monterey |
+| 備註 1 | 有關 Ventura 的資訊，請參閱 [macOS 13 Ventura](../extras/ventura.md#dropped-cpu-support) |
+| 備註 2 | Sandy Bridge 的 iGPU 的官方最後支援版本是 macOS 10.13 |
+| 備註 3 | 多數支援 Sandy Bridge 的主板都不支援 UEFI |
 
-## Starting Point
+## 起點
 
-So making a config.plist may seem hard, it's not. It just takes some time but this guide will tell you how to configure everything, you won't be left in the cold. This also means if you have issues, review your config settings to make sure they're correct. Main things to note with OpenCore:
+製作一個 config.plist 看起來可能很難，其實不然，只是需要一些時間。本指南將告訴您如何設定所有內容，您不會被冷落。這也意味著如果你有問題，你需要檢查你的配置設定以確保它們是正確的。設定 OpenCore 時需要注意的主要事項：
 
-* **All properties must be defined**, there are no default OpenCore will fall back on so **do not delete sections unless told explicitly so**. If the guide doesn't mention the option, leave it at default.
-* **The Sample.plist cannot be used As-Is**, you must configure it to your system
-* **DO NOT USE CONFIGURATORS**, these rarely respect OpenCore's configuration and even some like Mackie's will add Clover properties and corrupt plists!
+* **所有屬性均必須定義**，OpenCore 不設任何預設的回退值，因此**除非明確地告訴你可以刪除，否則不要刪除任何章節**。如果指南沒有提到該選項，請將其保留為預設值。
+* **Sample.plist 不能按原樣使用**，你必須根據自己的系統進行配置
+* **不要使用配置器**, 這些配置器很少遵守 OpenCore 的配置設定，甚至一些像 Mackie 製作的配置器還會增加 Clover 屬性和破壞 plist！
 
-Now with all that, a quick reminder of the tools we need
+現在，我們來快速回顧一下我們需要的工具
 
 * [ProperTree](https://github.com/corpnewt/ProperTree)
-  * Universal plist editor
+  * 通用的 plist 編輯器
 * [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS)
-  * For generating our SMBIOS data
+  * 用於生成 SMBIOS 資料
 * [Sample/config.plist](https://github.com/acidanthera/OpenCorePkg/releases)
-  * See previous section on how to obtain: [config.plist Setup](../config.plist/README.md)
+  * 參閱上一章節了解如何取得：[config.plist 設定](../config.plist/README.md)
 
 ::: warning
 
-Read this guide more than once before setting up OpenCore and make sure you have it set up correctly. Do note that images will not always be the most up-to-date so please read the text below them, if nothing's mentioned then leave as default.
+在設定 OpenCore 之前，請多次閱讀本指南，並確保你已正確設定。請注意，圖片並不總是最新的，所以請閱讀圖片下面的文字，如果沒有提到，那麼請將其保持為預設值。
 
 :::
 
@@ -37,31 +37,31 @@ Read this guide more than once before setting up OpenCore and make sure you have
 
 ### Add
 
-::: tip Info
+::: tip 資訊
 
-This is where you'll add SSDTs for your system, these are very important to **booting macOS** and have many uses like [USB maps](https://dortania.github.io/OpenCore-Post-Install/usb/), [disabling unsupported GPUs](../extras/spoof.md) and such. And with our system, **it's even required to boot**. Guide on making them found here: [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/)
+這裡是你將為系統加入 SSDT 的地方，它們對**啟動 macOS** 非常重要，且有許多用途，如 [USB 映射](https://eason329.github.io/OpenCore-Post-Install/usb/)、[停用不支援的 GPU](../extras/spoof.md) 等。在我們的系統中, **甚至需要這些才可以啟動**. 你可以在 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/)了解如何製作 SSDT
 
-For us we'll need a couple of SSDTs to bring back functionality that Clover provided:
+對於我們來說，我們需要一些 SSDT 來帶回 Clover 提供的功能：
 
-| Required SSDTs | Description |
+| 需要的 SSDT | 描述 |
 | :--- | :--- |
-| **[SSDT-PM](https://github.com/Piker-Alpha/ssdtPRGen.sh)** | Needed for proper CPU power management, you will need to run Pike's ssdtPRGen.sh script to generate this file. This will be run in [post install](https://dortania.github.io/OpenCore-Post-Install/). |
-| **[SSDT-EC](https://dortania.github.io/Getting-Started-With-ACPI/)** | Fixes the embedded controller, see [Getting Started With ACPI Guide](https://dortania.github.io/Getting-Started-With-ACPI/) for more details. |
-| **[SSDT-IMEI](https://dortania.github.io/Getting-Started-With-ACPI/)** | Needed to add a missing IMEI device on Sandy Bridge CPU with 7 series motherboards |
+| **[SSDT-PM](https://github.com/Piker-Alpha/ssdtPRGen.sh)** | 用於進行正確的 CPU 電源管理。你將需要執行 Pike 的 ssdtPRGen.sh 腳本生成該檔案。這步驟會在[安裝 macOS 後](https://dortania.github.io/OpenCore-Post-Install/)進行。 |
+| **[SSDT-EC](https://eason329.github.io/Getting-Started-With-ACPI/)** | 修復嵌入式控制器，參見 [ACPI 入門教學](https://eason329.github.io/Getting-Started-With-ACPI/)了解更多詳細資訊。 |
+| **[SSDT-IMEI](https://eason329.github.io/Getting-Started-With-ACPI/)** | 用於在 7 系列主板中加入缺失的 Sandy Bridge CPU 的 IMEI 裝置的代碼 |
 
-Note that you **should not** add your generated `DSDT.aml` here, it is already in your firmware. So if present, remove the entry for it in your `config.plist` and under EFI/OC/ACPI.
+請注意，你**不應該**在這裡加入您生成的 DSDT.aml，它已經在你的韌體中了。因此，如果存在的話，請刪除 config plist 和 EFI/OC/ACPI 下的相關條目。
 
-For those wanting a deeper dive into dumping your DSDT, how to make these SSDTs, and compiling them, please see the [**Getting started with ACPI**](https://dortania.github.io/Getting-Started-With-ACPI/) **page.** Compiled SSDTs have a **.aml** extension(Assembled) and will go into the `EFI/OC/ACPI` folder and **must** be specified in your config under `ACPI -> Add` as well.
+對於那些想要更深入地傾印你的 DSDT、如何製作這些 SSDT 及編譯它們的人，請參閱 [**ACPI 入門教學**](https://eason329.github.io/Getting-Started-With-ACPI/)**頁面**。編譯後的 SSDT 會有一個 **.aml** 副檔名（已編譯）並會放入 `EFI/OC/ACPI` 資料夾，且**必須**在你的配置檔案裡的 `ACPI -> Add` 下指定。
 
 :::
 
 ### Delete
 
-::: tip Info
+::: tip 資訊
 
-This blocks certain ACPI tables from loading, for us we really care about this. Main reason is that Apple's XCPM does not support SandyBridge all too well and can cause AppleIntelCPUPowerManagement panics on boot. To avoid this we make our own PM SSDT in [Post-Install](https://dortania.github.io/OpenCore-Post-Install/) and drop the old tables(Note that this is only temporary until we've made our SSDT-PM, we'll re-enable these tables later):
+這裡將阻止載入某些 ACPI 表，對於我們來說要特別注意。這是由於蘋果的 XCPM 對 SandyBridge 的支援不太好，會導致開機時令 AppleIntelCPUPowerManagement 出現錯誤。要避免這種情況，我們要在 [安裝後](https://dortania.github.io/OpenCore-Post-Install/) 建立我們自己的 PM SSDT，並「刪除」原有的表（注意：這是暫時性的，直至我們建立了自己的 SSDT-PM，我們稍後會重新啟用這些表）。
 
-Removing CpuPm:
+刪除 CpuPm:
 
 | Key | Type | Value |
 | :--- | :--- | :--- |
@@ -72,7 +72,7 @@ Removing CpuPm:
 | TableLength | Number | 0 |
 | TableSignature | Data | `53534454` |
 
-Removing Cpu0Ist:
+刪除 Cpu0Ist:
 
 | Key | Type | Value |
 | :--- | :--- | :--- |
@@ -87,39 +87,39 @@ Removing Cpu0Ist:
 
 ### Patch
 
-This section allows us to dynamically modify parts of the ACPI (DSDT, SSDT, etc.) via OpenCore. For us, our patches are handled by our SSDTs. This is a much cleaner solution as this will allow us to boot Windows and other OSes with OpenCore
+這個章節允許我們通過 OpenCore 動態修改 ACPI 部分内容（DSDT、SSDT 等）。對我們來說，我們的修補程式將由我們的 SSDT 處理。這是一個更簡潔的解決方案，因為這將允許我們使用 OpenCore 啟動 Windows 和其他操作系統。
 
 ### Quirks
 
-Settings relating to ACPI, leave everything here as default as we have no use for these quirks.
+與 ACPI 相關的設定，請將所有內容保留為預設值，我們不需要這些選項值。
 
 ## Booter
 
 ![Booter](../images/config/config-universal/aptio-iv-booter.png)
 
-This section is dedicated to quirks relating to boot.efi patching with OpenRuntime, the replacement for AptioMemoryFix.efi
+這個章節專門討論利用選項值並配合 OpenRuntime（AptioMemoryFix.efi 的替代品）修補 boot.efi 時的相關問題。
 
 ### MmioWhitelist
 
-This section is allowing spaces to be passthrough to macOS that are generally ignored, useful when paired with `DevirtualiseMmio`
+這個章節允許將通常被忽略的空間傳送予 macOS，與 `DevirtualiseMmio` 配合使用時會很有用。
 
 ### Quirks
 
-::: tip Info
-Settings relating to boot.efi patching and firmware fixes, for us, we leave it as default
+::: tip 資訊
+與修補 boot.efi 及修復韌體相關的設定，對於我們來說，我們會保留預設值。
 :::
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AvoidRuntimeDefrag**: YES
-  * Fixes UEFI runtime services like date, time, NVRAM, power control, etc.
+  * 修復 UEFI 執行期服務，如日期、時間、NVRAM、電源控制等；但使用傳統 BIOS 的電腦應該停用這選項
 * **EnableSafeModeSlide**: YES
-  * Enables slide variables to be used in safe mode, however this quirk is only applicable to UEFI platforms.
+  * 允許 Slide 變量在安全模式下使用。但這個選項只適用於使用 UEFI 的電腦。
 * **EnableWriteUnprotector**: YES
-  * Needed to remove write protection from CR0 register.
+  * 需要從 UEFI 平台的 CR0 寄存器中移除寫入保護。
 * **ProvideCustomSlide**: YES
-  * Used for Slide variable calculation. However the necessity of this quirk is determined by `OCABC: Only N/256 slide values are usable!` message in the debug log. If the message `OCABC: All slides are usable! You can disable ProvideCustomSlide!` is present in your log, you can disable `ProvideCustomSlide`.
+  * 用於 Slide 變量計算。然而，這個選項的必要性取決於除錯日誌中是否出現 `OCABC: Only N/256 slide values are usable!` 訊息。如果在日誌中顯示 `OCABC: All slides are usable! You can disable ProvideCustomSlide!` 訊息，你可以停用 `ProvideCustomSlide`。
 * **SetupVirtualMap**: YES
-  * Fixes SetVirtualAddresses calls to virtual addresses, required for Gigabyte boards to resolve early kernel panics
+  * 修復了 SetVirtualAddresses 對虛擬地址的調用問題，Gigabyte 主板需要啟用這個選項來解決早期內核錯誤
 
 :::
 
@@ -129,48 +129,48 @@ Settings relating to boot.efi patching and firmware fixes, for us, we leave it a
 
 ### Add
 
-Sets device properties from a map.
+從映射中設定裝置屬性。
 
 ::: tip PciRoot(0x0)/Pci(0x2,0x0)
 
-This section is set up via WhateverGreen's [Framebuffer Patching Guide](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md) and is used for setting important iGPU properties.
+本章節是通過 WhateverGreen 的 [Framebuffer 修補指南](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md)建立的，用來設定重要的 iGPU 屬性。
 
-The config.plist doesn't already have a section for this so you will have to create it manually.
+config.plist 還沒有這個部分，所以你必須手動建立它。
 
-The `AAPL,snb-platform-id` is what macOS uses to determine how the iGPU drivers interact with our system, and the two values choose between are as follows:
+macOS 使用 `AAPL,snb-platform-id` 來確定 iGPU 驅動程式如何與我們的系統交互，可以選擇的兩個值如下：
 
-| AAPL,snb-platform-id | Comment |
+| AAPL,snb-platform-id | 說明 |
 | :--- | :--- |
-| **`10000300`** | Used when the Desktop iGPU is used to drive a display |
-| **`00000500`** | Used when the Desktop iGPU is only used for computing tasks and doesn't drive a display |
+| **`10000300`** | 以桌面 iGPU 來驅動顯示器時使用 |
+| **`00000500`** | 以桌面 iGPU 來進行計算任務而不驅動顯示器時使用 |
 
-We also have the issue of requiring a supported device-id, just like with the above table you'll want to match up to your hardware configuration:
+我們還需要一個支援的 device-id，就像上面的表一樣，你需要與你的硬體配置匹配：
 
-| device-id | Comment |
+| device-id | 說明 |
 | :--- | :--- |
-| **`26010000`** | Used when the Desktop iGPU is used to drive a display |
-| **`02010000`** | Used when the Desktop iGPU is only used for computing tasks and doesn't drive a display |
+| **`26010000`** | 以桌面 iGPU 來驅動顯示器時使用 |
+| **`02010000`** | 以桌面 iGPU 來進行計算任務而不驅動顯示器時使用 |
 
-And finally, you should have something like this:
+最後，你應該有類似下表的內容：
 
 | Key | Type | Value |
 | :--- | :--- | :--- |
 | AAPL,snb-platform-id | Data | `00000500` |
 | device-id | Data | `26010000` |
 
-(This is an example for a desktop HD 3000 with a dGPU used as the output)
+（這是一個桌面平台的 HD 3000，並使用 dGPU 作為輸出的例子）
 
 :::
 
 ::: tip PciRoot(0x0)/Pci(0x16,0x0)
 
-This is needed if you're pairing an Sandy Bridge CPU with a 7 series motherboard(ie. B75, Q75, Z75, H77, Q77, Z77), specifically needed to spoof your IMEI device into being supported. Note this property is still required with or without SSDT-IMEI.
+如果你在 7 系列主板（如：B75, Q75, Z75, H77, Q77, Z77）使用 Sandy Bridge CPU 的話便需要設定這個屬性。因為需要利用 IMEI 裝置代碼來欺騙系統，使你的硬體組合可被支援。無論有沒有 SSDT-IMEI，你也必須要設定本屬性。
 
 | Key | Type | Value |
 | :--- | :--- | :--- |
 | device-id | Data | `3A1C0000` |
 
-**Note**: This is not needed if you have a 6 series motherboard(ie. H61, B65, Q65, P67, H67, Q67, Z68)
+**註**：如果你使用 6 系列主板（如：H61, B65, Q65, P67, H67, Q67, Z68）則無需加入
 
 :::
 
@@ -178,16 +178,16 @@ This is needed if you're pairing an Sandy Bridge CPU with a 7 series motherboard
 
 `layout-id`
 
-* Applies AppleALC audio injection, you'll need to do your own research on which codec your motherboard has and match it with AppleALC's layout. [AppleALC Supported Codecs](https://github.com/acidanthera/AppleALC/wiki/Supported-codecs).
-* You can delete this property outright as it's unused for us at this time
+* 用於 AppleALC 的音訊硬體資訊的注入，你需要找出你的主板使用的編解碼器，並將其與 AppleALC 的佈局匹配。[查看 AppleALC 支援的編解碼器](https://github.com/acidanthera/AppleALC/wiki/Supported-codecs).
+* 你可以直接刪除這個屬性，因為目前我們還沒有需要使用它
 
-For us, we'll be using the boot-arg `alcid=xxx` instead to accomplish this. `alcid` will override all other layout-IDs present. More info on this is covered in the [Post-Install Page](https://dortania.github.io/OpenCore-Post-Install/)
+對於我們來說，我們將使用開機參數 `alcid=xxx` 來完成此操作。`alcid` 將覆蓋所有其他 layout-ID。更多訊息請參閱[安裝後完善指南](https://eason329.github.io/OpenCore-Post-Install/)
 
 :::
 
 ### Delete
 
-Removes device properties from the map, for us we can ignore this
+這裡將移除某些裝置屬性，對於我們來說，我們可以略過它。
 
 ## Kernel
 
@@ -195,40 +195,40 @@ Removes device properties from the map, for us we can ignore this
 
 ### Add
 
-Here's where we specify which kexts to load, in what specific order to load, and what architectures each kext is meant for. By default we recommend leaving what ProperTree has done, however for 32-bit CPUs please see below:
+在這裡，我們將指定要載入哪些 kext，載入的次序，及 kext 適用的架構。預設情況下，我們建議保留 ProperTree 所做的操作，但對於 32 位元 CPU，請參見以下内容：
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
-The main thing you need to keep in mind is:
+你需要記住的主要事項：
 
-* Load order
-  * Remember that any plugins should load *after* its dependencies
-  * This means kexts like Lilu **must** come before VirtualSMC, AppleALC, WhateverGreen, etc
+* 載入次序
+  * 請記住，任何插件都應該在其依賴項**以後**才載入
+  * 這意味著像 Lilu 這樣的 kext 必須出現在 VirtualSMC、AppleALC、WhateverGreen 等插件之前
 
-A reminder that [ProperTree](https://github.com/corpnewt/ProperTree) users can run **Cmd/Ctrl + Shift + R** to add all their kexts in the correct order without manually typing each kext out.
+提醒：[ProperTree](https://github.com/corpnewt/ProperTree) 用戶可以執行 **Cmd/Ctrl + Shift + R** 以正確的次序加入所有 kext 而無需手動輸入。
 
 * **Arch**
-  * Architectures supported by this kext
-  * Currently supported values are `Any`, `i386` (32-bit), and `x86_64` (64-bit)
+  * Kext 支援的架構
+  * 目前支援的值包括 `Any`、`i386`（32 位元）及 `x86_64`（64位元）
 * **BundlePath**
-  * Name of the kext
-  * ex: `Lilu.kext`
+  * Kext 的名稱
+  * 例：`Lilu.kext`
 * **Enabled**
-  * Self-explanatory, either enables or disables the kext
+  * 不必多做解釋了，就是啟用或停用 kext
 * **ExecutablePath**
-  * Path to the actual executable is hidden within the kext, you can see what path your kext has by right-clicking and selecting `Show Package Contents`. Generally, they'll be `Contents/MacOS/Kext` but some have kexts hidden within under `Plugin` folder. Do note that plist only kexts do not need this filled in.
-  * ex: `Contents/MacOS/Lilu`
+  * 隱藏在 kext 中的實際可執行文件的路徑，您可以通過點擊右鍵並選擇`顯示套裝內容`來查看 kext 的路徑。它們一般都是 `Contents/MacOS/Kext`，但有些 kext 將可執行文件隱藏在 `Plugin` 資料夾下。注意，只包含 plist 的 kext 不需要填寫該屬性。
+  * 例：`Contents/MacOS/Lilu`
 * **MinKernel**
-  * Lowest kernel version your kext will be injected into, see below table for possible values
-  * ex. `12.00.00` for OS X 10.8
+  * Kext 可被注入的最低内核版本，有關可用的值，請參見下表
+  * 例：`12.00.00`（OS X 10.8）
 * **MaxKernel**
-  * Highest kernel version your kext will be injected into, see below table for possible values
-  * ex. `11.99.99` for OS X 10.7
+  * Kext 可被注入的最高内核版本，有關可用的值，請參見下表
+  * 例：`11.99.99`（OS X 10.7）
 * **PlistPath**
-  * Path to the `info.plist` hidden within the kext
-  * ex: `Contents/Info.plist`
+  * 隱藏在 kext 中的 info.Plist 的路徑
+  * 例：`Contents/Info.plist`
 
-::: details Kernel Support Table
+::: details Kernel 版本號列表
 
 | OS X Version | MinKernel | MaxKernel |
 | :--- | :--- | :--- |
@@ -252,99 +252,99 @@ A reminder that [ProperTree](https://github.com/corpnewt/ProperTree) users can r
 
 ### Emulate
 
-Needed for spoofing unsupported CPUs like Pentiums and Celerons
+用於隱藏不支援的 CPU 的資訊（如：Pentium 和 Celeron）來欺騙系統
 
-* **Cpuid1Mask**: Leave this blank
-* **Cpuid1Data**: Leave this blank
+* **Cpuid1Mask**：不用填寫
+* **Cpuid1Data**：不用填寫
 
 ### Force
 
-Used for loading kexts off system volume, only relevant for older operating systems where certain kexts are not present in the cache(ie. IONetworkingFamily in 10.6).
+用於從系統磁碟區中載入 kext，只適用於某些在緩存中沒有特定 kext 的老舊操作系統（如：10.16 中的 IONetworkingFamily）。
 
-For us, we can ignore.
+對於我們來說，我們可以略過它。
 
 ### Block
 
-Blocks certain kexts from loading. Not relevant for us.
+這裡將阻止載入某些 kext，而我們目前無需理會這裡。
 
 ### Patch
 
-Patches both the kernel and kexts.
+同時修補內核和 kext。
 
 ### Quirks
 
-::: tip Info
+::: tip 資訊
 
-Settings relating to the kernel, for us we'll be enabling the following:
+與內核相關的設定，我們將啟用以下功能：
 
-| Quirk | Enabled | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| AppleCpuPmCfgLock | YES | Not needed if `CFG-Lock` is disabled in the BIOS |
-| DisableIoMapper | YES | Not needed if `VT-D` is disabled in the BIOS |
-| LapicKernelPanic | NO | HP Machines will require this quirk |
+| AppleCpuPmCfgLock | YES | 如果在 BIOS 中停用了 `CFG-Lock` 則可以停用 |
+| DisableIoMapper | YES | 如果在 BIOS 中停用了 `VT-D` 則可以停用 |
+| LapicKernelPanic | NO | HP 品牌電腦則需要啟用這個選項 |
 | PanicNoKextDump | YES | |
 | PowerTimeoutKernelPanic | YES | |
-| XhciPortLimit | YES | If your board does not have USB 3.0, you can disable<br/>Disable if running macOS 11.3+ |
+| XhciPortLimit | YES | 如果你的主板沒有 USB 3.0，則可以停用它<br/>11.3 及更新版本則需要停用 |
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AppleCpuPmCfgLock**: YES
-  * Only needed when CFG-Lock can't be disabled in BIOS
-  * Only applicable for Ivy Bridge and older
-    * Note: Broadwell and older require this when running 10.10 or older
+  * 只有無法從 BIOS 停用 CFG-Lock 的時候才需要
+  * 只適用於 Ivy Bridge 或更老舊平台
+    * 註：Broadwell 或更老舊平台在運行 10.10 或更老舊版本時需要啟用
 * **AppleXcpmCfgLock**: NO
-  * Only needed when CFG-Lock can't be disabled in BIOS
-  * Only applicable for Haswell and newer
-    * Note: Ivy Bridge-E is also included as it's XCPM capable
+  * 只有無法從 BIOS 停用 CFG-Lock 的時候才需要
+  * 只適用於 Haswell 或更老舊平台
+    * 註：Ivy Bridge-E 平台也包括在內，因為該平台支援 XCPM
 * **CustomSMBIOSGuid**: NO
-  * Performs GUID patching for UpdateSMBIOSMode set to `Custom`. Usually relevant for Dell laptops
-  * Enabling this quirk with UpdateSMBIOSMode Custom mode can also disable SMBIOS injection into "non-Apple" OSes however we do not endorse this method as it breaks Bootcamp compatibility. Use at your own risk
+  * 在 UpdateSMBIOSMode 設為 `Custom` 時進行 GUID 修補。通常與 Dell 筆記型電腦有關
+  * 在 UpdateSMBIOSMode 自訂模式下啟用此選項時，可以同時將 SMBIOS 注入到「非蘋果」操作系統的功能停用，但我們不支持這種方法，因為它會破壞了 Bootcamp 的相容性。使用風險自負
 * **DisableIoMapper**: YES
-  * Needed to get around VT-D if either unable to disable in BIOS or needed for other operating systems, much better alternative to `dart=0` as SIP can stay on in Catalina
+  * 如果在 BIOS 中無法停用或其他操作系統需要啟用 VT-D，則需要繞過 VT-D，這是比 `dart=0` 更好的替代方案，因為 SIP 可以在 Catalina 維持啟用
 * **DisableLinkeditJettison**: YES
-  * Allows Lilu and others to have more reliable performance without `keepsyms=1`
+  * 允許 Lilu 和其他 kext 在不需要 `keepsyms=1` 的情況下擁有更可靠的性能
 * **DisableRtcChecksum**: NO
-  * Prevents AppleRTC from writing to primary checksum (0x58-0x59), required for users who either receive BIOS reset or are sent into Safe mode after reboot/shutdown
+  * 防止 AppleRTC 寫入主校驗碼 (0x58-0x59)，這對於接收到 BIOS 重置或在重新開機/關機後進入安全模式的用戶是必需的
 * **ExtendBTFeatureFlags** NO
-  * Helpful for those having continuity issues with non-Apple/non-Fenvi cards
+  * 對於那些非蘋果或非 fenvi 卡有連接問題的人很有幫助
 * **LapicKernelPanic**: NO
-  * Disables kernel panic on AP core lapic interrupt, generally needed for HP systems. Clover equivalent is `Kernel LAPIC`
+  * 在 AP 核心 lapic 中斷上停用內核錯誤，一般 HP 系統需要啟用。相當於 Clover 的 Kernel LAPIC
 * **LegacyCommpage**: NO
-  * Resolves SSSE3 requirement for 64 Bit CPUs in macOS, mainly relevant for 64-Bit Pentium 4 CPUs(ie. Prescott)
+  * 解決了 macOS 中 64 位元 CPU 的 SSSE3 要求，主要適用於 64 位元 Pentium 4 CPU（即 Prescott）
 * **PanicNoKextDump**: YES
-  * Allows for reading kernel panics logs when kernel panics occur
+  * 允許在發生內核嚴重故障時讀取內核嚴重故障日誌
 * **PowerTimeoutKernelPanic**: YES
-  * Helps fix kernel panics relating to power changes with Apple drivers in macOS Catalina, most notably with digital audio.
+  * 幫助修復 macOS Catalina 中與蘋果驅動程式權限變化相關的內核錯誤，尤其是與數字音訊有關的問題。
 * **SetApfsTrimTimeout**: `-1`
-  * Sets trim timeout in microseconds for APFS filesystems on SSDs, only applicable for macOS 10.14 and newer with problematic SSDs.
+  * 為 SSD 上的 APFS 檔案系統設定以微秒為單位的 TRIM 超時時間，只適用於 macOS 10.14 及更新版本和有相關問題的 SSD。
 * **XhciPortLimit**: YES
-  * This is actually the 15 port limit patch, don't rely on it as it's not a guaranteed solution for fixing USB. Please create a [USB map](https://dortania.github.io/OpenCore-Post-Install/usb/) when possible.
-  * With macOS 11.3+, [XhciPortLimit may not function as intended.](https://github.com/dortania/bugtracker/issues/162) We recommend users either disable this quirk and map before upgrading or [map from Windows](https://github.com/USBToolBox/tool). You may also install macOS 11.2.3 or older.
+  * 這是 15 個連接埠限制的修補程式，不要依賴它，因為它不是一個保證修復 USB 連接埠的解決方案。如果可以的話，請建立一個[USB 映射表](https://dortania.github.io/OpenCore-Post-Install/usb/)。
+  * 在 macOS 11.3 及更新版本中, [XhciPortLimit 可能無法正常工作](https://github.com/dortania/bugtracker/issues/162)。我們建議用戶在升級前停用此選項值並進行映射，或是[從 Windows 映射](https://github.com/USBToolBox/tool)。你也可以安裝 macOS 11.2.3 或更舊的版本。
 
 :::
 
 ### Scheme
 
-Settings related to legacy booting(ie. 10.4-10.6), for majority you can skip however for those planning to boot legacy OSes you can see below:
+與傳統 BIOS 開機（如：10.4-10.6）相關的設定，大多數的用戶都可以略過。但對於計劃啟動老舊操作系統的人，你可以查看以下内容：
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **FuzzyMatch**: True
-  * Used for ignoring checksums with kernelcache, instead opting for the latest cache available. Can help improve boot performance on many machines in 10.6
+  * 用於略過 kernelcache 的校驗碼，而不是選擇可用的最新緩存。可以幫助提高許多使用 10.6 系統的電腦的啟動性能
 * **KernelArch**: x86_64
-  * Set the kernel's arch type, you can choose between `Auto`, `i386` (32-bit), and `x86_64` (64-bit).
-  * If you're booting older OSes which require a 32-bit kernel(ie. 10.4 and 10.5) we recommend to set this to `Auto` and let macOS decide based on your SMBIOS. See below table for supported values:
-    * 10.4-10.5 — `x86_64`, `i386` or `i386-user32`
-      * `i386-user32` refers 32-bit userspace, so 32-bit CPUs must use this(or CPUs missing SSSE3)
-      * `x86_64` will still have a 32-bit kernelspace however will ensure 64-bit userspace in 10.4/5
-    * 10.6 — `i386`, `i386-user32`, or `x86_64`
-    * 10.7 — `i386` or `x86_64`
-    * 10.8 or newer — `x86_64`
+  * 設定內核的架構類型, 你可以在 `Auto`, `i386`（32 位元）和 `x86_64`（64 位元）之間選擇。
+  * 如果你要啟動需要 32 位元的舊版操作系統（如：10.4 和 10.5），我們建議將其設置為 `Auto`，讓 macOS 根據您的 SMBIOS 決定。支援的值請見下表：
+    * 10.4-10.5 — `x86_64`, `i386` 或 `i386-user32`
+      * `i386-user32` 代表 32 位元用戶空間，32 位元（或缺少 SSSE3 支援）的 CPU 必須使用這個
+      * `x86_64` 仍然使用 32 位元內核空間，但在 10.4/5 中會保留 64 位元用戶空間
+    * 10.6 — `i386`, `i386-user32`, 或 `x86_64`
+    * 10.7 — `i386` 或 `x86_64`
+    * 10.8 或更新 — `x86_64`
 
 * **KernelCache**: Auto
-  * Set kernel cache type, mainly useful for debugging and so we recommend `Auto` for best support
+  * 設定內核緩存類型，主要用於除錯，因此我們建議使用 `Auto` 以取得最佳支援
 
 :::
 
@@ -354,28 +354,28 @@ Settings related to legacy booting(ie. 10.4-10.6), for majority you can skip how
 
 ### Boot
 
-::: tip Info
+::: tip 資訊
 
-| Quirk | Enabled | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| HideAuxiliary | YES | Press space to show macOS recovery and other auxiliary entries |
+| HideAuxiliary | YES | 按空格鍵來顯示 macOS 恢復模式及其他輔助條目 |
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **HideAuxiliary**: YES
-  * This option will hide supplementary entries, such as macOS recovery and tools, in the picker. Hiding auxiliary entries may increase boot performance on multi-disk systems. You can press space at the picker to show these entries
+  * 此選項將輔助條目（如：macOS 恢復模式和其他工具）從選擇器中隱藏。隱藏輔助條目可以提高多磁碟系統的啟動性能。你可以在選擇器按空格鍵來顯示輔助條目
 
 :::
 
 ### Debug
 
-::: tip Info
+::: tip 資訊
 
-Helpful for debugging OpenCore boot issues(We'll be changing everything *but* `DisplayDelay`):
+有助我們對 OpenCore 開機問題進行除錯（除了`DisplayDelay`，我們將更改所有內容）：
 
-| Quirk | Enabled |
+| 選項值 | 是否啟用 |
 | :--- | :--- |
 | AppleDebug | YES |
 | ApplePanic | YES |
@@ -384,81 +384,80 @@ Helpful for debugging OpenCore boot issues(We'll be changing everything *but* `D
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AppleDebug**: YES
-  * Enables boot.efi logging, useful for debugging. Note this is only supported on 10.15.4 and newer
+  * 啟用 boot.efi 的日誌記錄，用於除錯。注意：只有 10.15.4 及更高版本支援這個功能
 * **ApplePanic**: YES
-  * Attempts to log kernel panics to disk
+  * 嘗試將內核崩潰記錄到磁碟
 * **DisableWatchDog**: YES
-  * Disables the UEFI watchdog, can help with early boot issues
+  * 停用 UEFI watchdog，可以幫助解決早期開機問題
 * **DisplayLevel**: `2147483650`
-  * Shows even more debug information, requires debug version of OpenCore
+  * 顯示更多的除錯訊息，需要 DEBUG 版本的 OpenCore
 * **SysReport**: NO
-  * Helpful for debugging such as dumping ACPI tables
-  * Note that this is limited to DEBUG versions of OpenCore
+  * 有助我們進行除錯（如：傾印 ACPI 表）
+  * 注意：只限於 DEBUG 版本的 OpenCore
 * **Target**: `67`
-  * Shows more debug information, requires debug version of OpenCore
+  * 顯示更多的除錯訊息，需要 DEBUG 版本的 OpenCore
 
-These values are based of those calculated in [OpenCore debugging](../troubleshooting/debug.md)
+這些值是基於在[對 OpenCore 進行除錯](../troubleshooting/debug.md)過程中計算得出的。
 
 :::
 
 ### Security
 
-::: tip Info
+::: tip 資訊
 
-Security is pretty self-explanatory, **do not skip**. We'll be changing the following:
+安全性不用多說了吧，**不要跳過**。我們將修改以下內容：
 
-| Quirk | Enabled | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
 | AllowSetDefault | YES | |
 | BlacklistAppleUpdate | YES | |
 | ScanPolicy | 0 | |
-| SecureBootModel | Default | Leave this as `Default` for OpenCore to automatically set the correct value corresponding to your SMBIOS. The next page goes into more detail about this setting. |
-| Vault | Optional | This is a word, it is not optional to omit this setting. You will regret it if you don't set it to Optional, note that it is case-sensitive |
+| SecureBootModel | Default | 將這個值設定為 `Default`，以便 OpenCore 自動設定為與您的 SMBIOS 對應的正確值。下一頁將詳細介紹這個設定。 |
+| Vault | Optional | 你不能略過這個設定。如果你不把它設定為 Optional，你會後悔的，注意：它是區分大小寫的 |
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AllowSetDefault**: YES
-  * Allow `CTRL+Enter` and `CTRL+Index` to set default boot device in the picker
+  * 允許在選擇器中按 `CTRL+Enter` 和 `CTRL+Index` 設定預設啟動條目
 * **ApECID**: 0
-  * Used for netting personalized secure-boot identifiers, currently this quirk is unreliable due to a bug in the macOS installer so we highly encourage you to leave this as default.
+  * 用於獲得個性化的安全啟動標識字符，由於 macOS 安裝程式中的一個 bug，這種方式目前是不可靠的，因此我們強烈建議您保留預設設置。
 * **AuthRestart**: NO
-  * Enables Authenticated restart for FileVault 2 so password is not required on reboot. Can be considered a security risk so optional
+  * 為 FileVault 2 啟用身份認證重啟，因此在重新開機時不需要密碼。由於被認為是一個安全風險，因此這是可選的
 * **BlacklistAppleUpdate**: YES
-  * Used for blocking firmware updates, used as extra level of protection as macOS Big Sur no longer uses `run-efi-updater` variable
-
+  * 用於阻止韌體更新，由於 macOS Big Sur 不再使用 `run-efi-updater` 變量，這可作為額外的保護
 * **DmgLoading**: Signed
-  * Ensures only signed DMGs load
+  * 確保只加載經過簽名的 DMG
 * **ExposeSensitiveData**: `6`
-  * Shows more debug information, requires debug version of OpenCore
+  * 顯示更多的除錯訊息，需要 DEBUG 版本的 OpenCore
 * **Vault**: `Optional`
-  * We won't be dealing vaulting so we can ignore, **you won't boot with this set to Secure**
-  * This is a word, it is not optional to omit this setting. You will regret it if you don't set it to `Optional`, note that it is case-sensitive
+  * 我們目前不會處理 Vault 功能，所以我們可以略過它，**如果你現在把這個選項設定為 Secure，你將無法開機**
+  * 這是一個字，你不能略過這個設定。如果你不把它設定為 Optional，你會後悔的，注意：它是區分大小寫的
 * **ScanPolicy**: `0`
-  * `0` allows you to see all drives available, please refer to [Security](https://dortania.github.io/OpenCore-Post-Install/universal/security.html) section for further details. **Will not boot USB devices with this set to default**
+  * `0` 允許您查看所有可用的磁碟，請參閱[安全](https://eason329.github.io/OpenCore-Post-Install/universal/security.html) 部分了解更多詳細訊息。**如果保留為預設值，將不能從 USB 裝置啟動**
 * **SecureBootModel**: Default
-  * Controls Apple's secure boot functionality in macOS, please refer to [Security](https://dortania.github.io/OpenCore-Post-Install/universal/security.html) section for further details.
-  * Note: Users may find upgrading OpenCore on an already installed system can result in early boot failures. To resolve this, see here: [Stuck on OCB: LoadImage failed - Security Violation](/troubleshooting/extended/kernel-issues.md#stuck-on-ocb-loadimage-failed-security-violation)
+  * 控制 macOS 中的蘋果安全啟動功能，請參閱[安全](https://dortania.github.io/OpenCore-Post-Install/universal/security.html)部分了解更多詳細訊息。
+  * 注意：用戶可能會發現在已經安裝 macOS 的系統上升級 OpenCore 可能會導致早期開機失敗。要解決這個問題，請參見：[卡在 OCB: LoadImage failed - Security Violation](/troubleshooting/extended/kernel-issues.md#stuck-on-ocb-loadimage-failed-security-violation)
 
 :::
 
 ### Serial
 
-Used for serial debugging (Leave everything as default).
+用于序列除錯（保留為預設值）。
 
 ### Tools
 
-Used for running OC debugging tools like the shell, ProperTree's snapshot function will add these for you.
+用於執行 OC 除錯工具（如：shell），ProperTree 的快照功能將為您加入這些工具。
 
 ### Entries
 
-Used for specifying irregular boot paths that can't be found naturally with OpenCore.
+用於指定 OpenCore 無法自然找到的不規則的開機路徑。
 
-Won't be covered here, see 8.6 of [Configuration.pdf](https://github.com/acidanthera/OpenCorePkg/blob/master/Docs/Configuration.pdf) for more info
+這裡不會介紹，更多信息請參見 [Configuration.pdf](https://github.com/acidanthera/OpenCorePkg/blob/master/Docs/Configuration.pdf) 第 8.6 節
 
 ## NVRAM
 
@@ -468,15 +467,15 @@ Won't be covered here, see 8.6 of [Configuration.pdf](https://github.com/acidant
 
 ::: tip 4D1EDE05-38C7-4A6A-9CC6-4BCCA8B38C14
 
-Used for OpenCore's UI scaling, default will work for us. See in-depth section for more info
+用於 OpenCore 的 UI 縮放，保留預設值就可以了。更多訊息請參閱下方的更深入資訊
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
-Booter Path, mainly used for UI modification
+開機程式路徑，主要用於修改 UI
 
-* **DefaultBackgroundColor**: Background color used by boot.efi
+* **DefaultBackgroundColor**：boot.efi 使用的背景顏色
   * `00000000`: Syrah Black
   * `BFBFBF00`: Light Gray
 
@@ -484,55 +483,56 @@ Booter Path, mainly used for UI modification
 
 ::: tip 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102
 
-OpenCore's NVRAM GUID, mainly relevant for RTCMemoryFixup users
+OpenCore 的 NVRAM GUID，主要針對 RTCMemoryFixup 用戶
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **rtc-blacklist**: <>
-  * To be used in conjunction with RTCMemoryFixup, see here for more info: [Fixing RTC write issues](https://dortania.github.io/OpenCore-Post-Install/misc/rtc.html#finding-our-bad-rtc-region)
-  * Most users can ignore this section
+  * 與 RTCMemoryFixup 一起使用，請參閱這裡以取得更多訊息: [修復 RTC 寫入問題](https://dortania.github.io/OpenCore-Post-Install/misc/rtc.html#finding-our-bad-rtc-region)
+  * 大多數用戶可以略過這一節
 
 :::
 
 ::: tip 7C436110-AB2A-4BBB-A880-FE41995C9F82
 
-System Integrity Protection bitmask
+系統完整性保護位元遮罩碼
 
-* **General Purpose boot-args**:
+* **一般的 boot-args**：
 
-| boot-args | Description |
+| boot-args | 說明 |
 | :--- | :--- |
-| **-v** | This enables verbose mode, which shows all the behind-the-scenes text that scrolls by as you're booting instead of the Apple logo and progress bar. It's invaluable to any Hackintosher, as it gives you an inside look at the boot process, and can help you identify issues, problem kexts, etc. |
-| **debug=0x100** | This disables macOS's watchdog which helps prevents a reboot on a kernel panic. That way you can *hopefully* glean some useful info and follow the breadcrumbs to get past the issues. |
-| **keepsyms=1** | This is a companion setting to debug=0x100 that tells the OS to also print the symbols on a kernel panic. That can give some more helpful insight as to what's causing the panic itself. |
-| **alcid=1** | Used for setting layout-id for AppleALC, see [supported codecs](https://github.com/acidanthera/applealc/wiki/supported-codecs) to figure out which layout to use for your specific system. More info on this is covered in the [Post-Install Page](https://dortania.github.io/OpenCore-Post-Install/) |
+| **-v** | 啟用詳細模式，在你啟動時以滾動方式顯示所有後台文字，而不是蘋果 logo 和進度條。它對任何黑蘋果用戶來說都是無價的，因為它可以讓你深入了解開機過程，並可以幫助你識別問題、找出問題 kext 等等。 |
+| **debug=0x100** | 停用 macOS 的 watchdog 功能，它有助於防止在內核出現嚴重錯誤時重新啟動。這樣你就*有希望*收集到一些有用的訊息並按照提示來解決問題。 |
+| **keepsyms=1** | 這是 debug=0x100 的配套設定，它告訴操作系統在內核出現故障時也打印出這些符號。這可以提供一些更有用的見解，以瞭解造成錯誤的成因。 |
+| **alcid=1** | 用於設定 AppleALC 的 layout-id，請參閱[支援的編解碼器](https://github.com/acidanthera/applealc/wiki/supported-codecs)，以確定針對你的系統會使用到的布局。更多訊息會在[安裝後完善指南](https://dortania.github.io/OpenCore-Post-Install/)提供 |
 
-* **GPU-Specific boot-args**:
+* **GPU 專用 boot-args**:
 
-| boot-args | Description |
+| boot-args | 說明 |
 | :--- | :--- |
-| **agdpmod=pikera** | Used for disabling board ID checks on some Navi GPUs (RX 5000 & 6000 series), without this you'll get a black screen. **Don't use if you don't have Navi** (ie. Polaris and Vega cards shouldn't use this) |
-| **-radcodec** | Used for allowing officially unsupported AMD GPUs (spoofed) to use the Hardware Video Encoder |
-| **radpg=15** | Used for disabling some power-gating modes, helpful for properly initializing AMD Cape Verde based GPUs |
-| **unfairgva=1** | Used for fixing hardware DRM support on supported AMD GPUs |
-| **nvda_drv_vrl=1** | Used for enabling NVIDIA's Web Drivers on Maxwell and Pascal cards in macOS Sierra and High Sierra |
-| **-wegnoegpu** | Used for disabling all other GPUs than the integrated Intel iGPU, useful for those wanting to run newer versions of macOS where their dGPU isn't supported |
+| **agdpmod=pikera** | 用於在一些 Navi GPU（RX 5000 & 6000 系列）上停用 board ID 檢查，否則將會出現黑屏。**如果你沒有 Navi 顯示卡，請不要使用**（如：Polaris 和 Vega 顯示卡就不應使用這個參數） |
+| **-radcodec** | 用於允許官方不支援的 AMD GPU（以欺騙方式）使用硬體視訊編碼器 |
+| **radpg=15** | 用於停用一些電源開關模式，有助於正確初始化基於 Cape Verde 的 AMD GPU |
+| **unfairgva=1** | 用於在支援的 AMD GPU 上修復硬體 DRM 支援 |
+| **nvda_drv_vrl=1** | 讓 Maxwell 和 Pascal 顯示卡在 macOS Sierra 和 High Sierra 上啟用 NVIDIA 的 Web 驅動程式 |
+| **-wegnoegpu** | 關閉除 Intel iGPU 以外所有的 GPU，對於一些想更新 macOS 版本卻發現其獨立 GPU 不支援的用戶來說很有用 |
 
 * **csr-active-config**: `00000000`
-  * Settings for 'System Integrity Protection' (SIP). It is generally recommended to change this with `csrutil` via the recovery partition.
-  * csr-active-config by default is set to `00000000` which enables System Integrity Protection. You can choose a number of different values but overall we recommend keeping this enabled for best security practices. More info can be found in our troubleshooting page: [Disabling SIP](../troubleshooting/extended/post-issues.md#disabling-sip)
+  * 「系統完整性保護」 (SIP) 的設定。通常建議通過恢復模式使用 `csrutil` 進行更改。
+  * 預設情況下，csr-active-config 會設定為 `00000000`，以啓用系統完整性保護。你可以選擇許多不同的值，但總的來說，為了最佳安全實踐，我們建議啟用此選項。更多訊息可以在我們的除錯頁面中找到：[停用 SIP](../troubleshooting/extended/post-issues.md#disabling-sip)
 
 * **run-efi-updater**: `No`
-  * This is used to prevent Apple's firmware update packages from installing and breaking boot order; this is important as these firmware updates (meant for Macs) will not work.
+  * 這用於防止蘋果的韌體更新包安裝的時候破壞開機順序；這很重要，因為這些韌體更新（用於真正的 Mac）無法在黑蘋果電腦工作。
 
 * **prev-lang:kbd**: <>
-  * Needed for non-latin keyboards in the format of `lang-COUNTRY:keyboard`, recommended to keep blank though you can specify it(**Default in Sample config is Russian**):
-  * American: `en-US:0`(`656e2d55533a30` in HEX)
-  * Full list can be found in [AppleKeyboardLayouts.txt](https://github.com/acidanthera/OpenCorePkg/blob/master/Utilities/AppleKeyboardLayouts/AppleKeyboardLayouts.txt)
-  * Hint: `prev-lang:kbd` can be changed into a String so you can input `en-US:0` directly instead of converting to HEX
-  * Hint 2: `prev-lang:kbd` can be set to a blank variable (eg. `<>`) which will force the Language Picker to appear instead at first boot up.
+  * 用於非拉丁文鍵盤（格式為：`lang-COUNTRY:keyboard`），儘管你可以指定它，但建議保持空白（**示例配置檔案中的預設值是俄文**):
+  * 繁體中文（使用倉頡鍵盤）：`zh-Hant:16899`（十六進制值是 `7a682d48616e743a3136383939`）
+  * 繁體中文（使用注音鍵盤）：`zh-Hant:16900`（十六進制值是 `7a682d48616e743a3136393030`）
+  * 完整列表可前往 [AppleKeyboardLayouts.txt](https://github.com/acidanthera/OpenCorePkg/blob/master/Utilities/AppleKeyboardLayouts/AppleKeyboardLayouts.txt)
+  * 提示：`prev-lang:kbd` 可以被轉換成字串，所以你可以直接輸入 `en-US:0`，而不需要轉換至十六進制值。然而，有用戶反映這個做法已經無效。如要解決，可直接轉換至十六進制值。
+  * 提示 2：`prev-lang:kbd` 可以設定為一個空白變量（eg：`<>`），這將強制在首次啟動時顯示語言選擇器。
 
 | Key | Type | Value |
 | :--- | :--- | :--- |
@@ -542,23 +542,23 @@ System Integrity Protection bitmask
 
 ### Delete
 
-::: tip Info
+::: tip 資訊
 
-Forcibly rewrites NVRAM variables, do note that `Add` **will not overwrite** values already present in NVRAM so values like `boot-args` should be left alone. For us, we'll be changing the following:
+強制重寫 NVRAM 變量，請注意，`Add` **不會覆蓋** NVRAM 中已經存在的值，所以像 `boot-args` 這樣的值應該保持不變。對我們來說，我們將更改以下內容：
 
-| Quirk | Enabled |
+| 選項值 | 是否啟用 |
 | :--- | :--- |
 | WriteFlash | YES |
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **LegacySchema**
-  * Used for assigning NVRAM variables, used with `OpenVariableRuntimeDxe.efi`. Only needed for systems without native NVRAM
+  * 用於賦予 NVRAM 變量，與 `OpenVariableRuntimeDxe.efi` 一起使用。只適用於沒有原生 NVRAM 的系統
 
 * **WriteFlash**: YES
-  * Enables writing to flash memory for all added variables.
+  * 允許所有新增的變量寫入快閃記憶體。
 
 :::
 
@@ -566,20 +566,20 @@ Forcibly rewrites NVRAM variables, do note that `Add` **will not overwrite** val
 
 ![PlatformInfo](../images/config/config.plist/ivy-bridge/smbios.png)
 
-::: tip Info
+::: tip 資訊
 
-For setting up the SMBIOS info, we'll use CorpNewt's [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) application.
+為了設定 SMBIOS 訊息，我們將使用 CorpNewt 的 [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) 應用程式。
 
-For this Sandy Bridge example, we'll chose the iMac12,2 SMBIOS - this is done intentionally for compatibility's sake. There are two main SMBIOS used for Sandy Bridge:
+在這個  Sandy Bridge 示例中，我們選擇 iMac12,2 SMBIOS - 這樣做是為了相容性。這裡有兩個主要用於該硬體的 SMBIOS：
 
-| SMBIOS | Hardware |
+| SMBIOS | 硬體 |
 | :--- | :--- |
-| iMac12,2 | Default Sandy Bridge SMBIOS |
-| MacPro6,1 | Mojave and newer SMBIOS |
+| iMac12,2 | 預設 Sandy Bridge SMBIOS |
+| MacPro6,1 | Mojave 和更新的 SMBIOS |
 
-* If you plan to later run macOS 10.14, Mojave or newer, MacPro6,1 will be the recommended SMBIOS and the iGPU must be disabled in the BIOS due to no longer being supported
+* 如果你打算稍後執行 macOS 10.14 Mojave 或更新版本，那麼推薦使用 MacPro6,1 這個 SMBIOS。由於本平台的 iGPU 已經不再支援，你必須在 BIOS 中停用它
 
-Run GenSMBIOS, pick option 1 for downloading MacSerial and Option 3 for selecting out SMBIOS.  This will give us an output similar to the following:
+執行 GenSMBIOS，選擇選項 1 下載 MacSerial，選擇選項 3 下載 SMBIOS。這將給我們一個類似於下面的輸出：
 
 ```sh
   #######################################################
@@ -592,55 +592,55 @@ Board Serial: C02309301QXF2FRJC
 SmUUID:       A154B586-874B-4E57-A1FF-9D6E503E4580
 ```
 
-The `Type` part gets copied to Generic -> SystemProductName.
+將 `Type` 部分複製到 Generic -> SystemProductName。
 
-The `Serial` part gets copied to Generic -> SystemSerialNumber.
+將 `Serial` 部分複製到 Generic -> SystemSerialNumber。
 
-The `Board Serial` part gets copied to Generic -> MLB.
+將 `Board Serial` 部分複製到 Generic -> MLB。
 
-The `SmUUID` part gets copied to Generic -> SystemUUID.
+將 `SmUUID` 部分複製到 Generic -> SystemUUID。
 
-We set Generic -> ROM to either an Apple ROM (dumped from a real Mac), your NIC MAC address, or any random MAC address (could be just 6 random bytes, for this guide we'll use `11223300 0000`. After install follow the [Fixing iServices](https://dortania.github.io/OpenCore-Post-Install/universal/iservices.html) page on how to find your real MAC Address)
+我們將 Generic -> ROM 設定為蘋果 ROM（從真正的 Mac 中傾印），你的網路卡 MAC 地址，或任何隨機的 MAC 地址的其中之一 （可以是 6 個隨機位元組，在本指南中我們將使用 `11223300 0000`。安裝後，請跟隨[修復 iServices](https://eason329.github.io/OpenCore-Post-Install/universal/iservices.html) 頁面了解如何找到你的真實 MAC 地址）
 
-**Reminder that you need an invalid serial! When inputting your serial number in [Apple's Check Coverage Page](https://checkcoverage.apple.com), you should get a message such as "Unable to check coverage for this serial number."**
+**提醒：你需要一個無效的序列號！當你在蘋果的[查看裝置保固範圍](https://checkcoverage.apple.com)頁面中輸入你的序列號時，你會得到一條訊息，如「請輸入有效的序號」。**
 
 **Automatic**: YES
 
-* Generates PlatformInfo based on Generic section instead of DataHub, NVRAM, and SMBIOS sections
+* 基於 Generic 章節而不是 DataHub、NVRAM 和 SMBIOS 節來生成 PlatformInfo
 
 :::
 
 ### Generic
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **AdviseFeatures**: NO
-  * Used for when the EFI partition isn't first on the Windows drive
+  * 當 EFI 分割不是 Windows 磁碟上的第一個分割時使用
 
 * **MaxBIOSVersion**: NO
-  * Sets BIOS version to Max to avoid firmware updates in Big Sur+, mainly applicable for genuine Macs.
+  * 設定 BIOS 版本為 Max，以避免在 Big Sur 及以上版本進行韌體更新，主要適用於正版 Mac。
 
 * **ProcessorType**: `0`
-  * Set to `0` for automatic type detection, however this value can be overridden if desired. See [AppleSmBios.h](https://github.com/acidanthera/OpenCorePkg/blob/master/Include/Apple/IndustryStandard/AppleSmBios.h) for possible values
+  * 設定為 `0` 以用於自動類型檢測，但是如果需要，這個值可以被覆蓋。參見 [AppleSmBios.h](https://github.com/acidanthera/OpenCorePkg/blob/master/Include/Apple/IndustryStandard/AppleSmBios.h) 取得可能的值
 
 * **SpoofVendor**: YES
-  * Swaps vendor field for Acidanthera, generally not safe to use Apple as a vendor in most case
+  * 將供應商欄位替換為 Acidanthera，在大多數情況下使用蘋果作為供應商通常不安全
 
 * **SystemMemoryStatus**: Auto
-  * Sets whether memory is soldered or not in SMBIOS info, purely cosmetic and so we recommend `Auto`
+  * 在 SMBIOS 訊息中設定記憶體是否焊接，純粹用於修飾，因此我們建議使用 `Auto`
 
 * **UpdateDataHub**: YES
-  * Update Data Hub fields
+  * 更新 Data Hub 欄位
 
 * **UpdateNVRAM**: YES
-  * Update NVRAM fields
+  * 更新 NVRAM 欄位
 
 * **UpdateSMBIOS**: YES
-  * Updates SMBIOS fields
+  * 更新 SMBIOS 欄位
 
 * **UpdateSMBIOSMode**: Create
-  * Replace the tables with newly allocated EfiReservedMemoryType, use `Custom` on Dell laptops requiring `CustomSMBIOSGuid` quirk
-  * Setting to `Custom` with `CustomSMBIOSGuid` quirk enabled can also disable SMBIOS injection into "non-Apple" OSes however we do not endorse this method as it breaks Bootcamp compatibility. Use at your own risk
+  * 用新分配的 EfiReservedMemoryType 替換表, 在需要 `CustomSMBIOSGuiduse` 的 Dell 筆記型電腦上使用 `Custom`
+  * 設定為 `Custom` 並啟用 `CustomSMBIOSGuid` 也可以阻止 SMBIOS 注入到「非蘋果」作業系統，但是我們不支持這種方法，因為它破壞了 Bootcamp 的相容性。使用風險自負
 
 :::
 
@@ -650,150 +650,150 @@ We set Generic -> ROM to either an Apple ROM (dumped from a real Mac), your NIC 
 
 **ConnectDrivers**: YES
 
-* Forces .efi drivers, change to NO will automatically connect added UEFI drivers. This can make booting slightly faster, but not all drivers connect themselves. E.g. certain file system drivers may not load.
+* 強制 .efi 驅動，更改為 NO 將自動連接新增的 UEFI 驅動。这可以使稍微加快開機速度，但不是所有驅動程式都連接自己。例如某些檔案系統驅動程式可能無法載入。
 
 ### Drivers
 
-Add your .efi drivers here.
+在這裡加入你的 .efi 驅動程式。
 
-Only drivers present here should be:
+必須要放入下列的驅動程式：
 
 * HfsPlusLegacy.efi
 * OpenRuntime.efi
-* OpenUsbKbDxe.efi(If your firmware does not support UEFI)
+* OpenUsbKbDxe.efi（如果你的韌體不支援 UEFI）
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
-| Key | Type | Description |
+| Key | Type | 說明 |
 | :--- | :--- | :--- |
-| Path | String | Path of the file from `OC/Drivers` directory |
-| LoadEarly | Boolean | Load the driver early before NVRAM setup, should only be enabled for `OpenRuntime.efi` and `OpenVariableRuntimeDxe.efi` if using legacy NVRAM |
-| Arguments | String | Some drivers accept additional arguments which are specified here. |
+| Path | String | 檔案在 `OC/Drivers` 目錄的路徑 |
+| LoadEarly | Boolean | 在設定 NVRAM 前先行載入驅動程式，如果系統使用舊版 NVRAM，應該只在 `OpenRuntime.efi` 和 `OpenVariableRuntimeDxe.efi` 啟用 |
+| Arguments | String | 有些驅動程式接受這裡指定的其他參數。 |
 
 :::
 
 ### APFS
 
-By default, OpenCore only loads APFS drivers from macOS Big Sur and newer. If you are booting macOS Catalina or earlier, you may need to set a new minimum version/date.
-Not setting this can result in OpenCore not finding your macOS partition!
+預設情況下，OpenCore 只會載入 macOS Big Sur 及更新版本的 APFS 驅動程式。如果你要啟動 macOS Catalina 或更舊版本，你可能需要設定新的最低版本或日期。
+不設定這個選項可能導致 OpenCore 無法找到你的 macOS 磁碟區！
 
-macOS Sierra and earlier use HFS instead of APFS. You can skip this section if booting older versions of macOS.
+macOS Sierra 及更舊版本使用 HFS 而非 APFS。如果要啟動舊版 macOS，你可以略過這個章節。
 
-::: tip APFS Versions
+::: tip APFS 版本
 
-Both MinVersion and MinDate need to be set if changing the minimum version.
+如果要修改最小版本，需要同時設定 MinVersion 和 MinDate。
 
-| macOS Version | Min Version | Min Date |
+| macOS 版本 | 最低版本（MinVersion） | 最低日期（MinDate） |
 | :------------ | :---------- | :------- |
 | High Sierra (`10.13.6`) | `748077008000000` | `20180621` |
 | Mojave (`10.14.6`) | `945275007000000` | `20190820` |
 | Catalina (`10.15.4`) | `1412101001000000` | `20200306` |
-| No restriction | `-1` | `-1` |
+| 無限制 | `-1` | `-1` |
 
 :::
 
 ### Audio
 
-Related to AudioDxe settings, for us we'll be ignoring(leave as default). This is unrelated to audio support in macOS.
+針對 AudioDxe 的設定，我們可以略過這個章節（保留預設值）。這與 macOS 的音訊支援無關。
 
-* For further use of AudioDxe and the Audio section, please see the Post Install page: [Add GUI and Boot-chime](https://dortania.github.io/OpenCore-Post-Install/)
+* 有關 AudioDxe 和音訊章節的進一步使用，請參見安裝後完善指南的：[增設 GUI 和開機聲音](https://eason329.github.io/OpenCore-Post-Install/)
 
 ### Input
 
-::: tip Info
+::: tip 資訊
 
-Related to boot.efi keyboard passthrough used for FileVault and Hotkey support, leave everything here as default besides:
+用於 FileVault 和熱鍵支援的 boot.efi 鍵盤直連相關的設定，此部分請保留預設值，除了下列選項：
 
-| Quirk | Value | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| KeySupport | NO | Enable if your BIOS supports UEFI |
+| KeySupport | NO | 如果你的 BIOS 支援 UEFI，則可以啟用 |
 
 :::
 
 ### Output
 
-Relating to OpenCore's visual output, leave everything here as default as we have no use for these quirks.
+與 OpenCore 的視訊輸出有關的設定，這些選項對我們來說沒有作用，因此這部分請保留預設值。
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
-| Output | Value | Comment |
+| Output | Value | 說明 |
 | :--- | :--- | :--- |
-| UIScale | `0` | `0` will automatically set based on resolution<br/>`-1` will leave it unchanged<br/>`1` for 1x scaling, for normal displays<br/>`2` for 2x scaling, for HiDPI displays |
+| UIScale | `0` | `0` 根據解析度自動調整<br/>`-1` 保持不變<br/>`1` 1x 縮放，適用於一般顯示器<br/>`2` 2x 縮放，適用於 HiDPI 顯示器 |
 
 :::
 
 ### ProtocolOverrides
 
-Mainly relevant for Virtual machines, legacy macs and FileVault users. See here for more details: [Security and FileVault](https://dortania.github.io/OpenCore-Post-Install/)
+主要適用於虛擬機器、舊 Mac 和 FileVault 用戶。詳細訊息請見：[安全與 FileVault](https://eason329.github.io/OpenCore-Post-Install/)
 
 ### Quirks
 
-::: tip Info
-Relating to quirks with the UEFI environment, for us we'll be changing the following:
+::: tip 資訊
+與 UEFI 環境有關的設定，我們將會更改以下選項：
 
-| Quirk | Enabled | Comment |
+| 選項值 | 是否啟用 | 說明 |
 | :--- | :--- | :--- |
-| IgnoreInvalidFlexRatio | YES | |
-| UnblockFsConnect | NO | Needed mainly by HP motherboards |
+| IgnoreInvalidFlexRatio | YES | 如果你使用舊版 BIOS，請停用這選項 |
+| UnblockFsConnect | NO | 主要用於 HP 主版 |
 
 :::
 
-::: details More in-depth Info
+::: details 更深入的資訊
 
 * **IgnoreInvalidFlexRatio**: YES
-  * Fix for when MSR_FLEX_RATIO (0x194) can't be disabled in the BIOS, required for all pre-Skylake based systems
+  * 修復 MSR_FLEX_RATIO (0x194) 無法在 BIOS 停用的問題，所有比 Skylake 舊的平台的電腦均需要啟用
 
 * **DisableSecurityPolicy**: NO
-  * Disables platform security policy in firmware, recommended for buggy firmwares where disabling Secure Boot does not allow 3rd party firmware drivers to load.
-  * If running a Microsoft Surface device, recommended to enable this option
+  * 停用韌體的平台安全策略，建議用於有問題的韌體（例如：停用安全開機會導致第三方韌體驅動程式無法載入）。
+  * 如果是 Microsoft Surface 裝置，則建議啟用這個選項
 
 * **RequestBootVarRouting**: YES
-  * Redirects AptioMemoryFix from `EFI_GLOBAL_VARIABLE_GUID` to `OC_VENDOR_VARIABLE_GUID`. Needed for when firmware tries to delete boot entries and is recommended to be enabled on all systems for correct update installation, Startup Disk control panel functioning, etc.
+  * 將 AptioMemoryFix 從 `EFI_GLOBAL_VARIABLE_GUID` 重定向至 `OC_VENDOR_VARIABLE_GUID`。當韌體嘗試刪除啟動項時則需要啟用，建議在所有系統上啟用，以確保正確地安裝更新，啟動磁碟控制台的功能等等。
 
 * **UnblockFsConnect**: NO
-  * Some firmware block partition handles by opening them in By Driver mode, which results in File System protocols being unable to install. Mainly relevant for HP systems when no drives are listed
+  * 某些韌體的按驅動程式模式會在磁碟分割控制代碼阻止它們工作，這將導致檔案系統協議無法安裝。主要適用於沒有列出磁碟的 HP 電腦
 
 :::
 
 ### ReservedMemory
 
-Used for exempting certain memory regions from OSes to use, mainly relevant for Sandy Bridge iGPUs or systems with faulty memory. Use of this quirk is not covered in this guide
+用於將某些記憶體區域從操作系統中移除，避免它們被使用。這主要與 Sandy Bridge iGPU 或具有錯誤記憶體的系統有關。本指南中不會有涉及這個選項的用法
 
-## Cleaning up
+## 整理你的 plist
 
-And now you're ready to save and place it into your EFI under EFI/OC.
+現在，你可以儲存你的 config.plist 並將它放進位於 EFI/OC 的 EFI 資料夾裡。
 
-For those having booting issues, please make sure to read the [Troubleshooting section](../troubleshooting/troubleshooting.md) first and if your questions are still unanswered we have plenty of resources at your disposal:
+對於那些在啟動時發生問題的人，請確定你已閱讀[故障診斷部分](../troubleshooting/troubleshooting.md)。 如果你仍然有尚未解答的問題，我們有許多資源供你使用：
 
 * [r/Hackintosh Subreddit](https://www.reddit.com/r/hackintosh/)
 * [r/Hackintosh Discord](https://discord.gg/2QYd7ZT)
 
-## Intel BIOS settings
+## Intel BIOS 設定
 
-* Note: Most of these options may not be present in your firmware, we recommend matching up as closely as possible but don't be too concerned if many of these options are not available in your BIOS
+* 注意：大多數選項可能無法在你的韌體中找到，我們建議設定應儘可能匹配，但如果這些選項在你的 BIOS 中沒有出現，你亦不要太擔心
 
-### Disable
+### 停用
 
-* Fast Boot
-* Secure Boot
-* Serial/COM Port
-* Parallel Port
-* VT-d (can be enabled if you set `DisableIoMapper` to YES)
-* Compatibility Support Module (CSM) (**Must be off in most cases, GPU errors/stalls like `gIO` are common when this option is enabled**)
-* Thunderbolt (For initial install, as Thunderbolt can cause issues if not setup correctly)
+* 快速啟動
+* 安全開機
+* Serial/COM 連接埠
+* Parallel 連接埠
+* VT-d（如果你已將 `DisableIoMapper` 設為 YES，則可以啟用）
+* Compatibility Support Module（CSM）（**在大多數情況下，你必須關閉此選項，當該選項啟用時，像 `gIO` 等等的 GPU 錯誤或停頓會很常見**）
+* Thunderbolt（在初始安裝的時候需要停用，因為一旦設定不當會造成 Thunderbolt 出現問題）
 * Intel SGX
 * Intel Platform Trust
-* CFG Lock (MSR 0xE2 write protection)(**This must be off, if you can't find the option then enable `AppleCpuPmCfgLock` under Kernel -> Quirks. Your hack will not boot with CFG-Lock enabled**)
+* CFG Lock（MSR 0xE2 寫入保護）（**必須關閉這個功能，如果你無法在 BIOS 找到這個功能，請在 Kernel -> Quirks 啟用 `AppleCpuPmCfgLock`。你的系統無法在 CFG Lock 啟用的情況下啟動**）
 
-### Enable
+### 啟用
 
 * VT-x
 * Above 4G Decoding
-* Hyper-Threading
-* Execute Disable Bit
+* 超線程
+* 執行禁用位元
 * EHCI/XHCI Hand-off
-* OS type: Windows 8.1/10 UEFI Mode (some motherboards may require "Other OS" instead)
-* DVMT Pre-Allocated(iGPU Memory): 32MB or higher
-* SATA Mode: AHCI
+* 操作系統類型：Windows 8.1/10 UEFI 模式（某些主板可能需要選用「其他操作系統」）
+* 預先分配的 DVMT（iGPU 記憶體）：32MB 或更多
+* SATA 模式：AHCI
 
-# Once done here, we need to edit a couple extra values. Head to the [Apple Secure Boot Page](../config.plist/security.md)
+# 完成以後，我們需要編輯額外的值。請前往[蘋果安全開機](../config.plist/security.md)頁面
