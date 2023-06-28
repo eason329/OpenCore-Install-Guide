@@ -30,9 +30,8 @@
   * 本指南支援 Arrandale 到 Ice Lake 世代。
   * **不**支持 Mobile Atoms、Celeron 和 Pentium CPU
 * AMD 的 Bulldozer(15H)，Jaguar（16H）和 Ryzen(17h) CPU
-  * 需要配備獨立 GPU。
-  * 如使用補丁，則支援部分使用 Vega iGPU 的桌面及筆記型電腦 CPU（即 APU）。詳情請參閱 [GPU 支援](macos-limits.md#gpu-支援)
-  * 注意，AMD CPU 無法支援 macOS 的所有功能，請參見下文。
+  * 需要配備獨立 GPU，或指定的 Vega iGPU。詳情請參閱 [GPU 支援](macos-limits.md#gpu-支援)
+  * 注意：AMD CPU 無法支援 macOS 的所有功能，請參見下文。
 
 **欲了解更多深入資訊，請參閱[避免購買指南](https://eason329.github.io/Anti-Hackintosh-Buyers-Guide/)**
 
@@ -128,6 +127,12 @@ SSE要求:
 * 許多應用程式的穩定性問題
   * 基於音訊的應用程式最容易出現問題，例如 Logic Pro
   * DaVinci Resolve 也有零星的問題
+
+::: warning 對 AMD APU 電腦的忠告
+
+在 AMD APU 電腦上安裝 macOS 是一件非常新鮮的事情。對於 AMD APU 是否能夠完美地安裝 macOS，這很大程度上與 [NootedRed](https://github.com/NootInc/NootedRed) 插件，以及其開發者 [NootInc](https://github.com/NootInc) 在其他問題的開發進度高度相關（如：AMD 筆記型電腦的觸控板的支援）。即使他們成功修復這些功能，但 AMD CPU 在部分功能仍然與 Intel CPU 有一定差別。
+
+因此，譯者原則上 **不建議** 在 AMD APU 電腦安裝 macOS（尤其是用於完成重要工作的電腦），一切後果自負。
 
 :::
 

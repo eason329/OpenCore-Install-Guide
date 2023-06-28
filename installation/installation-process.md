@@ -1,36 +1,36 @@
-# Installation Process
+# 安裝程序
 
-Now that you've finished setting up OpenCore, you're finally able to boot, main things to keep in mind:
+现在，你已經完成了 OpenCore 的設定，你終於能開始首次開機，需要記住的主要事情：
 
-* Enable BIOS settings optimal for macOS
-* Read up on the [OpenCore Multiboot Guide](https://dortania.github.io/OpenCore-Multiboot/) as well as [Setting up LauncherOption](https://dortania.github.io/OpenCore-Post-Install/multiboot/bootstrap)
-  * Mainly relevant for those running a single drive for multiple OSes
-* And a copy of the [General Troubleshooting](../troubleshooting/troubleshooting.md) page
-* Read up on the [macOS Boot Process](../troubleshooting/boot.md)
-  * Can help first time installers better understand where they may be getting stuck
-* And a ton of patience
+* 為 macOS 啟用最適當的設定
+* 閱讀 [OpenCore 多系統開機指南](https://dortania.github.io/OpenCore-Multiboot/) 和[設定 LauncherOption](https://dortania.github.io/OpenCore-Post-Install/multiboot/bootstrap) 頁面
+  * 主要適用於打算單磁碟多操作系統的用戶
+* 在其他裝置開啟[通用故障診斷](../troubleshooting/troubleshooting.md)頁面
+* 閱讀和了解 [macOS 開機過程](../troubleshooting/boot.md)
+  * 可以幫助第一次安裝的用戶更好地了解他們可能在哪裡出現問題
+* 大量耐性
 
-## Double checking your work
+## 再次檢查你的準備工作
 
-One last thing we should go over before booting is how your EFI is setup:
+在開機之前，讓我們再次檢查一下你的 EFI 設置：
 
-Good EFI          |  Bad EFI
+良好的 EFI          |  不好的 EFI
 :-------------------------:|:-------------------------:
 ![](../images/installation/install-md/good-efi.png)  |  ![](../images/installation/install-md/bad-efi.png)
-EFI folder found on EFI partition | EFI folder missing
-ACPI Files are compiled(.aml) | ACPI Files are not compiled(.dsl)
-DSDT is not included |* DSDT is included
-Removed unneeded Drivers(.efi) | Leaves default Drivers
-Removed unneeded Tools(.efi) | Leaves default Tools
-All files in the Kexts folder end in .kext | Includes source code and folders
-config.plist found under EFI/OC | Neither renamed or placed the .plist in right location
-Only uses kexts that are needed | Downloaded every kext listed
+EFI 資料夾能在 EFI 磁碟分割中找到 | 找不到 EFI 資料夾
+ACPI 檔案都是已編譯的 (.aml) | 有 ACPI 檔案是未編譯的 (.dsl)
+不包括 DSDT | 包含了 DSDT
+已移除不需要的驅動程式 (.efi) | 保留預設的驅動程式
+已移除不需要的工具程式 (.efi) | 保留預設的工具程式
+kext 資料夾的所有檔案皆以 .kext 為副檔名 | 包含原始碼和資料夾
+config.plist 在 EFI/OC 內 | 既沒有重新命名，也沒有將 .plist 放在正確位置
+只保留需要的 kext | 下載了每一個列出的 kext
 
-## Booting the OpenCore USB
+## 以 OpenCore USB 開機
 
-So you're now ready to finally put the USB stick into your computer and boot off of it. Remember that most laptops and some desktops will still default to the internal drive with Windows, and you'll need to manually select OpenCore in the BIOS boot options. You'll need to check in the user manual or use a bit of google to find out what Fn key accesses the BIOS and boot menu(ie. Esc, F2, F10 or F12)
+現在，你終於準備好你的 USB 隨身碟並將其插入電腦啟動了。請注意，大多數電腦仍然會預設使用 Windows 的磁碟區開機，你將需要在 BIOS 開機選單中手動選擇 OpenCore。請查看主版說明書或使用 Google 找出如何進入 BIOS 和開機選單（如：Esc, F2, F10 或 F12）
 
-Once you boot the USB, you'll likely be greeted to the following boot options:
+啟動隨身碟後，你會看到類似下面的開機選項：
 
 1. Windows
 2. macOS Base System (External) / Install macOS Big Sur (External) / *USB drive name* (External)
@@ -39,23 +39,32 @@ Once you boot the USB, you'll likely be greeted to the following boot options:
 
 ::: warning
 
-You might need to press space in order to see the installer, as in later versions of OpenCore `HideAuxiliary` is enabled by default.
+你可能需按下空格鍵才能看到安裝程式，因為 OpenCore 較後期的版本已預設啟用 `HideAuxiliary`。
 
 :::
 
-For us, **Option 2.** is the one we want. Depending how the installer was made, it may report as either **"macOS Base System (External)"**, **"Install macOS Big Sur (External)"** or **"*Your USB drive's name* (External)"**
+對我們來說，**選項 2** 就是我們想要的。根據安裝程式製作方式的不同，它可能會稱為 **"macOS Base System (External)"**、**"Install macOS *version name* (External)"** 或 **"*Your USB drive's name* (External)"**
 
-## macOS Installer
+你終於進入安裝程式的啟動過程，你可能會看到大量文字。這是「詳細模式」（Verbose Mode），這能幫助你解決開機過程中遇到的問題。如果你在這裡卡住了，請參閱[故障診斷指南](../troubleshooting/kernel-debugging.md)。
 
-So you've finally got the installer booted, got through the verbose and hit the installer! Now that you've gotten this far,  the main things to keep in mind:
+## macOS 安裝程式
 
-* Drives you wish to install macOS on **must** be both of GUID partition Scheme **and** APFS
-  * High Sierra on HDD and all Sierra users will need to use macOS Journaled(HFS+)
-* The drive **must** also have a 200MB partition
-  * By default, macOS will setup freshly formatted drives with 200MB
-  * See the [Multiboot Guide](https://dortania.github.io/OpenCore-Multiboot/) for more info on partitioning a Windows Drive
+當你看到畫面從詳細模式變成蘋果標誌的時候，你終於完成安裝程式的啟動過程！
 
-Once you start the installation, you will want to wait until the system restarts. You will once again want to boot into OpenCore, but rather than selecting your USB installer/recovery - you will want to select the macOS installer on the hard drive to continue installation. You should get an apple logo, and after a few minutes you should get a timer at the bottom saying "x minutes remaining". This may be a good time to get a drink or snack as this will take a while. It may restart a couple more times, but if all goes well, it should finally plop you at the "Setup your Mac screen"
+現在你已經走到了這一步，需要記住的主要事情包括：
 
-You're in! 🎉
-You will want to go through the Post-Installation pages to finish setting up your system.
+* 你的 SATA 或 NVME 控制器必須是 macOS 所支援的
+  * 如果無法在磁碟工具程式中找到你的硬碟，可以嘗加入諸如 SATA-unsupported.kext 等針對控制器的内核延伸插件。
+  * AMD 原生的 FCH SATA Controller 是少數連内核延伸插件也不支援的控制器。如果你在 Linux 尋找硬體時只看到這個控制器，你可能要考慮安裝至外置硬碟或放棄了
+* 你希望安装 macOS 的磁碟區 **必須** 是以 GUID 分割區配置表來格式化的 APFS 磁碟
+  * 在機械硬碟（HDD）上安裝 High Sierra，和所有安裝 Sierra 及更舊的用戶應該使用 macOS 擴充格式 (HFS+)
+* 磁碟 **必須** 有一個 200MB 的（EFI）分割
+  * macOS 一般會在新磁碟中格式化一個 200MB 的分割
+  * 參閱[多系統開機指南](https://eason329.github.io/OpenCore-Multiboot/) 了解有關分割一個已安裝 Windows 的磁碟的更多資訊
+
+開始安裝後，請等待系統重新啟動，然後你將需要再次選擇以 OpenCore 隨身碟開機。不要選擇剛才的隨身碟安裝程式（標示為 External）或是 Recovery，而是要選擇硬碟上的 macOS Installer 來繼續安裝。在經過詳細模式後會出現蘋果標誌，幾分鐘後你會看到底部有計時器，並寫着「剩餘大約 x 分鐘」。這可能是休息或吃東西的好時機，因為這需要一段時間和數次的重新啟動。如果一切順利，它最終會把你帶到「設定你的 Mac」或「選擇你的國家或地區」界面。
+
+![](../images/installation/install-md/setup-your-mac.png)
+
+如果你看到這個畫面，你成功了！ 🎉
+你可以瀏覽[安裝後完善指南](https://eason329.github.io/OpenCore-Post-Install/)來完成後續的系統設定。

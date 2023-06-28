@@ -381,8 +381,7 @@ BlueToolFixup 可以放在 Lilu 之後的任何地方。
 * [SATA-Unsupported](https://github.com/khronokernel/Legacy-Kexts/blob/master/Injectors/Zip/SATA-unsupported.kext.zip)
   * 增加了大量 SATA 控制器的支援，主要適用於在 macOS 中遇到 SATA 磁碟問題的筆記型電腦。我們建議首先在沒有這個 kext 的情況下進行測試。
   * Big Sur+ 註：請改為使用 [CtlnaAHCIPort](https://github.com/dortania/OpenCore-Install-Guide/blob/master/extra-files/CtlnaAHCIPort.kext.zip) ，因為有許多控制器遭到刪除
-    * Catalina 和更舊的則不必擔心
-  * AMD CPU 筆記型電腦註：經譯者測試，包含這個的大部分同類的 kext 均無法作用於 AMD 原生的 SATA 控制器。如果你的電腦沒有其他 SATA 控制器，你可能需要安裝至 USB 移動硬碟。
+  * Catalina 和更舊的則不必擔心
 * [CPUTopologyRebuild](https://github.com/b00t0x/CpuTopologyRebuild)
   * 一個實驗性的 Lilu 插件，用於優化 Alder Lake 的異構核心配置。 **只適用於 Alder Lake CPU**
 * [RestrictEvents](https://github.com/acidanthera/RestrictEvents)

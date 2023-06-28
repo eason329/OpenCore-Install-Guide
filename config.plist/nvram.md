@@ -1,8 +1,10 @@
 # NVRAM
 
-NVRAM（非揮發性隨機存取記憶體，nonvolatile random-access memory）是 Mac 用於儲存某些設定並快速存取它們的記憶體。
+此部分允許設置非易失性 UEFI 變量（通常稱為 NVRAM 變量）。 macOS 操作系統廣泛使用 NVRAM 變量來實現操作系統 - 開機程式 - 韌體間的相互通信。因此，為了 macOS 的正常運行，我們需要提供多個 NVRAM 變量。OpenCore 使用 NVRAM 進行某些設定，例如 UI 縮放和啟動參數。
 
-OpenCore 使用 NVRAM 進行某些設定，例如 UI 縮放和啟動參數。這些設定可以幫助你解決啟動問題。
+每個 NVRAM 變量由其名稱、值、屬性及其 GUID 組成，代表 NVRAM 變量屬於哪個“部分”。
+
+**注意**：某些變量可能要加入到 PlatformInfo 章節的 PlatformNVRAM 或 General 子章節。請確保本節中設定的變量不會與這些子章節中的項目衝突，否則會造成問題。
 
 ## Add
 

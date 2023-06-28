@@ -5,7 +5,7 @@
 **macOS**        | 蘋果公司自己的基於 UNIX 的操作系統，用於 Mac 機器和 “使 Mac 成為 Mac” 的重點。
 **Windows**      | 微軟的專有操作系統，可在各種電腦上安裝和使用（如果你不想頭疼，就繼續使用這個操作系統）
 **Linux**        | 基於 Linux 内核的開源類 UNIX 操作系統家族，1991 年 9 月 17 日由 Linus Torvalds 首次發佈的操作系統内核。Linux 通常打包在 Linux 發行版中。注意，雖然 macOS 和 Linux 可能是基於 UNIX 的，但它們有很大的不同。
-**Distros**      | 發行版的縮寫。Linux 發行版是 Linux 的發行方式。然而，當涉及到 macOS 時，發行版混合了 macOS 安裝程式和一堆非蘋果公司的工具 **不要使用被修改過的 macOS**  
+**Distros**      | 發行版的縮寫。Linux 發行版是 Linux 的發行方式。然而，當涉及到 macOS 時，發行版混合了 macOS 安裝程式和一堆非蘋果公司的工具。**不要使用被修改過的 macOS**  
 **Hackintosh**   | 將 macOS 安裝到 PC 上的過程，請注意**Hackintosh 不是操作系統**，它也可以指被「黑客」攻擊的機器，以使 macOS 在其上運行。例如：*我在這台 Windows 機器上安裝了 macOS，因此我有一個 Hackintosh。但是我沒有安裝 “Hackintosh”。*
 **Bootloader**   | 載入操作系統的軟體，通常由操作系統建立者製作。從技術上講，OpenCore本身並不是一個開機程式（請參閱下面的開機管理器解釋）。蘋果的 boot.efi 將是 Mac 或 Hackintosh 中實際的引導程式。
 **Boot Manager** | 管理開機程式的軟體（開機管理器）- 我們有很多例子：Clover, systemd-boot, OpenCore, rEFInd, rEFIt… 這些通常被視為幫助系統實際的引導程式作準備。
@@ -18,7 +18,7 @@
 **DSDT/SSDT**    | ACPI 中的表格描述了裝置以及操作系統應該如何與它們進行交互，例如使電腦進入休眠、喚醒、切換 GPU、USB 連接埠等等。
 **.AML**         | 編譯後的 ACPI 檔案格式，以及你的 PC 將執行的內容。 `.DAT` 是另一個具有完全相同用途的副檔名。
 **.DSL**         | ACPI 的源代碼 - 這是您為電腦編輯和編譯的內容。**不要** 將這種檔案格式與 `.asl` 混淆。
-**Kexts**        | 也稱為 **K**ernel **Ext**，是 macOS 的驅動程式。它們用於執行不同的任務，如裝置驅動程式，或用於不同的目的（在駭客編程中），如修補操作系統，注入訊息或執行任務。kext 並不是優秀 Hackintosh 的唯一組成部分，因為它們通常與 ACPI 補丁和修復一起使用。
+**Kexts**        | 內核延伸，是 **K**ernel **Ext** 的簡稱。這是 macOS 的驅動程式。它們用於執行不同的任務，如裝置驅動程式，或用於不同的目的（在駭客編程中），如修補操作系統，注入訊息或執行任務。kext 並不是優秀 Hackintosh 的唯一組成部分，因為它們通常與 ACPI 補丁和修復一起使用。
 **BIOS**         | 基本輸入／輸出系統是用於在啟動過程（通電啟動）中執行硬體初始化的韌體，並為操作系統和程式提供執行期服務。BIOS 韌體預先安裝在 PC 的主板上，它是在通電時第一個執行的軟體（資料來源：維基百科）。它是 70 年代製作的舊式軟體，由於其成熟度，至今仍在使用。
 **UEFI**         | 統一可延伸韌體介面（Unified Extensible Firmware Interface）是定義操作系統與平台韌體之間的軟件介面的規範。UEFI 取代了最初出現在所有 IBM PC 相容 PC 上的傳統 BIOS （Basic Input/Output System）韌體介面，大部分 UEFI 韌體實作都支持傳統 BIOS 服務。UEFI 可以支持遠端診斷和修復電腦，即使沒有安裝操作系統。（資料來源：維基百科）
 **UEFI Drivers** | 與其他操作系統一樣，UEFI 也有驅動程式，由 Clover 或 OpenCore 載入。它們還可以載入裝置或執行其他任務，如用 HfsPlus 載入蘋果的 HfsPlus.efi, 修補 macOS 的 `boot.efi` 等等. 你可能會發現它們是 `Clover Drivers` 或 `OpenCore Drivers`, 它們都是 UEFI 驅動程式。（注意：只使用針對特定開機管理器的驅動程式。更多資訊可以在 [Clover 轉換頁面](https://github.com/eason329/OpenCore-Install-Guide/tree/master/clover-conversion)上找到）。

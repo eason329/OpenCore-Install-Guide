@@ -1,8 +1,8 @@
 # UEFI
 
-UEFI（統一可延伸韌體介面，Unified Extensible Firmware Interface）是用來定義作業系統與系統韌體之間的軟件介面。
+UEFI（統一可延伸韌體介面，Unified Extensible Firmware Interface）是用來定義作業系統與系統韌體之間的軟件介面。此部分允許載入其他 UEFI 模塊以及對韌體進行調整。
 
-OpenCore 運行在 UEFI 環境中，因此需要 UEFI 驅動程式來確保一些硬體如 NVME 磁碟及鍵盤等能在 OpenCore 選擇器中運作。在這個部分中，我們會設定 OpenCore 會載入的 UEFI 驅動程式及其相關的設定。
+要檢查韌體內容、應用修改並執行升級，可以使用 UEFITool 和其他工具程式。
 
 **ConnectDrivers**: YES
 
