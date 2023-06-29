@@ -59,7 +59,7 @@ macOS 需要至少 64MB 的 DVMT 才能正常開機。但許多電腦的預設 D
 | framebuffer-stolenmem | Data | `00003001` |
 | framebuffer-fbmem | Data | `00009000` |
 
-* **注意**：使用 dGPU 或 AMD Vega iGPU 驅動顯示器（即 Headless framebuffer）便不需要設定這些參數。
+* **注意**：使用 dGPU 或 AMD Vega iGPU 驅動顯示器不需要設定這些參數，因為這些 GPU 會使用 Headless framebuffer
 
 示例：
 
