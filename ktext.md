@@ -528,4 +528,4 @@ BlueToolFixup 可以放在 Lilu 之後的任何地方。
 | Comet Lake | N/A | ^^ |
 | Ice Lake | ^^ | ^^ |
 
-# 現在，這些步驟都完成了，你可前往 [ACPI 入門教學](https://sumingyd.github.io/Getting-Started-With-ACPI/)。如果你已明白 ACPI 的入門技巧，則可直接[開始建構 config.plist](./config.plist/acpi.md)。
+# 現在，這些步驟都完成了，你可前往 [ACPI 入門教學](https://sumingyd.github.io/Getting-Started-With-ACPI/)。如果你已明白 ACPI 的入門技巧，則可直接[開始建構 config.plist](./config.plist/README.md)。
