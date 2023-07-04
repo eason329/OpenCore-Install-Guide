@@ -309,7 +309,7 @@ pci14e4,1686 = Broadcom BCM57766
 
 * 啟用 `Misc -> Security -> SecureBootModel` 並將其設置為 `Default` 或其他有效值
   * 這將在本指南後部和安裝後完善指南中討論：[Apple Secure Boot](https://sumingyd.github.io/OpenCore-Post-Install/universal/security/applesecureboot.html)
-* 如果你不能啟用 SecureBootModel，你仍然可以強制注入 IO80211Family（**非常不建议**）
+* 如果你不能啟用 SecureBootModel，你仍然可以強制注入 IO80211Family（**非常不建議**）
   * 在 config.plist 檔案的 `Kernel -> Force` 下設定以下内容。（稍後將會討論）：
   
 ![](./images/ktext-md/force-io80211.png)
@@ -528,4 +528,4 @@ BlueToolFixup 可以放在 Lilu 之後的任何地方。
 | Comet Lake | N/A | ^^ |
 | Ice Lake | ^^ | ^^ |
 
-# 現在，這些步驟都完成了，你可前往 [ACPI 入門教學](https://sumingyd.github.io/Getting-Started-With-ACPI/)
+# 現在，這些步驟都完成了，你可前往 [ACPI 入門教學](https://sumingyd.github.io/Getting-Started-With-ACPI/)。如果你已明白 ACPI 的入門技巧，則可直接[開始建構 config.plist](./config.plist/acpi.md)。
