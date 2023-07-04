@@ -130,11 +130,12 @@ This is either 1(or more) of 5 issues:
 * Old firmware, make sure the drive is on the latest firmware
 * And finally, you may just have a bad drive
 
-## SATA Drives Not Shown in DiskUtility
+## 磁碟工具程式沒有顯示任何 SATA 磁碟
 
-* Make sure SATA Mode is AHCI in bios
-* Certain SATA controllers may not be officially supported by macOS, for these cases you'll want to grab [CtlnaAHCIPort.kext](https://github.com/dortania/OpenCore-Install-Guide/blob/master/extra-files/CtlnaAHCIPort.kext.zip)
-  * For very legacy SATA controllers, [AHCIPortInjector.kext](https://www.insanelymac.com/forum/files/file/436-ahciportinjectorkext/) may be more suitable.
+* 請確認你的主板 BIOS 設定中的 SATA 控制器模式為 AHCI
+* 部分 SATA 控制器可能不受 macOS 官方的支援。對於這種情況，你需要下載 [CtlnaAHCIPort.kext](https://github.com/dortania/OpenCore-Install-Guide/blob/master/extra-files/CtlnaAHCIPort.kext.zip)
+  * 對於一些非常老舊的 SATA 控制器，[AHCIPortInjector.kext](https://www.insanelymac.com/forum/files/file/436-ahciportinjectorkext/) 可能更適合
+  * 對於 AMD 的 FCH SATA 控制器，~~很抱歉，目前還沒有人製作針對這個控制器的 kext。~~
 
 ## Stuck at 2 minutes remaining
 

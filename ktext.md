@@ -380,7 +380,7 @@ BlueToolFixup 可以放在 Lilu 之後的任何地方。
   * 需要 macOS 10.14 或更新的版本
 * [SATA-Unsupported](https://github.com/khronokernel/Legacy-Kexts/blob/master/Injectors/Zip/SATA-unsupported.kext.zip)
   * 增加了大量 SATA 控制器的支援，主要適用於在 macOS 中遇到 SATA 磁碟問題的筆記型電腦。我們建議首先在沒有這個 kext 的情況下進行測試。
-  * Big Sur+ 註：請改為使用 [CtlnaAHCIPort](https://github.com/dortania/OpenCore-Install-Guide/blob/master/extra-files/CtlnaAHCIPort.kext.zip) ，因為有許多控制器遭到刪除
+  * 對於 Big Sur 及更新版本的用戶，我們建議改為使用 [CtlnaAHCIPort](https://github.com/dortania/OpenCore-Install-Guide/blob/master/extra-files/CtlnaAHCIPort.kext.zip) ，因為有某些控制器類型遭到蘋果刪除，導致 macOS 無法準確檢測控制器型號。
   * Catalina 和更舊的則不必擔心
 * [CPUTopologyRebuild](https://github.com/b00t0x/CpuTopologyRebuild)
   * 一個實驗性的 Lilu 插件，用於優化 Alder Lake 的異構核心配置。 **只適用於 Alder Lake CPU**
@@ -447,6 +447,12 @@ BlueToolFixup 可以放在 Lilu 之後的任何地方。
 | Atmel Multitouch Protocol | VoodooI2CAtmelMXT | |
 | Synaptics HID | [VoodooRMI](https://github.com/VoodooSMBus/VoodooRMI/releases) | I2C Synaptic 觸控板（只在 I2C 模式下需要 VoodooI2C) |
 | Alps HID | [AlpsHID](https://github.com/blankmac/AlpsHID/releases) | 可配合 USB 或 I2C Alps 觸控板使用。主要出現在戴爾 (Dell) 筆記型電腦和惠普 (HP) 的一些 EliteBook 機型上 |
+
+:::
+
+::: warning VoodooI2C 插件對 AMD I2C 控制器的支援
+
+現時，VoodooI2C 插件尚未支援 AMD 的 I2C 控制器。但是，相關支援將會在版本 2.9 中加入（感謝 [NootInc](https://github.com/VoodooI2C/VoodooI2C/pull/530)）。如果你急需使用，請按[這裡](https://app.circleci.com/pipelines/github/VoodooI2C/VoodooI2C)下載 Pipeline 312 及以後版本。
 
 :::
 
@@ -528,4 +534,4 @@ BlueToolFixup 可以放在 Lilu 之後的任何地方。
 | Comet Lake | N/A | ^^ |
 | Ice Lake | ^^ | ^^ |
 
-# 現在，這些步驟都完成了，你可前往 [ACPI 入門教學](https://sumingyd.github.io/Getting-Started-With-ACPI/)。如果你已明白 ACPI 的入門技巧，則可直接[開始建構 config.plist](./config.plist/README.md)。
+# 現在，這些步驟都完成了，你可前往 [ACPI 入門教學](https://sumingyd.github.io/Getting-Started-With-ACPI/)。如果你已明白 ACPI 的入門技巧，則可直接[開始建構 config.plist](./config.plist/README.md)
