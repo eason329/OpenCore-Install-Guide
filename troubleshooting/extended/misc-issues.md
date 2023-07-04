@@ -1,56 +1,57 @@
-# Miscellaneous Issues
+# 雜項問題
 
-Miscellaneous issues not revolving around macOS itself such as multibooting.
+與 macOS 本身無關的雜項問題，例如多系統開機。
 
 [[toc]]
 
-## Can't run `acpidump.efi`
+## 無法執行 `acpidump.efi`
 
-Call upon OpenCore shell:
+在 OpenCore shell 中執行：
 
 ```
-shell> fs0: //replace with proper drive
+shell> fs0: //替換為正確的磁碟
 
-fs0:\> dir //to verify this is the right directory
+fs0:\> dir //驗證這是正確的目錄
 
   Directory of fs0:\
 
    01/01/01 3:30p  EFI
-fs0:\> cd EFI\OC\Tools //note that its with forward slashes
+fs0:\> cd EFI\OC\Tools //注意它是用正向斜線
 
 fs0:\EFI\OC\Tools> acpidump.efi -b -n DSDT -z
 ```
 
-## Fixing SSDTTime: `Could not locate or download iasl!`
+## 修復 SSDTTime: `Could not locate or download iasl!`
 
 This is usually due to an outdated version of Python, try either updating Python or add iasl to the scripts folder for SSDTTime:
+這通常是由於過時的 Python 版本，請嘗試更新 Python 或把 iasl 加入到 SSDTTime 的 scripts 資料夾：
 
-* [iasl macOS version](https://bitbucket.org/RehabMan/acpica/downloads/iasl.zip)
-* [iasl Windows version](https://acpica.org/downloads/binary-tools)
-* [iasl Linux version](http://amdosx.kellynet.nl/iasl.zip)
+* [iasl macOS 版](https://bitbucket.org/RehabMan/acpica/downloads/iasl.zip)
+* [iasl Windows 版](https://acpica.org/downloads/binary-tools)
+* [iasl Linux 版](http://amdosx.kellynet.nl/iasl.zip)
 
-## Fix Python: `Python is not installed or not found on PATH`
+## 修復 Python: `Python is not installed or not found on PATH`
 
-Easy fix, download and install the latest python:
+非常容易，下載並安裝最新版本的 Python:
 
-* [macOS link](https://www.python.org/downloads/macos)
-* [Windows link](https://www.python.org/downloads/windows/)
-* [Linux link](https://www.python.org/downloads/source/)
+* [macOS 版](https://www.python.org/downloads/macos)
+* [Windows 版](https://www.python.org/downloads/windows/)
+* [Linux 版](https://www.python.org/downloads/source/)
 
-Make sure `Add Python to PATH`
+記得要選擇 `Add Python to PATH`
 
 ![](../../images/troubleshooting/troubleshooting-md/python-path.png)
 
-## Windows Startup Disk can't see APFS drives
+## Windows 啟動磁碟找不到 APFS 磁碟區
 
-* Outdated BootCamp drivers(generally ver 6.0 will come with brigadier, BootCamp Utility in macOS provides newer version like ver 6.1). CorpNewt has also forked brigadier fixing these issues as well: [CorpNewt's brigadier](https://github.com/corpnewt/brigadier)
+* 過時的 BootCamp 驅動程式 (通常 6.0 版本會附帶 brigadier，macOS 中的 BootCamp Utility 提供較新的版本，如 6.1 版本）。CorpNewt 的 brigadier 分支亦修復了這個問題: [CorpNewt 的 brigadier](https://github.com/corpnewt/brigadier)
 
-## Incorrect resolution with OpenCore
+## OpenCore 解析度不正確
 
-* Follow [Fixing Resolution and Verbose](https://dortania.github.io/OpenCore-Post-Install/cosmetic/verbose.html) for correct setup, set `UIScale` to `2` for HiDPI
-* Users also have noticed that setting `ConsoleMode` to Max will sometimes fail, leaving it empty can help
+* 跟隨 [修復解析度及詳細模式](https://eason329.github.io/OpenCore-Post-Install/cosmetic/verbose.html) 的正確設定，在 HiDPI 顯示器中將  `UIScale` 設為 `2`
+* 有用戶注意到將 `ConsoleMode` 設為 Max 可能會失敗, 將該部分保留空值可能有幫助
 
-## Can't find Windows/BootCamp drive in picker
+## 無法在選擇器中找到 Windows/BootCamp 磁碟區
 
 So with OpenCore, we have to note that legacy Windows installs are not supported, only UEFI. Most installs now are UEFI based but those made by BootCamp Assistant are legacy based, so you'll have to find other means to make an installer(Google's your friend). This also means MasterBootRecord/Hybrid partitions are also broken so you'll need to format the drive you want to install onto with DiskUtility. See the [Multiboot Guide](https://dortania.github.io/OpenCore-Multiboot/) on best practices
 
