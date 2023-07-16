@@ -23,7 +23,6 @@ fs0:\EFI\OC\Tools> acpidump.efi -b -n DSDT -z
 
 ## 修復 SSDTTime: `Could not locate or download iasl!`
 
-This is usually due to an outdated version of Python, try either updating Python or add iasl to the scripts folder for SSDTTime:
 這通常是由於過時的 Python 版本，請嘗試更新 Python 或把 iasl 加入到 SSDTTime 的 scripts 資料夾：
 
 * [iasl macOS 版](https://bitbucket.org/RehabMan/acpica/downloads/iasl.zip)
@@ -53,50 +52,50 @@ This is usually due to an outdated version of Python, try either updating Python
 
 ## 無法在選擇器中找到 Windows/BootCamp 磁碟區
 
-So with OpenCore, we have to note that legacy Windows installs are not supported, only UEFI. Most installs now are UEFI based but those made by BootCamp Assistant are legacy based, so you'll have to find other means to make an installer(Google's your friend). This also means MasterBootRecord/Hybrid partitions are also broken so you'll need to format the drive you want to install onto with DiskUtility. See the [Multiboot Guide](https://dortania.github.io/OpenCore-Multiboot/) on best practices
+我們需要知道 OpenCore 只支援 UEFI 而不支援以傳統 BIOS 方式安裝 Windows。現在的 Windows 大部分均以 UEFI 方式安裝，但由 BootCamp Assistant 安裝的以 Windows 卻是傳統 BIOS 方式安裝。因此，你需要找其他方法製作相關的安裝程式（請自行 Google）。這亦代表你的磁碟不能使用 MasterBootRecord 或 Hybrid 磁碟分割方式。您需要在磁碟工具程式格式化欲安裝的磁碟。詳情請見[多系統開機指南](https://dortania.github.io/OpenCore-Multiboot/)。
 
-Now to get onto troubleshooting:
+現在我們來排除這個故障:
 
-* Make sure `Misc -> Security -> ScanPolicy` is set to `0` to show all drives
-* Enable `Misc -> Boot -> Hideself` when Windows bootloader is located on the same drive
+* 確認 `Misc -> Security -> ScanPolicy` 已設定為 `0` 以顯示所有磁碟
+* 當 Windows 開機程式位於同一磁碟時，啟用 `Misc -> Boot -> Hideself`
 
-## Selecting Startup Disk doesn't apply correctly
+## 所選的啟動磁碟無法正確地套用
 
-If you're having issues with Startup Disk correctly applying your new boot entry, this is most likely caused by a missing `DevicePathsSupported` in your I/O Registry. To resolve this, ensure you are using `PlatformInfo -> Automatic -> True`
+如果你在為新的啟動項設定為啟動磁碟時遇到無法正確設定的問題，這很可能是由於 I/O 註冊表中缺少 `DevicePathsSupported` 造成的。要解決這個問題，請確保你已啟用 `PlatformInfo -> Automatic -> True`
 
-Example of missing `DevicePathsSupported`:
+缺少 `DevicePathsSupported` 的示例:
 
 * [Default DevicePath match failure due to different PciRoot #664](https://github.com/acidanthera/bugtracker/issues/664#issuecomment-663873846)
 
-## Booting Windows results in BlueScreen or Linux crashes
+## 啟動 Windows 時出現藍屏，或是 Linux 發生崩潰
 
-This is due to alignment issues, make sure `SyncRuntimePermissions` is enabled on firmwares supporting MATs. Check your logs whether your firmware supports Memory Attribute Tables(generally seen on 2018 firmwares and newer)
+這是由於對齊問題所致。請確保在支援 MATs 的韌體上啟用了 `SyncRuntimePermissions`。檢查你的日誌，確認你的韌體是否支援記憶體屬性表（通常能在 2018 年或更新的韌體上看到）
 
-Common Windows error code:
+常見的 Windows 錯誤代碼:
 
 * `0xc000000d`
 
-## Booting Windows error: `OCB: StartImage failed - Already started`
+## 啟動 Windows 時發生錯誤: `OCB: StartImage failed - Already started`
 
-This is due to OpenCore getting confused when trying to boot Windows and accidentally thinking it's booting OpenCore. This can be avoided by either move Windows to it's own drive *or* adding a custom drive path under BlessOverride. See [Configuration.pdf](https://github.com/acidanthera/OpenCorePkg/blob/master/Docs/Configuration.pdf) for more details.
+這是由於 OpenCore 嘗試啟動 Windows 時出現問題，意外地認為它正在啟動 OpenCore。這可以通過移動 Windows 到獨立的磁碟 *或* 在 BlessOverride 下新增一個自訂磁碟路徑來避免問題。詳情請見 [Configuration.pdf](https://github.com/acidanthera/OpenCorePkg/blob/master/Docs/Configuration.pdf)。
 
-## iASL warning, only X unresolved
+## iASL 警告，only X resolved
 
-If you try to decompile your DSDT and get an error similar to this:
+如果你嘗試反編譯你的 DSDT，並得到以下錯誤:
 
 ```
 iASL Warning: There were 19 external control methods found during disassembly, but only 0 were resolved (19 unresolved)
 ```
 
-This happens when one ACPI table requires the rest for proper referencing, it does not accept the creation of DSDTs as we're only using it for creating a select few SSDTs. For those who are worried, you can run the following:
+當 ACPI 表需要其他表來進行適當的引用時就會發生這種情況，這是因為我們只使用它來建立選定的幾個 SSDT，使它拒絕建立 DSDT。對於那些擔心的人，你可以執行以下命令:
 
 ```
 iasl * [insert all ACPI files here]
 ```
 
-## Time inconsistency between macOS and Windows
+## macOS 與 Windows 之間的時間不同步
 
-This is due to macOS using Universal Time while Windows relies on Greenwich time, so you'll need to force one OS to a different way of measuring time. We highly recommend modifying Windows instead as it's far less destructive and painful:
+這是因為 macOS 使用世界協調時間（UTC），而 Windows 卻使用格林威治時間，所以你需要強制一個作業系統使用不同的時間標準。我們強烈建議修改 Windows，因為它的破壞性和痛苦要小得多:
 
-* [Install Bootcamp utilities](https://dortania.github.io/OpenCore-Post-Install/multiboot/bootcamp.html)
-* [Modify Windows' registry](https://superuser.com/q/494432)
+* [安裝 Bootcamp 工具程式](https://dortania.github.io/OpenCore-Post-Install/multiboot/bootcamp.html)
+* [修改 Windows 登錄檔案](https://superuser.com/q/494432)
