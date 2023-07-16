@@ -1,10 +1,10 @@
-# Userspace Issues
+# Userspace 問題
 
 Issues regarding once you've booted the installer and the GUI has loaded.
 
 [[toc]]
 
-## macOS installer in Russian
+## macOS 安裝程式顯示俄語
 
 Default sample config is in Russian because slavs rule the Hackintosh world, check your `prev-lang:kbd` value under `NVRAM -> Add -> 7C436110-AB2A-4BBB-A880-FE41995C9F82`. Set to `656e2d55533a30` for American: en-US:0 and a full list can be found in [AppleKeyboardLayouts.txt](https://github.com/acidanthera/OpenCorePkg/blob/master/Utilities/AppleKeyboardLayouts/AppleKeyboardLayouts.txt). For those using with a simple text editor(ie. UEFI Shell, Notepad++, etc), `656e2d55533a30` will become `ZW4tVVM6MA==`
 
@@ -120,7 +120,7 @@ Default           |  Show All Devices(Cmd+2)
 :-------------------------:|:-------------------------:
 ![](../../images/troubleshooting/troubleshooting-md/Default.png)  |  ![](../../images/troubleshooting/troubleshooting-md/Showalldevices.png)
 
-## DiskUtility failing to erase
+## DiskUtility 無法清除磁碟
 
 This is either 1(or more) of 5 issues:
 
@@ -137,7 +137,7 @@ This is either 1(or more) of 5 issues:
   * 對於一些非常老舊的 SATA 控制器，[AHCIPortInjector.kext](https://www.insanelymac.com/forum/files/file/436-ahciportinjectorkext/) 可能更適合
   * 對於 AMD 的 FCH SATA 控制器，~~很抱歉，目前還沒有人製作針對這個控制器的 kext。~~
 
-## Stuck at 2 minutes remaining
+## 卡在 剩餘 2 分鐘
 
 ![](../../images/troubleshooting/troubleshooting-md/2-min-remaining.jpeg)
 
