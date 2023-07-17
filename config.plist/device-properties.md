@@ -2,8 +2,6 @@
 
 裝置配置通過一個名為 `EfiDevicePathPropertyDatabase` 的專用緩衝區提供給 macOS。此緩衝區是 DevicePaths 到屬性名稱及其值的映射的序列化映射。
 
-裝置屬性是 macOS I/O 註冊表的 `IODeviceTree (gIODT)` 平面的一部分。此平面有幾個與平台初始化相關的建造階段。雖然早期構建階段是由 XNU 內核在 `IODeviceTreeAlloc` 方法中執行的，但大部分構建是由平台專家執行的，並在 `AppleACPIPlatformExpert.kext` 中實現。
-
 目前，我們將主要使用此部分來修補 Intel CPU 的 iGPU。請不要嘗試注入你不知道的值。
 
 ::: warning 注意
@@ -657,10 +655,10 @@ macOS 於此平台使用 `AAPL,snb-platform-id` 來確定 iGPU 驅動程式如�
 
 ### AMD 平台
 
-這些屬性目前對 AMD 平台沒有作用，你應該刪除這裡的所有屬性。
+目前 AMD 平台無需理會這個部分，你應該刪除這裡的所有屬性。
 
 ## Delete
 
-這裡將移除某些裝置屬性。我們會略過這部分。
+這裡將移除某些裝置屬性。我們會略過這部分。（除非你有特殊需要）
 
 # 完成此部分後，請[編輯 Kernel 部分](kernel.md)

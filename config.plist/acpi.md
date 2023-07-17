@@ -4,17 +4,6 @@ ACPI（進階組態與電源介面，Advanced Configuration and Power Interface�
 
 要編譯和反彙編 ACPI 表，可以使用 [ACPICA](https://www.acpica.org) 開發的 [iASL compiler](https://github.com/acpica/acpica)。iASL 編譯器的 GUI 軟體可以從 [Acidanthera/MaciASL](https://github.com/acidanthera/MaciASL/releases) 下載。
 
-ACPI 修改（在所有操作系統）會循以下順序執行：
-
-* 處理 `Delete`
-* 處理 `Quirks`
-* 處理 `Patch`
-* 處理 `Add`
-
-在所有操作系統套用修改可以解決操作系統檢測不正確（與 ACPI 規範一致，在操作系統啟動之前不可能）、多操作系統開機和困難的 ACPI 除錯等問題。 因此，在寫入“_OSI”更改時可能需要更多注意。
-
-提早套用修補可以編寫所謂的「代理」修補，其中原始方法在原始表中進行修補，並在修補後的表中執行。
-
 # Add
 
 ::: tip 資訊

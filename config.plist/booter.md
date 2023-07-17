@@ -2,11 +2,6 @@
 
 此部分允許對操作系統開機程式（主要是 Apple 開機程式 (boot.efi)）套用不同類型的 UEFI 修改。這些修改目前為不同的韌體類型提供了各種修補和環境更改。其中一些功能最初是作為現已不再維護的 [AptioMemoryFix.efi](https://github.com/acidanthera/AptioFixPkg) 的一部分實現的。
 
-Booter 修改會循以下順序執行：
-
-* 處理 `Quirks`
-* 處理 `Patch`
-
 請注意，大多數情況下，“MmioWhitelist” 允許將通常被忽略的空間傳遞到 macOS，與 “DevirtualiseMmio” 配合使用時非常有用。詳細訊息請參閱閱[這裡](https://dortania.github.io/OpenCore-Install-Guide/extras/kaslr-fix.html#using-devirtualisemmio)
 
 ## MmioWhitelist
