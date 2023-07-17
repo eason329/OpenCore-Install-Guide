@@ -1,76 +1,79 @@
 # Userspace 問題
 
-Issues regarding once you've booted the installer and the GUI has loaded.
+關於安裝程式和 GUI 啟動時的問題。
 
 [[toc]]
 
 ## macOS 安裝程式顯示俄語
 
-Default sample config is in Russian because slavs rule the Hackintosh world, check your `prev-lang:kbd` value under `NVRAM -> Add -> 7C436110-AB2A-4BBB-A880-FE41995C9F82`. Set to `656e2d55533a30` for American: en-US:0 and a full list can be found in [AppleKeyboardLayouts.txt](https://github.com/acidanthera/OpenCorePkg/blob/master/Utilities/AppleKeyboardLayouts/AppleKeyboardLayouts.txt). For those using with a simple text editor(ie. UEFI Shell, Notepad++, etc), `656e2d55533a30` will become `ZW4tVVM6MA==`
+在範例配置檔案中，我們預設了俄語為 macOS 安裝程式顯示語言。這是因為黑蘋果的世界基本由斯拉夫人主導的。現在，檢查 `NVRAM -> Add -> 7C436110-AB2A-4BBB-A880-FE41995C9F82` 的 `prev-lang:kbd` 的值。請移除這個值（這將使安裝程式讓你自行選擇語言）或將其設定為 `656e2d55533a30`（即 American: en-US:0）。完整列表可在 [AppleKeyboardLayouts.txt](https://github.com/acidanthera/OpenCorePkg/blob/master/Utilities/AppleKeyboardLayouts/AppleKeyboardLayouts.txt) 找到。
 
-You may also need to reset NVRAM in the boot picker as well
+使用文字編輯器（如 UEFI Shell, Notepad++ 等）的用戶會發現 `656e2d55533a30` 會變成 `ZW4tVVM6MA==`
 
-* Note: Thinkpad laptops are known to be semi-bricked after an NVRAM reset in OpenCore, we recommend resetting NVRAM by updating the BIOS on these machines.
+您可能還需要在開機程式中重置 NVRAM
 
-Still didn't work? Well time for the big guns. We'll force remove that exact property and let OpenCore rebuild it:
+* 注意: ThinkPad 筆記型電腦可能在 OpenCore 中重置 NVRAM 後會變磚並無法使用，我們建議通過更新這些電腦的 BIOS 來重置 NVRAM。
 
-`NVRAM -> Delete -> 7C436110-AB2A-4BBB-A880-FE41995C9F82 -> Item 0` then set it Type `String` and Value `prev-lang:kbd`
+還是不管用？好吧，是時候讓大人物上場了。我們將強制刪除該屬性，並讓 OpenCore 重建它:
+
+`NVRAM -> Delete -> 7C436110-AB2A-4BBB-A880-FE41995C9F82 -> Item 0` 然後設置它的類型和值分別為 `String` 和 `prev-lang:kbd`
 
 ![](../../images/troubleshooting/troubleshooting-md/lang.png)
 
-## macOS Installer being damaged
+## macOS 安裝程式損壞
 
-If you've download macOS before October 2019, you likely have an expired macOS Installer certificate, there's 2 ways to fix this:
+如果你在 2019 年 10 月之前下載了 macOS，你可能已經有一個過期的 macOS 安裝程式證書，有兩種方法可以解決這個問題:
 
-* Download newest copy of macOS
-* Change date in terminal to when the certificate was valid
+* 下載最新版本的 macOS
+* 在終端機把日期更改為證書有效日期
 
-For the latter:
+後者需要進行以下步驟:
 
-* Disconnect all networking devices(Ethernet, disable WiFi)
-* In the recovery terminal set to September 1st, 2019:
+* 斷開或關閉所有網路裝置（乙太網, WiFi）
+* 在恢復模式的終端機把日期更改為 2019 年 9 月 1 日:
 
 ```
 date 0901000019
 ```
 
-## Stuck on or near `IOConsoleUsers: gIOScreenLock...`/`gIOLockState (3...`
+## 在 `IOConsoleUsers: gIOScreenLock...`/`gIOLockState (3...` 或接近的位置卡住
 
-This is right before the GPU is properly initialized, verify the following:
+這錯誤發生在 GPU 正確初始化之前，請驗證以下內容:
 
-* GPU is UEFI capable(GTX 7XX/2013+)
-* CSM is off in the BIOS
-* Forcing PCIe 3.0 link speed
-* Double check that ig-platform-id and device-id are valid if running an iGPU.
-  * Desktop UHD 630's may need to use `00009B3E` instead
-* Trying various [WhateverGreen Fixes](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md)
-  * `-igfxmlr` boot argument. This can also manifest as a "Divide by Zero" error.
-* Coffee Lake iGPU users may also need `igfxonln=1` in 10.15.4 and newer
+* GPU 支援 UEFI（GTX 7XX/2013+）
+  * 如果你的 GPU 支援 macOS 但不支援 UEFI，你也許可以嘗試[強制注入 GOP](https://winraid.level1techs.com/t/amd-and-nvidia-gop-update-no-requests-diy/30917/2)
+* 已在 BIOS 中停用 CSM
+* 強制使用 PCIe 3.0
+* 如使用 iGPU，請仔細檢查 ig-platform-id 和 device-id 是否有效。
+  * 桌面平台 UHD 630 可能需要改為使用 `00009B3E`
+* 試用各種 [WhateverGreen 修復](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md)參數
+  * `-igfxmlr` 開機參數。這也可以表現為 "Divide by Zero" 錯誤。
+  * 在 10.15.4 及更新版本中，Coffee Lake iGPU 用戶可能還需要 `igfxonln=1` 
 
-## Scrambled Screen on laptops
+## 在筆記型電腦上出現花屏
 
-Enable CSM in your UEFI settings. This may appear as "Boot legacy ROMs" or other legacy setting.
+在 BIOS 設定中啟用 CSM。這可能顯示為 "Boot legacy ROMs" 或其他 legacy 設定.
 
-## Black screen after `IOConsoleUsers: gIOScreenLock...` on laptops and AIOs
+## 在筆記型電腦和 AIO 上，於 `IOConsoleUsers: gIOScreenLock...` 後出現黑屏
 
-Verify the following:
+驗證以下內容:
 
-* SSDT-PNLF is installed(ie. EFI/OC/ACPI as well as config.plist -> ACPI -> Add)
-* iGPU properties were setup correctly under `DeviceProperties -> Add -> PciRoot(0x0)/Pci(0x2,0x0)`
-* Coffee Lake and newer laptops, add `-igfxblr` to your boot-args
-  * Alternatively, add `enable-backlight-registers-fix | Data | 01000000` to `PciRoot(0x0)/Pci(0x2,0x0)`
+* 已加入 SSDT-PNLF（即同時出現在 EFI/OC/ACPI 及 config.plist -> ACPI -> Add）
+* iGPU 屬性 `DeviceProperties -> Add -> PciRoot(0x0)/Pci(0x2,0x0)` 已正確設定
+* Coffee Lake 和较新的筆記型電腦，請加入 `-igfxblr` 開機參數
+  * 或者，在 `PciRoot(0x0)/Pci(0x2,0x0)` 加入 `enable-backlight-registers-fix | Data | 01000000`
 
-Additionally, verify issues mentioned in [Stuck on or near `IOConsoleUsers: gIOScreenLock...`](#stuck-on-or-near-ioconsoleusers-gioscreenlock-giolockstate-3)
+此外，請驗證[在 `IOConsoleUsers: gIOScreenLock...` 或接近的位置卡住](#stuck-on-or-near-ioconsoleusers-gioscreenlock-giolockstate-3) 中提到的問題
 
-## Black screen after `IOConsoleUsers: gIOScreenLock...` on Navi
+## 在 Navi 上，於 `IOConsoleUsers: gIOScreenLock...` 後出現黑屏
 
-* Add `agdpmod=pikera` to boot args
-* Switch between different display outputs
-* Try running MacPro7,1 SMBIOS with the boot-arg `agdpmod=ignore`
+* 加入開機參數 `agdpmod=pikera`
+* 在不同的顯示輸出之間切換
+* 嘗試使用 MacPro7,1 SMBIOS，及配合 `agdpmod=ignore` 開機參數
 
-For MSI Navi users, you'll need to apply the patch mentioned here: [Installer not working with 5700XT #901](https://github.com/acidanthera/bugtracker/issues/901)
+MSI Navi 用戶需要使用這裡提到的修補: [安裝程式不能與 5700XT 工作 #901](https://github.com/acidanthera/bugtracker/issues/901)
 
-Specifically, add the following entry under `Kernel -> Patch`:
+具体来说，在 `Kernel -> Patch` 下加入以下條目:
 
 ```
 Base:
@@ -88,21 +91,24 @@ ReplaceMask:
 Skip: 0
 ```
 
-## Frozen in the macOS installer after 30 seconds
+## macOS 安裝程式卡在「剩餘 30 秒」
 
-This is likely due to faulty or outright missing NullCPUPowerManagement, the one hosted on AMD OSX's Vanilla Guide is corrupted. Go yell at Shannee to fix it. To fix the issue, remove NullCPUPowerManagement from `Kernel -> Add` and `EFI/OC/Kexts` then enable `DummyPowerManagement` under `Kernel -> Emulate`
+這可能是由於 NullCPUPowerManagement 驅動程式發生錯誤或完全缺失。另外， AMD OSX 教學所提供的驅動程式是有問題的，請要求 Shannee 進行修復。要解決這個問題，請從 `Kernel -> Add` 和 `EFI/OC/Kexts` 中移除 NullCPUPowerManagement，然後在 `Kernel -> Emulate` 中啟用 `DummyPowerManagement`
 
-## 15h/16h CPU reboot after Data & Privacy screen
+## AMD 15h/16h CPU 在數據和隱私畫面後自行重新啟動
 
-Follow directions here after UPDATE 2: [Fix Data and Privacy reboot](https://www.insanelymac.com/forum/topic/335877-amd-mojave-kernel-development-and-testing/?do=findComment&comment=2658085)
+請遵循此貼文的 UPDATE 2 的指示: [Fix Data and Privacy reboot](https://www.insanelymac.com/forum/topic/335877-amd-mojave-kernel-development-and-testing/?do=findComment&comment=2658085)
 
-## macOS frozen right before login
+## macOS 在登入前就凍結了
 
-This is a common example of screwed up TSC, for most system add [CpuTscSync](https://github.com/lvs1974/CpuTscSync)
+這問題有兩個原因：
 
-For Skylake-X, many firmwares including Asus and EVGA won't write to all cores. So we'll need to reset the TSC on cold boot and wake with [TSCAdjustReset](https://github.com/interferenc/TSCAdjustReset). Compiled version can be found here: [TSCAdjustReset.kext](https://github.com/dortania/OpenCore-Install-Guide/blob/master/extra-files/TSCAdjustReset.kext.zip). Note that you **must** open up the kext(ShowPackageContents in finder, `Contents -> Info.plist`) and change the Info.plist -> `IOKitPersonalities -> IOPropertyMatch -> IOCPUNumber` to the number of CPU threads you have starting from `0`(i9 7980xe 18 core would be `35` as it has 36 threads total)
+* 這是一個常見的 TSC 錯誤的例子，請加入 [CpuTscSync](https://github.com/lvs1974/CpuTscSync)
+  * 對於 Skylake-X，由於像 Asus and EVGA 的廠商不會在韌體中寫入所有核心。所以我們需要在冷開機和喚醒時使用 [TSCAdjustReset](https://github.com/interferenc/TSCAdjustReset) 重置 TSC。 已編譯版本: [TSCAdjustReset.kext](https://github.com/dortania/OpenCore-Install-Guide/blob/master/extra-files/TSCAdjustReset.kext.zip)。請注意，您**必須**打開 kext（在 Finder 按顯示套件內容，`Contents -> Info.plist`）及修改 Info.plist -> `IOKitPersonalities -> IOPropertyMatch -> IOCPUNumber` 的 CPU 線程數量。你需要由 `0` 數起（i9 7980XE 是 18 核心 36 線程，因此填寫 `35`）
 
-The most common way to see the TSC issue:
+* 對於 NootedRed 用戶，在 macOS 13 以後新增的 "mediaanalysisd" 也會導致這個問題（有機會在登入後才凍結）。請加入 [RestrictEvents](https://github.com/acidanthera/RestrictEvents) 及 `revblock=media` 開機參數。
+
+查看這個問題的最常見方法:
 
 Case 1    |  Case 2
 :-------------------------:|:-------------------------:
