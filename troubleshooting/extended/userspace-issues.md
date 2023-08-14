@@ -48,7 +48,7 @@ date 0901000019
   * 桌面平台 UHD 630 可能需要改為使用 `00009B3E`
 * 試用各種 [WhateverGreen 修復](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md)參數
   * `-igfxmlr` 開機參數。這也可以表現為 "Divide by Zero" 錯誤。
-  * 在 10.15.4 及更新版本中，Coffee Lake iGPU 用戶可能還需要 `igfxonln=1` 
+  * 在 10.15.4 及更新版本中，Coffee Lake iGPU 用戶可能還需要 `igfxonln=1`
 
 ## 在筆記型電腦上出現花屏
 

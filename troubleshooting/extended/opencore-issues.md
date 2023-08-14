@@ -1,10 +1,10 @@
-# OpenCore Boot Issues
+# OpenCore 啟動問題
 
-Issues surrounding from initial booting the USB itself to right before you choose to boot the macOS installer
+從啟動 USB 隨身碟到選擇啟動 macOS 安裝程式之前的問題
 
 [[toc]]
 
-## Stuck on a black screen before picker
+## 在出現選擇選單前卡在黑屏上
 
 This is likely some error either on your firmware or OpenCore, specifically it's having troubles loading all the drivers and presenting the menu. The best way to diagnose it is via [OpenCore's DEBUG Build](./../debug.md) and checking the logs whether OpenCore actually loaded, and if so what is it getting stuck on.
 
