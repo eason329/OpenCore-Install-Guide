@@ -1,12 +1,12 @@
-# System Debugging: In-depth
+# 更深入的系統除錯
 
-This section will go a bit deeper into the troubleshooting rabbit hole, specifically focusing on more low level debugging with proper debug output and optional serial setup.
+本章節將更深入地討論故障排除，尤其是關注更適當的除錯輸出和序列通訊設定等底層的除錯程序。
 
-**Note**: 99% of users do not need this level of debugging, this is only for the hardcore or extreme edge-cases.
+**注意**：99% 的用戶不需要這種級別的除錯，這只適用於硬核或極端情況。因此，我們暫不翻譯這一部分。歡迎你們自行翻譯（甚至 Pull Request 到這個 Repo）
 
 [[toc]]
 
-## EFI Setup
+## EFI 設定
 
 For most part, there's fairly minimal changes required. Main things we recommend are DEBUG version of **OpenCore** and all your **kexts**. This can help ensure you get all the necessary data, see here for more details on OpenCore debugging: [OpenCore debugging](./debug.md)
 
@@ -20,7 +20,7 @@ Besides just using DEBUG variants of OpenCore and kexts, these tools can also he
   * Enables debug statements from your ACPI tables, helping for in-OS ACPI event debugging
   * Note you will need to [compile the SSDT](https://dortania.github.io/Getting-Started-With-ACPI/Manual/compile.html)
   
-## Config.plist Setup
+## Config.plist 設定
 
 For serial setup, OpenCore actually makes this quite straight forward.
 
@@ -83,7 +83,7 @@ Depending on what you're debugging, you may also find these boot-args extremely 
   * Sets `ACPI_LV_DEBUG_OBJECT` debug, see [acoutput.h](https://github.com/acpica/acpica/blob/master/source/include/acoutput.h) for more information
   * `0xFFFF5F` alternatively implies `ACPI_ALL_COMPONENTS`
 
-## Serial Setup(Optional)
+## 序列通訊設定（可選）
 
 * [Hardware Setup](#hardware-setup)
 * [EFI Setup](#efi-setup)
@@ -148,7 +148,7 @@ To record, simply head to `Connections -> Capture to Text/Binary File -> Start..
 
 ![](../images/troubleshooting/kernel-debugging-md/coolterm-record.png)
 
-## Kernel Debug Kits (Optional)
+## Kernel Debug Kits（可選）
 
 * [KDK on an Installed OS](#kdk-on-an-installed-os)
 * [Uninstalling the KDK](#uninstalling-the-kdk)
