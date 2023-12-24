@@ -197,7 +197,7 @@ lshw -class disk -class storage
 
 ![](./images/finding-hardware-md/cpu-model-ocsysinfo.png)
 
-除了 CPU 型号，它還列出了 CPU 的世代、最高可支援的 SSE 版本和 SSSE3 的可用性。
+除了 CPU 型號，它還列出了 CPU 的世代、最高可支援的 SSE 版本和 SSSE3 的可用性。
 
 ### GPU 型號
 
