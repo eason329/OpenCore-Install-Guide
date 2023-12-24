@@ -6,43 +6,43 @@
 
 ## 在出現選擇選單前卡在黑屏上
 
-This is likely some error either on your firmware or OpenCore, specifically it's having troubles loading all the drivers and presenting the menu. The best way to diagnose it is via [OpenCore's DEBUG Build](./../debug.md) and checking the logs whether OpenCore actually loaded, and if so what is it getting stuck on.
+這可能是您的韌體或 OpenCore 本身發生了錯誤，或者在載入驅動程式或顯示選單期間出現問題。診斷它的最佳方法是通過 [OpenCore 的 DEBUG 版本](./../debug.md) 並檢查記錄檔來判斷 OpenCore 是否已經實際載入，以及尋找阻礙它正常載入的東西。
 
-**Situations where OpenCore did not load**:
+**OpenCore 未載入的情況**:
 
-* If there are no logs present even after setting up the DEBUG version of OpenCore with Target set to 67, there's likely an issue either with:
-  * Incorrect USB Folder Structure
-    * See [Booting OpenCore reboots to BIOS](#booting-opencore-reboots-to-bios) for more info
-  * Firmware does not support UEFI
-    * You'll need to setup DuetPkg, this is covered in both the [macOS](../../installer-guide/mac-install.md) and [Windows](../../installer-guide/windows-install.md) install pages
+* 如果在使用 OpenCore 的 DEBUG 版本，並把 Target 設定為 67 後仍然沒有記錄，則可能出現以下問題：
+  * 不正確的 USB 資料夾結構
+    * 參見 [啟動 OpenCore 時重新啟動到 BIOS](#booting-opencore-reboots-to-bios) 了解更多資訊
+  * 韌體不支援 UEFI
+    * 您需要設定 DuetPkg, 这在 [macOS](../../installer-guide/mac-install.md) 和 [Windows](../../installer-guide/windows-install.md) 安裝頁面中都有介紹
 
-**Situations where OpenCore did load**:
+**SOpenCore 已載入的情況**:
 
-* Check the last line printed in your logs, there will likely be either a .efi driver that's been loaded or some form of ASSERT
-  * For ASSERT's, you'll want to actually inform the developers about this issue here: [Acidanthera's Bugtracker](https://github.com/acidanthera/bugtracker)
-  * For .efi drivers getting stuck, check over the following:
-    * **HfsPlus.efi load issues:**
-      * Try using [HfsPlusLegacy.efi](https://github.com/acidanthera/OcBinaryData/blob/master/Drivers/HfsPlusLegacy.efi) instead
-      * This is recommended for CPUs that do not support RDRAND, mainly relevant for 3rd gen Ivy bridge i3 and older
-      * [VBoxHfs.efi](https://github.com/acidanthera/AppleSupportPkg/releases/tag/2.1.7) is another option however is much slower than HfsPlus's version
-    * **HiiDatabase.efi load issues:**
-      * Likely your firmware already supports HiiDatabase, so the driver is conflicting. Simply remove the driver as you don't need it.
+* 檢查記錄檔中列出的最後一行，這很有可能是載入了 .efi 驅動程式或其他的一些中斷（ASSERT）
+  * 對於中斷（ASSERT），您需要在這裡通知開發人員這個問題: [Acidanthera's Bugtracker](https://github.com/acidanthera/bugtracker)
+  * 如果是 .efi 驅動程式載入時卡住了，請檢查以下內容:
+    * **HfsPlus.efi 載入問題:**
+      * 嘗試使用 [HfsPlusLegacy.efi](https://github.com/acidanthera/OcBinaryData/blob/master/Drivers/HfsPlusLegacy.efi) 代替
+      * 建議在不支援 RDRAND 的 CPU 上使用，主要與第 3 代 Ivy bridge i3 及更老的 CPU 有關
+      * [VBoxHfs.efi](https://github.com/acidanthera/AppleSupportPkg/releases/tag/2.1.7) 是另一個選擇，但是比 HfsPlus 的版本要慢得多
+    * **HiiDatabase.efi 載入問題:**
+      * 這可能是您的韌體已支援 HiiDatabase，因此驅動程式發生衝突。您不需要這個驅動程式，只需要移除它即可。
 
-## Stuck on `no vault provided!`
+## 卡在 `no vault provided!`
 
-Turn off Vaulting in your config.plist under `Misc -> Security -> Vault` by setting it to:
+在你的 config.plist 中的 `Misc -> Security -> Vault` 將 Vault 設定為:
 
 * `Optional`
 
-If you have already executed the `sign.command` you will need to restore the OpenCore.efi file as the 256 byte RSA-2048 signature has been shoved in. Can grab a new copy of OpenCore.efi here: [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases)
+如果您已經執行了 `sign.command`，您將需要恢復 OpenCore.efi 檔案，因為原來檔案已經插入了 256 位元組 的 RSA-2048 簽名。您可以在這裡獲取新的 OpenCore.efi 副本: [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases)
 
-**Note**: Vault and FileVault are 2 separate things, see [Security and FileVault](https://dortania.github.io/OpenCore-Post-Install/universal/security.html) for more details
+**注意**: Vault 和 FileVault 是兩個不同的東西，請參閱 [安全與 FileVault](https://dortania.github.io/OpenCore-Post-Install/universal/security.html) 了解更多資訊
 
-## Stuck on `OC: Invalid Vault mode`
+## 卡在 `OC: Invalid Vault mode`
 
-This is likely a spelling mistake, options in OpenCore are case-sensitive so make sure you check closely, **O**ptional is the correct way to enter it under `Misc -> Security -> Vault`
+這可能是一個拼寫錯誤，OpenCore 中的選項是區分大小寫的，所以請務必仔細檢查， **O**ptional 是在 `Misc -> Security -> Vault` 下正確的輸入方式。
 
-## Can't see macOS partitions
+## 無法看到 macOS 磁碟分區
 
 Main things to check:
 
