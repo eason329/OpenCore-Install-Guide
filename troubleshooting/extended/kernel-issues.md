@@ -1,5 +1,6 @@
-# Kernel Issues
+# 內核相關問題 Issues
 
+這裡描述一些從最初啟動 macOS 到出現安裝程式 GUI
 Issues surrounding from initial booting the macOS installer to right before the install GUI pops up.
 
 [[toc]]
