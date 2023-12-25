@@ -6,82 +6,83 @@
 
 ## 在出現選擇選單前卡在黑屏上
 
-This is likely some error either on your firmware or OpenCore, specifically it's having troubles loading all the drivers and presenting the menu. The best way to diagnose it is via [OpenCore's DEBUG Build](./../debug.md) and checking the logs whether OpenCore actually loaded, and if so what is it getting stuck on.
+這可能是您的韌體或 OpenCore 本身發生了錯誤，或者在載入驅動程式或顯示選單期間出現問題。診斷它的最佳方法是通過 [OpenCore 的 DEBUG 版本](./../debug.md) 並檢查記錄檔來判斷 OpenCore 是否已經實際載入，以及尋找阻礙它正常載入的東西。
 
-**Situations where OpenCore did not load**:
+**OpenCore 未載入的情況**:
 
-* If there are no logs present even after setting up the DEBUG version of OpenCore with Target set to 67, there's likely an issue either with:
-  * Incorrect USB Folder Structure
-    * See [Booting OpenCore reboots to BIOS](#booting-opencore-reboots-to-bios) for more info
-  * Firmware does not support UEFI
-    * You'll need to setup DuetPkg, this is covered in both the [macOS](../../installer-guide/mac-install.md) and [Windows](../../installer-guide/windows-install.md) install pages
+* 如果在使用 OpenCore 的 DEBUG 版本，並把 Target 設定為 67 後仍然沒有記錄，則可能出現以下問題：
+  * 不正確的 USB 資料夾結構
+    * 參見 [啟動 OpenCore 時重新啟動到 BIOS](#booting-opencore-reboots-to-bios) 了解更多資訊
+  * 韌體不支援 UEFI
+    * 您需要設定 DuetPkg, 这在 [macOS](../../installer-guide/mac-install.md) 和 [Windows](../../installer-guide/windows-install.md) 安裝頁面中都有介紹
 
-**Situations where OpenCore did load**:
+**SOpenCore 已載入的情況**:
 
-* Check the last line printed in your logs, there will likely be either a .efi driver that's been loaded or some form of ASSERT
-  * For ASSERT's, you'll want to actually inform the developers about this issue here: [Acidanthera's Bugtracker](https://github.com/acidanthera/bugtracker)
-  * For .efi drivers getting stuck, check over the following:
-    * **HfsPlus.efi load issues:**
-      * Try using [HfsPlusLegacy.efi](https://github.com/acidanthera/OcBinaryData/blob/master/Drivers/HfsPlusLegacy.efi) instead
-      * This is recommended for CPUs that do not support RDRAND, mainly relevant for 3rd gen Ivy bridge i3 and older
-      * [VBoxHfs.efi](https://github.com/acidanthera/AppleSupportPkg/releases/tag/2.1.7) is another option however is much slower than HfsPlus's version
-    * **HiiDatabase.efi load issues:**
-      * Likely your firmware already supports HiiDatabase, so the driver is conflicting. Simply remove the driver as you don't need it.
+* 檢查記錄檔中列出的最後一行，這很有可能是載入了 .efi 驅動程式或其他的一些中斷（ASSERT）
+  * 對於中斷（ASSERT），您需要在這裡通知開發人員這個問題: [Acidanthera's Bugtracker](https://github.com/acidanthera/bugtracker)
+  * 如果是 .efi 驅動程式載入時卡住了，請檢查以下內容:
+    * **HfsPlus.efi 載入問題:**
+      * 嘗試使用 [HfsPlusLegacy.efi](https://github.com/acidanthera/OcBinaryData/blob/master/Drivers/HfsPlusLegacy.efi) 代替
+      * 建議在不支援 RDRAND 的 CPU 上使用，主要與第 3 代 Ivy bridge i3 及更老的 CPU 有關
+      * [VBoxHfs.efi](https://github.com/acidanthera/AppleSupportPkg/releases/tag/2.1.7) 是另一個選擇，但是比 HfsPlus 的版本要慢得多
+    * **HiiDatabase.efi 載入問題:**
+      * 這可能是您的韌體已支援 HiiDatabase，因此驅動程式發生衝突。您不需要這個驅動程式，只需要移除它即可。
 
-## Stuck on `no vault provided!`
+## 卡在 `no vault provided!`
 
-Turn off Vaulting in your config.plist under `Misc -> Security -> Vault` by setting it to:
+在你的 config.plist 中的 `Misc -> Security -> Vault` 將 Vault 設定為:
 
 * `Optional`
 
-If you have already executed the `sign.command` you will need to restore the OpenCore.efi file as the 256 byte RSA-2048 signature has been shoved in. Can grab a new copy of OpenCore.efi here: [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases)
+如果您已經執行了 `sign.command`，您將需要恢復 OpenCore.efi 檔案，因為原來檔案已經插入了 256 位元組 的 RSA-2048 簽名。您可以在這裡獲取新的 OpenCore.efi 副本: [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg/releases)
 
-**Note**: Vault and FileVault are 2 separate things, see [Security and FileVault](https://dortania.github.io/OpenCore-Post-Install/universal/security.html) for more details
+**注意**: Vault 和 FileVault 是兩個不同的東西，請參閱 [安全與 FileVault](https://dortania.github.io/OpenCore-Post-Install/universal/security.html) 了解更多資訊
 
-## Stuck on `OC: Invalid Vault mode`
+## 卡在 `OC: Invalid Vault mode`
 
-This is likely a spelling mistake, options in OpenCore are case-sensitive so make sure you check closely, **O**ptional is the correct way to enter it under `Misc -> Security -> Vault`
+這可能是一個拼寫錯誤，OpenCore 中的選項是區分大小寫的，所以請務必仔細檢查， **O**ptional 是在 `Misc -> Security -> Vault` 下正確的輸入方式。
 
-## Can't see macOS partitions
+## 無法看到 macOS 磁碟分區
 
-Main things to check:
+需要檢查的地方:
 
-* ScanPolicy set to `0` to show all drives
-* Have the proper firmware drivers such as HfsPlus(Note ApfsDriverLoader shouldn't be used in 0.5.8)
-* Set UnblockFsConnect to True in config.plist -> UEFI -> Quirks. Needed for some HP systems
-* Set **SATA Mode**: `AHCI` in BIOS
-* Set `UEFI -> APFS` to see APFS based drives:
+* 將 ScanPolicy 設為 `0` 來顯示所有磁碟
+* 安裝合適的韌體驅動程式，例如 HfsPlus（注意：Note ApfsDriverLoader 不應在 0.5.8 中使用）
+* 在 config.plist -> UEFI -> Quirks 中將 UnblockFsConnect 設為 True。一些 HP 系統需要設定
+* 在 BIOS 中將 SATA 模式設定為：`AHCI`
+* 在 `UEFI -> APFS` 進行以下設定來查看 APFS 磁碟:
   * **EnableJumpstart**: YES
   * **HideVerbose**: NO
-  * If running older versions of High Sierra(ie. 10.13.5 or older), set the following:
+  * 如要運行 High Sierra 或更舊版本（10.13.5 或更舊），請進行以下設定:
     * **MinDate**: `-1`
     * **MinVersion**: `-1`
 
-## Stuck on `OCB: OcScanForBootEntries failure - Not Found`
+## 卡在 `OCB: OcScanForBootEntries failure - Not Found`
 
-This is due to OpenCore being unable to find any drives with the current ScanPolicy, setting to `0` will allow all boot options to be shown
-
-* `Misc -> Security -> ScanPolicy -> 0`
-
-## Stuck on `OCB: failed to match a default boot option`
-
-Same fix as `OCB: OcScanForBootEntries failure - Not Found`, OpenCore is unable to find any drives with the current ScanPolicy, setting to `0` will allow all boot options to be shown
+這是因為 OpenCore 無法找到任何符合目前 ScanPolicy 的磁碟區，設定為 `0` 將允許顯示所有啟動選項
 
 * `Misc -> Security -> ScanPolicy -> 0`
 
-## Stuck on `OCB: System has no boot entries`
+## 卡在 `OCB: failed to match a default boot option`
 
-Same fix as the above 2:
+進行與 `OCB: OcScanForBootEntries failure - Not Found` 一樣的修復，因為 OpenCore 無法找到任何符合目前 ScanPolicy 的磁碟區，設定為 `0` 將允許顯示所有啟動選項
 
 * `Misc -> Security -> ScanPolicy -> 0`
 
-## Stuck on `OCS: No schema for DSDT, KernelAndKextPatch, RtVariable, SMBIOS, SystemParameters...`
+## 卡在 `OCB: System has no boot entries`
 
-This is due to either using a Clover config with OpenCore or using a configurator such as Mackie's Clover and OpenCore configurator. You'll need to start over and make a new config or figure out all the garbage you need to remove from your config. **This is why we don't support configurators, they are known for these issues**
+與上述兩個錯誤相同的修復方法:
 
-* Note: These same issues will also occur if you mix outdated configs with newer versions of OpenCore. Please update them accordingly
+* `Misc -> Security -> ScanPolicy -> 0`
 
-## Stuck on `OC: Driver XXX.efi at 0 cannot be found`
+## 卡在 `OCS: No schema for DSDT, KernelAndKextPatch, RtVariable, SMBIOS, SystemParameters...`
+
+有兩個原因：
+
+* 在 OpenCore 中使用了 Clover 設定，或者使用了像 Mackie 的 Clover 和 OpenCore configurator 這樣的配置器。您將需要重新開始並建立一個新的配置檔，或從原來的檔案中刪除所有有問題的內容。**這就是為什麼我們不支持配置器的原因，配置器在這些問題上是眾所周知的**
+* 您的配置檔有過時的設定，並與新版本的 OpenCore 混合使用。請在更新 OpenCore 時相應地更新配置檔
+
+## 卡在 `OC: Driver XXX.efi at 0 cannot be found`
 
 This is due to an entry being in your config.plist, however not present in your EFI. To resolve:
 
