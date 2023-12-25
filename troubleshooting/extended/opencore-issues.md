@@ -44,44 +44,45 @@
 
 ## 無法看到 macOS 磁碟分區
 
-Main things to check:
+需要檢查的地方:
 
-* ScanPolicy set to `0` to show all drives
-* Have the proper firmware drivers such as HfsPlus(Note ApfsDriverLoader shouldn't be used in 0.5.8)
-* Set UnblockFsConnect to True in config.plist -> UEFI -> Quirks. Needed for some HP systems
-* Set **SATA Mode**: `AHCI` in BIOS
-* Set `UEFI -> APFS` to see APFS based drives:
+* 將 ScanPolicy 設為 `0` 來顯示所有磁碟
+* 安裝合適的韌體驅動程式，例如 HfsPlus（注意：Note ApfsDriverLoader 不應在 0.5.8 中使用）
+* 在 config.plist -> UEFI -> Quirks 中將 UnblockFsConnect 設為 True。一些 HP 系統需要設定
+* 在 BIOS 中將 SATA 模式設定為：`AHCI`
+* 在 `UEFI -> APFS` 進行以下設定來查看 APFS 磁碟:
   * **EnableJumpstart**: YES
   * **HideVerbose**: NO
-  * If running older versions of High Sierra(ie. 10.13.5 or older), set the following:
+  * 如要運行 High Sierra 或更舊版本（10.13.5 或更舊），請進行以下設定:
     * **MinDate**: `-1`
     * **MinVersion**: `-1`
 
-## Stuck on `OCB: OcScanForBootEntries failure - Not Found`
+## 卡在 `OCB: OcScanForBootEntries failure - Not Found`
 
-This is due to OpenCore being unable to find any drives with the current ScanPolicy, setting to `0` will allow all boot options to be shown
-
-* `Misc -> Security -> ScanPolicy -> 0`
-
-## Stuck on `OCB: failed to match a default boot option`
-
-Same fix as `OCB: OcScanForBootEntries failure - Not Found`, OpenCore is unable to find any drives with the current ScanPolicy, setting to `0` will allow all boot options to be shown
+這是因為 OpenCore 無法找到任何符合目前 ScanPolicy 的磁碟區，設定為 `0` 將允許顯示所有啟動選項
 
 * `Misc -> Security -> ScanPolicy -> 0`
 
-## Stuck on `OCB: System has no boot entries`
+## 卡在 `OCB: failed to match a default boot option`
 
-Same fix as the above 2:
+進行與 `OCB: OcScanForBootEntries failure - Not Found` 一樣的修復，因為 OpenCore 無法找到任何符合目前 ScanPolicy 的磁碟區，設定為 `0` 將允許顯示所有啟動選項
 
 * `Misc -> Security -> ScanPolicy -> 0`
 
-## Stuck on `OCS: No schema for DSDT, KernelAndKextPatch, RtVariable, SMBIOS, SystemParameters...`
+## 卡在 `OCB: System has no boot entries`
 
-This is due to either using a Clover config with OpenCore or using a configurator such as Mackie's Clover and OpenCore configurator. You'll need to start over and make a new config or figure out all the garbage you need to remove from your config. **This is why we don't support configurators, they are known for these issues**
+與上述兩個錯誤相同的修復方法:
 
-* Note: These same issues will also occur if you mix outdated configs with newer versions of OpenCore. Please update them accordingly
+* `Misc -> Security -> ScanPolicy -> 0`
 
-## Stuck on `OC: Driver XXX.efi at 0 cannot be found`
+## 卡在 `OCS: No schema for DSDT, KernelAndKextPatch, RtVariable, SMBIOS, SystemParameters...`
+
+有兩個原因：
+
+* 在 OpenCore 中使用了 Clover 設定，或者使用了像 Mackie 的 Clover 和 OpenCore configurator 這樣的配置器。您將需要重新開始並建立一個新的配置檔，或從原來的檔案中刪除所有有問題的內容。**這就是為什麼我們不支持配置器的原因，配置器在這些問題上是眾所周知的**
+* 您的配置檔有過時的設定，並與新版本的 OpenCore 混合使用。請在更新 OpenCore 時相應地更新配置檔
+
+## 卡在 `OC: Driver XXX.efi at 0 cannot be found`
 
 This is due to an entry being in your config.plist, however not present in your EFI. To resolve:
 
